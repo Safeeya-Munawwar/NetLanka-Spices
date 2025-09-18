@@ -1,6 +1,5 @@
+
 import Home from "./pages/Home";
-
-
 
 function App() {
   return (
@@ -8,6 +7,8 @@ function App() {
     <Home/>
     </div>
   );
+  
 }
 
 export default App;
+
