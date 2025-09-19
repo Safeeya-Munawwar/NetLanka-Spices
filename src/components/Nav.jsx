@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef} from "react";
 import { NavLink, Link } from "react-router-dom";
 
 export default function Nav() {
@@ -6,12 +6,12 @@ export default function Nav() {
   const menuRef = useRef(null);
 
   const linkClass = ({ isActive }) =>
-    `block  px-2 py-2 text-[12pt] rounded hover:text-blue-600 transition ${
-      isActive ? "text-blue-600 font-semibold" : "text-gray-200 font-bold"
+    `block  px-2 py-2 text-[12pt] rounded hover:text-blue-300 transition ${
+      isActive ? "text-blue-400 font-semibold" : "text-gray-200 font-bold"
     }`;
 
   return (
-    <header className="w-full bg-[#152310]  top-0 z-50 md:h-32  border-b border-white">
+    <header className="w-full bg-[#302019]  top-0 z-50 md:h-32  border-b border-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-5 py-4 md:py-7">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">

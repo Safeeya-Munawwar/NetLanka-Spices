@@ -34,16 +34,12 @@ const WhyChooseUs = () => {
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
         <h1
-          className={`font-serif text-yellow-800 mt-10 mb-3 text-left text-xl transition-transform duration-700 ${
-            isVisible ? "slide-in-left opacity-100" : "opacity-0 -translate-x-20"
-          }`}
+          className="font-serif text-yellow-800 mt-10 mb-3 text-left text-xl transition-transform duration-700"
         >
           Net Spice's
         </h1>
         <h1
-          className={`text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left transition-transform duration-700 delay-200 ${
-            isVisible ? "slide-in-left opacity-100" : "opacity-0 -translate-x-20"
-          }`}
+          className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left transition-transform duration-700 delay-200"
         >
           WHY CHOOSE US
         </h1>

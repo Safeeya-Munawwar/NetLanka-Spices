@@ -7,22 +7,17 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const currentRef = sectionRef.current; // cache ref for cleanup
+    const currentRef = sectionRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          } else {
-            setIsVisible(false); // reset when leaving viewport
-          }
+          setIsVisible(entry.isIntersecting);
         });
       },
-      { threshold: 0.2 } // triggers when 20% visible
+      { threshold: 0.2 }
     );
 
     if (currentRef) observer.observe(currentRef);
-
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
@@ -31,14 +26,14 @@ export default function Header() {
   return (
     <div>
       {/* First Section */}
-      <section className="w-full h-[600px] bg-white flex items-center justify-center">
-        <div className="flex justify-between items-center max-w-7xl mx-auto space-x-3 gap-5">
-          <div className="w-1/2">
-            <h1 className="text-3xl font-bold text-[rgb(166,91,5)]">
+      <section className="w-full min-h-[500px] md:h-[600px] bg-white flex items-center justify-center px-4 sm:px-6 md:px-8">
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center max-w-7xl mx-auto gap-8">
+          {/* Text */}
+          <div className="w-full md:w-1/2 text-center md:text-left">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[rgb(166,91,5)]">
               Taste the Essence of Nature
             </h1>
-            <br />
-            <p className="text-justify">
+            <p className="text-justify text-sm sm:text-base mt-4">
               At Net Spice's, we bring you the vibrant flavors and natural
               goodness of Sri Lanka to the global stage. Specializing in premium
               foods, aromatic herbs, exotic spices, and the world-renowned
@@ -51,16 +46,16 @@ export default function Header() {
               your exact needs—with consistency, care, and a zest for
               excellence.
             </p>
-            <br />
-            <br />
-            <Link to="/Products">
-              <button className="text-[rgb(166,91,5)] font-bold px-4 py-2 bg-transparent rounded-lg border-2 border-[rgb(166,91,5)]">
-                View Products
-              </button>
-            </Link>
+           <Link to="/Products">
+  <button className="mt-6 mb-8 sm:mb-0 text-[rgb(166,91,5)] font-bold px-5 py-2 bg-transparent rounded-lg border-2 border-[rgb(166,91,5)] hover:bg-[rgb(166,91,5)] hover:text-white transition">
+    View Products
+  </button>
+</Link>
+
           </div>
 
-          <div className="w-1/2">
+          {/* Image Slider */}
+          <div className="w-full md:w-1/2">
             <ImageSlider />
           </div>
         </div>
@@ -69,29 +64,29 @@ export default function Header() {
       {/* Second Section */}
       <section
         ref={sectionRef}
-        className={`w-full h-[200px] bg-[rgb(61,76,43)] flex items-center justify-center transition-all duration-700 ${
+        className={`w-full py-10 bg-[rgb(61,76,43)] flex items-center justify-center transition-all duration-700 ${
           isVisible ? "slide-up opacity-100" : "opacity-0 translate-y-20"
         }`}
         aria-label="feature-strip"
       >
-        <div className="flex justify-between max-w-7xl mx-auto gap-28 text-white font-semibold text-lg">
-          <div className="flex flex-col items-center text-center">
-            <img src="/shipped.png" alt="" className="w-16 h-14" />
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-20 max-w-7xl mx-auto text-white font-semibold text-center text-sm sm:text-base">
+          <div className="flex flex-col items-center">
+            <img src="/shipped.png" alt="" className="w-12 h-12 sm:w-16 sm:h-14" />
             <p className="mt-3">Doorstep Delivery</p>
           </div>
 
-          <div className="flex flex-col items-center text-center">
-            <img src="/quality.png" alt="" className="w-16 h-14" />
+          <div className="flex flex-col items-center">
+            <img src="/quality.png" alt="" className="w-12 h-12 sm:w-16 sm:h-14" />
             <p className="mt-3">Quality Guaranteed</p>
           </div>
 
-          <div className="flex flex-col items-center text-center">
-            <img src="/srilanka.png" alt="" className="w-16 h-14" />
+          <div className="flex flex-col items-center">
+            <img src="/srilanka.png" alt="" className="w-12 h-12 sm:w-16 sm:h-14" />
             <p className="mt-3">Largest Marketer</p>
           </div>
 
-          <div className="flex flex-col items-center text-center">
-            <img src="/banking.png" alt="" className="w-16 h-14" />
+          <div className="flex flex-col items-center">
+            <img src="/banking.png" alt="" className="w-12 h-12 sm:w-16 sm:h-14" />
             <p className="mt-3">Pay Online</p>
           </div>
         </div>
