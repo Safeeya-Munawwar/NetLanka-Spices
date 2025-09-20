@@ -1,0 +1,15 @@
+// src/data/products.js
+export const products = [
+    { id: 1, name: "Cinnamon", category: "spices", price: "LKR 1200/kg", image: "/images/cinnamon.PNG", description: "Fresh Ceylon cinnamon sticks sourced from Sri Lanka, known for their sweet aroma and delicate flavor. Ideal for baking, cooking, and making herbal teas." },
+    { id: 2, name: "Cloves", category: "spices", price: "LKR 3800/kg", image: "/images/cloves.PNG", description: "Premium quality cloves with a strong, aromatic fragrance. Perfect for seasoning meats, enhancing curries, or adding depth to spiced teas and desserts." },
+    { id: 3, name: "Betel Nuts", category: "spices", price: "LKR 800/kg", image: "/images/betel-nuts.PNG", description: "Natural betel nuts, carefully selected for traditional uses, ceremonial purposes, and adding a subtle, earthy flavor to recipes." },
+    { id: 4, name: "Black Pepper", category: "spices", price: "LKR 900/kg", image: "/images/pepper.PNG", description: "High-quality black peppercorns with a bold, pungent flavor. Ideal for grinding fresh onto dishes, seasoning meats, or enhancing soups and sauces." },
+    { id: 5, name: "Green Pepper", category: "spices", price: "LKR 1000/kg", image: "/images/green-pepper.PNG", description: "Fresh green peppercorns with a milder, slightly fruity flavor. Perfect for light sauces, pickling, or adding a gentle peppery note to dishes." },
+    { id: 6, name: "Nutmeg", category: "spices", price: "LKR 1500/kg", image: "/images/nutmeg.PNG", description: "Aromatic whole nutmeg, ideal for baking, desserts, and savory dishes. Adds warmth and depth with its slightly sweet and spicy flavor." },
+    { id: 7, name: "Mace", category: "spices", price: "LKR 1800/kg", image: "/images/mace.PNG", description: "Delicate mace, the outer covering of nutmeg seeds, with a warm, subtle flavor. Great for flavoring cakes, pastries, sauces, and savory dishes." },
+    { id: 8, name: "Belimal Tea", category: "herbs", price: "LKR 2500/kg", image: "/images/belimal.jpg", description: "Belimal (Strychnos nux-vomica) herbal tea, traditionally used for relaxation and detoxification. Known for its refreshing taste and soothing properties, ideal for daily wellness." },
+    { id: 9, name: "Moringa Tea", category: "herbs", price: "LKR 3000/kg", image: "/images/moringa.jpg", description: "Premium Moringa leaf tea rich in antioxidants and nutrients. Promotes energy, supports immune health, and has a mild, earthy flavor perfect for a calming cup." },
+    { id: 10, name: "Green Tea", category: "teas", price: "LKR 2000/kg", image: "/images/greentea.jpg", description: "High-quality green tea leaves, carefully dried to preserve natural antioxidants and flavor. Refreshing, light, and ideal for daily consumption or relaxation." },
+    { id: 11, name: "Coffee Beans", category: "coffee", price: "LKR 1500/kg", image: "/images/coffee-beans.jpg", description: "Premium Arabica coffee beans, freshly roasted for a rich aroma and smooth taste. Perfect for brewing espresso, drip coffee, or French press at home." },
+  ];
+  
