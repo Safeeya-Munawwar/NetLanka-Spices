@@ -39,3 +39,153 @@ code {
 .cart-pulse {
   animation: cart-pulse 1.5s infinite;
 }
+
+
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Classes */
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+/* Rotate in from left */
+@keyframes rotateInLeft {
+  0% {
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+  }
+}
+
+/* Rotate in from right */
+@keyframes rotateInRight {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+  }
+}
+
+/* Rotate out (same for both directions) */
+@keyframes rotateOut {
+  0% {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.9);
+  }
+}
+
+/* Classes already used in your JSX */
+.slide-rotate-left {
+  animation: rotateInLeft 0.8s ease forwards;
+}
+.slide-rotate-right {
+  animation: rotateInRight 0.8s ease forwards;
+}
+
+/* 👇 This handles when you only had "opacity-0" */
+.opacity-0 {
+  animation: rotateOut 0.8s ease forwards;
+}
+/* --- Generic slide animations --- */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Default hidden state */
+.slide-in-left,
+.slide-in-right,
+.slide-left,
+.slide-right {
+  opacity: 0;
+  transform: translateX(0); /* safe reset */
+  transition: opacity 0.4s ease;
+}
+
+/* When in view → animate */
+.slide-in-left.in-view {
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.slide-in-right.in-view {
+  animation: slideInRight 0.8s ease forwards;
+}
+
+/* Cards */
+.slide-left.in-view {
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.slide-right.in-view {
+  animation: slideInRight 0.8s ease forwards;
+}
+
+
+/* Slide Up Animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-out forwards;
+}
