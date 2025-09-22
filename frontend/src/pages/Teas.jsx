@@ -1,4 +1,3 @@
-// src/pages/Teas.jsx
 import React from "react";
 import CategoryProducts from "../components/CategoryProducts";
 

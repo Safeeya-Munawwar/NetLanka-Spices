@@ -1,4 +1,3 @@
-// src/pages/Categories.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaLeaf, FaSeedling, FaSpa, FaCoffee } from "react-icons/fa";
@@ -29,12 +28,14 @@ export default function CategoriesPage() {
       { threshold: 0.3 }
     );
 
-    refs.current.forEach((ref) => {
+    const elements = refs.current;
+
+    elements.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
 
     return () => {
-      refs.current.forEach((ref) => {
+      elements.forEach((ref) => {
         if (ref) observer.unobserve(ref);
       });
     };

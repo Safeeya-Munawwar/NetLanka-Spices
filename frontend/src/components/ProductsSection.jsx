@@ -1,11 +1,5 @@
 import React from "react";
 
-// FeaturedProducts.jsx
-// TailwindCSS-based RFC (React Functional Component)
-// Drop this file into your React app (e.g. src/components/FeaturedProducts.jsx)
-// Make sure Tailwind is configured in your project.
-// Replace image paths in the `products` array with your real images.
-
 export default function Products() {
   const products = [
     {

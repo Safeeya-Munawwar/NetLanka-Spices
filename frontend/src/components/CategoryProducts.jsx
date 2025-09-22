@@ -1,4 +1,3 @@
-// src/components/CategoryProducts.js
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInfoCircle, FaCartPlus, FaArrowLeft } from "react-icons/fa";

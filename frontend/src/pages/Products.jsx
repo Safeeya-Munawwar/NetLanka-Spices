@@ -1,5 +1,3 @@
-// C:\Users\Administrator\Projects\netlanka-spices\frontend\src\pages\Products.js
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";

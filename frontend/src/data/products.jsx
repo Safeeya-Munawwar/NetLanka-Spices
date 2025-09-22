@@ -1,4 +1,3 @@
-// src/data/products.js
 export const products = [
     { id: 1, name: "Cinnamon", category: "spices", price: "LKR 1200/kg", image: "/images/cinnamon.PNG", description: "Fresh Ceylon cinnamon sticks sourced from Sri Lanka, known for their sweet aroma and delicate flavor. Ideal for baking, cooking, and making herbal teas." },
     { id: 2, name: "Cloves", category: "spices", price: "LKR 3800/kg", image: "/images/cloves.PNG", description: "Premium quality cloves with a strong, aromatic fragrance. Perfect for seasoning meats, enhancing curries, or adding depth to spiced teas and desserts." },

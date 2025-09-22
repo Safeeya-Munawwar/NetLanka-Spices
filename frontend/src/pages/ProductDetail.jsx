@@ -1,7 +1,6 @@
-// src/components/ProductDetail.js
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { products } from "../data/products"; // Make sure each product has `category` & `description`
+import { products } from "../data/products";
 
 export default function ProductDetail() {
   const { id } = useParams();
