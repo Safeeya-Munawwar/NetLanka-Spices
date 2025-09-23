@@ -15,63 +15,112 @@ import LoginPage from "./components/LoginPage";
 import RegistrationPage from "./components/RegistrationPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import CategoryProducts from "./components/CategoryProducts";
+import PrivateRoute from "./PrivateRoute"; // import it
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Pages without Navbar/Footer */}
+        {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
 
-        {/* Pages with Navbar/Footer/Layout */}
+        {/* Protected routes */}
         <Route
           path="/"
-          element={<Layout><Home /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><Home /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/products"
-          element={<Layout><Products /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><Products /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/products/:id"
-          element={<Layout><ProductDetail /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><ProductDetail /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/categories"
-          element={<Layout><Categories /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><Categories /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/categories/:category"
-          element={<Layout><CategoryProducts /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><CategoryProducts /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/spices"
-          element={<Layout><SpicesPage /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><SpicesPage /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/herbs"
-          element={<Layout><HerbsPage /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><HerbsPage /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/teas"
-          element={<Layout><TeasPage /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><TeasPage /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/coffee"
-          element={<Layout><CoffeePage /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><CoffeePage /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/about"
-          element={<Layout><About /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><About /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/contact"
-          element={<Layout><Contact /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><Contact /></Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/order-confirmation"
-          element={<Layout><OrderConfirmation /></Layout>}
+          element={
+            <PrivateRoute>
+              <Layout><OrderConfirmation /></Layout>
+            </PrivateRoute>
+          }
         />
       </Routes>
     </Router>

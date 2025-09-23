@@ -1,5 +1,5 @@
- import React, { useState } from "react";
-
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function RegistrationPage() {
   const [name, setName] = useState("");
@@ -7,14 +7,26 @@ export default function RegistrationPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("Registering user:", { name, email, password });
-    // Add your registration API logic here
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
+        name,
+        email,
+        password
+      });
+
+      alert(res.data.msg); // e.g., "User registered successfully"
+      window.location.href = "/login"; // redirect to login page
+    } catch (err) {
+      alert(err.response?.data?.msg || "Registration failed");
+    }
   };
 
   return (
@@ -33,7 +45,7 @@ export default function RegistrationPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Your Name"
+              placeholder="John Doe"
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition bg-gray-50 placeholder-gray-400"
             />
           </div>
