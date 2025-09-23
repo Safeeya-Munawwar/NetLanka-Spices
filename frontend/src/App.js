@@ -16,6 +16,13 @@ import RegistrationPage from "./components/RegistrationPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import CategoryProducts from "./components/CategoryProducts";
 import PrivateRoute from "./PrivateRoute"; // import it
+import AdminLogin from "./pages/admin/AdminLogin";
+import Dashboard from "./pages/admin/Dashboard";
+import ProductsPage from "./pages/admin/ProductsPage";
+import CategoriesPage from "./pages/admin/CategoriesPage";
+import OrdersPage from "./pages/admin/OrdersPage";
+import UsersPage from "./pages/admin/UsersPage";
+import CheckoutPage from "./pages/admin/CheckoutPage";
 
 function App() {
   return (
@@ -93,17 +100,17 @@ function App() {
         <Route
           path="/coffee"
           element={
-            <PrivateRoute>
-              <Layout><CoffeePage /></Layout>
-            </PrivateRoute>
+            <Layout>
+              <CoffeePage />
+            </Layout>
           }
         />
         <Route
           path="/about"
           element={
-            <PrivateRoute>
-              <Layout><About /></Layout>
-            </PrivateRoute>
+            <Layout>
+              <About />
+            </Layout>
           }
         />
         <Route
@@ -122,6 +129,15 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Admin Pages */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin/products" element={<ProductsPage />} />
+        <Route path="/admin/categories" element={<CategoriesPage />} />
+        <Route path="/admin/orders" element={<OrdersPage />} />
+        <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin/checkout" element={<CheckoutPage />} />
       </Routes>
     </Router>
   );
