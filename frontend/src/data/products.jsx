@@ -8,7 +8,7 @@ export const products = [
     { id: 7, name: "Mace", category: "spices", price: "LKR 1800/kg", image: "/images/mace.PNG", description: "Delicate mace, the outer covering of nutmeg seeds, with a warm, subtle flavor. Great for flavoring cakes, pastries, sauces, and savory dishes." },
     { id: 8, name: "Belimal Tea", category: "herbs", price: "LKR 2500/kg", image: "/images/belimal.jpg", description: "Belimal (Strychnos nux-vomica) herbal tea, traditionally used for relaxation and detoxification. Known for its refreshing taste and soothing properties, ideal for daily wellness." },
     { id: 9, name: "Moringa Tea", category: "herbs", price: "LKR 3000/kg", image: "/images/moringa.jpg", description: "Premium Moringa leaf tea rich in antioxidants and nutrients. Promotes energy, supports immune health, and has a mild, earthy flavor perfect for a calming cup." },
-    { id: 10, name: "Green Tea", category: "teas", price: "LKR 2000/kg", image: "/images/greentea.jpg", description: "High-quality green tea leaves, carefully dried to preserve natural antioxidants and flavor. Refreshing, light, and ideal for daily consumption or relaxation." },
+    { id: 10, name: "Green Tea", category: "teas", price: "LKR 2000/kg", image: "/images/green-tea.jpg", description: "High-quality green tea leaves, carefully dried to preserve natural antioxidants and flavor. Refreshing, light, and ideal for daily consumption or relaxation." },
     { id: 11, name: "Coffee Beans", category: "coffee", price: "LKR 1500/kg", image: "/images/coffee-beans.jpg", description: "Premium Arabica coffee beans, freshly roasted for a rich aroma and smooth taste. Perfect for brewing espresso, drip coffee, or French press at home." },
   ];
   

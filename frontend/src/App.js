@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -12,51 +11,69 @@ import TeasPage from "./pages/Teas";
 import CoffeePage from "./pages/Coffee";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import WhatsAppButton from "./components/WhatsAppButton";
-import CartSidebar from "./components/CartSidebar";
-import CategoryProducts from "./components/CategoryProducts";
 import LoginPage from "./components/LoginPage";
 import RegistrationPage from "./components/RegistrationPage";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import CategoryProducts from "./components/CategoryProducts";
 
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <Routes>
-          {/* Pages without Navbar/Footer */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegistrationPage />} />
+      <Routes>
+        {/* Pages without Navbar/Footer */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
 
-          {/* Pages with Navbar/Footer */}
-          <Route
-            path="/*"
-            element={
-              <>
-                <Navbar />
-                <main className="flex-grow bg-yellow-50">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/categories/:category" element={<CategoryProducts />} />
-                    <Route path="/:category" element={<CategoryProducts />} />
-                    <Route path="/categories" element={<Categories />} />
-                    <Route path="/products/:id" element={<ProductDetail />} />
-                    <Route path="/spices" element={<SpicesPage />} />
-                    <Route path="/herbs" element={<HerbsPage />} />
-                    <Route path="/teas" element={<TeasPage />} />
-                    <Route path="/coffee" element={<CoffeePage />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                  </Routes>
-                </main>
-                <WhatsAppButton />
-                <Footer />
-                <CartSidebar />
-              </>
-            }
-          />
-        </Routes>
-      </div>
+        {/* Pages with Navbar/Footer/Layout */}
+        <Route
+          path="/"
+          element={<Layout><Home /></Layout>}
+        />
+        <Route
+          path="/products"
+          element={<Layout><Products /></Layout>}
+        />
+        <Route
+          path="/products/:id"
+          element={<Layout><ProductDetail /></Layout>}
+        />
+        <Route
+          path="/categories"
+          element={<Layout><Categories /></Layout>}
+        />
+        <Route
+          path="/categories/:category"
+          element={<Layout><CategoryProducts /></Layout>}
+        />
+        <Route
+          path="/spices"
+          element={<Layout><SpicesPage /></Layout>}
+        />
+        <Route
+          path="/herbs"
+          element={<Layout><HerbsPage /></Layout>}
+        />
+        <Route
+          path="/teas"
+          element={<Layout><TeasPage /></Layout>}
+        />
+        <Route
+          path="/coffee"
+          element={<Layout><CoffeePage /></Layout>}
+        />
+        <Route
+          path="/about"
+          element={<Layout><About /></Layout>}
+        />
+        <Route
+          path="/contact"
+          element={<Layout><Contact /></Layout>}
+        />
+        <Route
+          path="/order-confirmation"
+          element={<Layout><OrderConfirmation /></Layout>}
+        />
+      </Routes>
     </Router>
   );
 }

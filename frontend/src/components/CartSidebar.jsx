@@ -1,17 +1,23 @@
 import React, { useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaTimes, FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
-export default function CartSidebar() {
+export default function CartSidebar({ open: parentOpen, setOpen: parentSetOpen }) {
   const { cartItems, removeFromCart, totalPrice, clearCart } = useCart();
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Local state if parent doesn't control open
+  const [localOpen, setLocalOpen] = useState(false);
+  const open = parentOpen !== undefined ? parentOpen : localOpen;
+  const setOpen = parentSetOpen !== undefined ? parentSetOpen : setLocalOpen;
 
   return (
     <>
-      {/* Floating Cart Button with Pulse Animation */}
+      {/* Floating Cart Button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 bg-yellow-900 text-white p-4 rounded-full shadow-lg z-50 hover:bg-yellow-800 transition flex items-center justify-center cart-pulse"
+        className="fixed bottom-6 right-6 bg-yellow-900 text-white p-4 rounded-full shadow-lg z-50 hover:bg-yellow-800 transition flex items-center justify-center"
       >
         <FaShoppingCart className="w-6 h-6" />
         {cartItems.length > 0 && (
@@ -29,13 +35,19 @@ export default function CartSidebar() {
         ></div>
       )}
 
-      {/* Cart Sidebar */}
+      {/* Sidebar */}
       <div
         className={`fixed top-0 right-0 w-80 bg-yellow-50 h-full z-50 transform ${
           open ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 shadow-lg p-6 flex flex-col`}
       >
-        <h2 className="text-2xl font-bold text-yellow-900 mb-4">Your Cart</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-yellow-900">Your Cart</h2>
+          <button onClick={() => setOpen(false)}>
+            <FaTimes size={20} className="text-yellow-900" />
+          </button>
+        </div>
+
         <div className="flex-grow overflow-y-auto">
           {cartItems.length === 0 ? (
             <p className="text-yellow-800">Cart is empty.</p>
@@ -58,12 +70,16 @@ export default function CartSidebar() {
             ))
           )}
         </div>
+
         {cartItems.length > 0 && (
           <>
-            <p className="text-yellow-900 font-bold mb-4">Total: LKR {totalPrice}</p>
+            <p className="text-yellow-900 font-bold mb-4">
+              Total: LKR {totalPrice}
+            </p>
+
             <button
               className="bg-yellow-900 text-white px-4 py-2 rounded hover:bg-yellow-800 transition mb-2"
-              onClick={() => alert("Proceed to checkout")}
+              onClick={() => navigate("/order-confirmation")}
             >
               Checkout
             </button>

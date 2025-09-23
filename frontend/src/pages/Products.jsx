@@ -1,7 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
-import { FaInfoCircle, FaCartPlus } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import ProductCard from "../components/ProductCard";
 
 const products = [
   { id: 1, name: "Cinnamon", price: "LKR 1200/kg", image: "/images/cinnamon.PNG" },
@@ -13,74 +11,91 @@ const products = [
   { id: 7, name: "Mace", price: "LKR 1800/kg", image: "/images/mace.PNG" },
   { id: 8, name: "Belimal Tea", price: "LKR 2500/kg", image: "/images/belimal.jpg" },
   { id: 9, name: "Moringa Tea", price: "LKR 3000/kg", image: "/images/moringa.jpg" },
-  { id: 10, name: "Green Tea", price: "LKR 2000/kg", image: "/images/moringa.jpg" },
-  { id: 11, name: "Coffee Beans", price: "LKR 1500/kg", image: "/images/green-pepper.PNG" },
+  { id: 10, name: "Green Tea", price: "LKR 2000/kg", image: "/images/green-tea.jpg" },
+  { id: 11, name: "Coffee Beans", price: "LKR 1500/kg", image: "/images/coffee-beans.jpg" },
 ];
 
-function ProductCard({ product }) {
-  const { addToCart } = useCart();
-
-  return (
-    <div
-      className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden 
-      group hover:shadow-2xl transition-transform duration-300 transform 
-      hover:-translate-y-2 hover:scale-105 cursor-pointer"
-    >
-      {/* Image with zoom effect */}
-      <div className="overflow-hidden">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-48 object-cover transform group-hover:scale-110 transition duration-500"
-        />
-      </div>
-
-      {/* Product Info */}
-      <div className="p-4">
-        <h3 className="text-xl font-bold text-yellow-900 group-hover:text-yellow-700 transition">
-          {product.name}
-        </h3>
-        <p className="text-yellow-800 mt-2 font-semibold">{product.price}</p>
-      </div>
-
-      {/* Hover overlay actions */}
-      <div
-        className="absolute inset-0 bg-black bg-opacity-0 
-        group-hover:bg-opacity-50 flex flex-col items-center justify-center 
-        gap-3 opacity-0 group-hover:opacity-100 transition duration-500"
-      >
-        <Link
-          to={`/products/${product.id}`}
-          className="flex items-center gap-2 px-5 py-2 bg-yellow-900 text-white 
-          rounded-full shadow-md hover:bg-yellow-700 transition-transform transform hover:scale-105"
-        >
-          <FaInfoCircle /> View Details
-        </Link>
-        <button
-          className="flex items-center gap-2 px-5 py-2 bg-yellow-700 text-white 
-          rounded-full shadow-md hover:bg-yellow-600 transition-transform transform hover:scale-105"
-          onClick={() => addToCart(product)}
-        >
-          <FaCartPlus /> Add to Cart
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export default function Products() {
+  const headingRef = useRef(null);
+  const gridRef = useRef(null);
+
+  const [headingVisible, setHeadingVisible] = useState(false);
+  const [gridVisible, setGridVisible] = useState(false);
+
+  useEffect(() => {
+    const observerOptions = { threshold: 0.3 };
+  
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === headingRef.current) {
+          setHeadingVisible(entry.isIntersecting);
+        }
+        if (entry.target === gridRef.current) {
+          setGridVisible(entry.isIntersecting);
+        }
+      });
+    }, observerOptions);
+  
+    // ✅ Copy current refs into variables
+    const headingEl = headingRef.current;
+    const gridEl = gridRef.current;
+  
+    if (headingEl) observer.observe(headingEl);
+    if (gridEl) observer.observe(gridEl);
+  
+    return () => {
+      if (headingEl) observer.unobserve(headingEl);
+      if (gridEl) observer.unobserve(gridEl);
+    };
+  }, []);
+  
+
   return (
-    <section className="bg-yellow-50 py-16">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-10 text-center text-yellow-900">
-          Our Products
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+    <div>
+      {/* Hero Section */}
+      <section
+        className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-center bg-cover bg-no-repeat bg-fixed flex flex-col justify-center items-center"
+        style={{ backgroundImage: "url('/images/all1.jpg')" }}
+      >
+        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold">
+          OUR PRODUCTS
+        </h1>
+        <p className="text-white mt-2 sm:mt-4 text-sm sm:text-base md:text-lg font-extralight">
+          Discover the finest spices & teas from Sri Lanka
+        </p>
+      </section>
+
+      {/* Products Grid Section */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Heading */}
+          <div
+            ref={headingRef}
+            className={`text-center transition-opacity duration-700 ease-in-out ${
+              headingVisible ? "animate-slide-in-top" : "opacity-0"
+            }`}
+          >
+            <h2 className="text-yellow-800 font-semibold text-lg mb-2">
+              Pure & Authentic
+            </h2>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-12">
+              OUR COLLECTION
+            </h1>
+          </div>
+
+          {/* Grid */}
+          <div
+            ref={gridRef}
+            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 transition-opacity duration-700 ease-in-out ${
+              gridVisible ? "animate-fade-in" : "opacity-0"
+            }`}
+          >
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
