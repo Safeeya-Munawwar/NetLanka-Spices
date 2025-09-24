@@ -129,7 +129,7 @@ export default function Nav() {
                 </li>
                 <li>
                   <button
-                    onClick={() => { navigate("/my-orders"); setOpen(false); }}
+                    onClick={() => { navigate("/order-confirmation"); setOpen(false); }}
                     className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
                   >
                     My Orders
@@ -138,7 +138,7 @@ export default function Nav() {
                 {isAdmin && (
                   <li>
                     <button
-                      onClick={() => { navigate("/dashboard"); setOpen(false); }}
+                      onClick={() => { navigate("/admin"); setOpen(false); }}
                       className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
                     >
                       Dashboard
@@ -170,14 +170,14 @@ export default function Nav() {
             <p className="text-sm text-gray-500 truncate">{user.email}</p>
           </div>
           <button
-            onClick={() => { navigate("/my-orders"); setProfileOpen(false); }}
+            onClick={() => { navigate("/order-confirmation"); setProfileOpen(false); }}
             className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
           >
             My Orders
           </button>
           {isAdmin && (
             <button
-              onClick={() => { navigate("/dashboard"); setProfileOpen(false); }}
+              onClick={() => { navigate("/admin"); setProfileOpen(false); }}
               className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
             >
               Dashboard
