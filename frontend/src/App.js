@@ -15,8 +15,7 @@ import LoginPage from "./components/LoginPage";
 import RegistrationPage from "./components/RegistrationPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import CategoryProducts from "./components/CategoryProducts";
-import PrivateRoute from "./PrivateRoute"; // import it
-import AdminLogin from "./pages/admin/AdminLogin";
+import PrivateRoute from "./PrivateRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import ProductsPage from "./pages/admin/ProductsPage";
 import CategoriesPage from "./pages/admin/CategoriesPage";
@@ -131,7 +130,6 @@ function App() {
         />
 
         {/* Admin Pages */}
-        <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/products" element={<ProductsPage />} />
         <Route path="/admin/categories" element={<CategoriesPage />} />
