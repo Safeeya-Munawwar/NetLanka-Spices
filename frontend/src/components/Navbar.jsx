@@ -50,22 +50,21 @@ export default function Nav() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-6">
-            <NavLink to="/" className={linkClass}>Home</NavLink>
-            <NavLink to="/about" className={linkClass}>About us</NavLink>
-            <NavLink to="/products" className={linkClass}>Products</NavLink>
-            <NavLink to="/categories" className={linkClass}>Categories</NavLink>
-            <NavLink to="/contact" className={linkClass}>Contact us</NavLink>
-
-            {/* Profile Icon */}
-            {user && (
-              <div className="relative ml-4" ref={profileRef}>
-                <FaUserCircle
-                  size={28}
-                  className="text-white cursor-pointer"
-                  onClick={() => setProfileOpen(!profileOpen)}
-                />
-              </div>
-            )}
+            <NavLink to="/" className={linkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/about" className={linkClass}>
+              About us
+            </NavLink>
+            <NavLink to="/products" className={linkClass}>
+              Products
+            </NavLink>
+            <NavLink to="/categories" className={linkClass}>
+              Categories
+            </NavLink>
+            <NavLink to="/contact" className={linkClass}>
+              Contact us
+            </NavLink>
 
             {/* Cart Icon (desktop only) */}
             <div
@@ -79,6 +78,17 @@ export default function Nav() {
                 </span>
               )}
             </div>
+
+            {/* Profile Icon */}
+            {user && (
+              <div className="relative ml-4" ref={profileRef}>
+                <FaUserCircle
+                  size={28}
+                  className="text-white cursor-pointer"
+                  onClick={() => setProfileOpen(!profileOpen)}
+                />
+              </div>
+            )}
           </nav>
 
           {/* Hamburger (Mobile Only) */}
@@ -87,13 +97,19 @@ export default function Nav() {
             onClick={() => setOpen(!open)}
           >
             <span
-              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${open ? "rotate-45 translate-y-2" : ""}`}
+              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${
+                open ? "rotate-45 translate-y-2" : ""
+              }`}
             ></span>
             <span
-              className={`h-0.5 w-6 bg-white transition-opacity duration-300 ${open ? "opacity-0" : ""}`}
+              className={`h-0.5 w-6 bg-white transition-opacity duration-300 ${
+                open ? "opacity-0" : ""
+              }`}
             ></span>
             <span
-              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`}
+              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${
+                open ? "-rotate-45 -translate-y-2" : ""
+              }`}
             ></span>
           </button>
         </div>
@@ -106,19 +122,49 @@ export default function Nav() {
         >
           <ul className="flex flex-col space-y-2 px-4 py-4">
             <li>
-              <NavLink to="/" className={linkClass} onClick={() => setOpen(false)}>Home</NavLink>
+              <NavLink
+                to="/"
+                className={linkClass}
+                onClick={() => setOpen(false)}
+              >
+                Home
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/about" className={linkClass} onClick={() => setOpen(false)}>About us</NavLink>
+              <NavLink
+                to="/about"
+                className={linkClass}
+                onClick={() => setOpen(false)}
+              >
+                About us
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/products" className={linkClass} onClick={() => setOpen(false)}>Products</NavLink>
+              <NavLink
+                to="/products"
+                className={linkClass}
+                onClick={() => setOpen(false)}
+              >
+                Products
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/categories" className={linkClass} onClick={() => setOpen(false)}>Categories</NavLink>
+              <NavLink
+                to="/categories"
+                className={linkClass}
+                onClick={() => setOpen(false)}
+              >
+                Categories
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/contact" className={linkClass} onClick={() => setOpen(false)}>Contact us</NavLink>
+              <NavLink
+                to="/contact"
+                className={linkClass}
+                onClick={() => setOpen(false)}
+              >
+                Contact us
+              </NavLink>
             </li>
 
             {user && (
@@ -129,7 +175,10 @@ export default function Nav() {
                 </li>
                 <li>
                   <button
-                    onClick={() => { navigate("/order-confirmation"); setOpen(false); }}
+                    onClick={() => {
+                      navigate("/order-confirmation");
+                      setOpen(false);
+                    }}
                     className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
                   >
                     My Orders
@@ -138,7 +187,10 @@ export default function Nav() {
                 {isAdmin && (
                   <li>
                     <button
-                      onClick={() => { navigate("/admin"); setOpen(false); }}
+                      onClick={() => {
+                        navigate("/admin");
+                        setOpen(false);
+                      }}
                       className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
                     >
                       Dashboard
@@ -170,14 +222,20 @@ export default function Nav() {
             <p className="text-sm text-gray-500 truncate">{user.email}</p>
           </div>
           <button
-            onClick={() => { navigate("/order-confirmation"); setProfileOpen(false); }}
+            onClick={() => {
+              navigate("/order-confirmation");
+              setProfileOpen(false);
+            }}
             className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
           >
             My Orders
           </button>
           {isAdmin && (
             <button
-              onClick={() => { navigate("/admin"); setProfileOpen(false); }}
+              onClick={() => {
+                navigate("/admin");
+                setProfileOpen(false);
+              }}
               className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
             >
               Dashboard
