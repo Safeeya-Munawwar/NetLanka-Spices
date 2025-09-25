@@ -18,10 +18,11 @@ import CategoryProducts from "./components/CategoryProducts";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import ProductsPage from "./pages/admin/ProductsPage";
-import CategoriesPage from "./pages/admin/CategoriesPage";
+import CategoriesPage from "./pages/admin/CategoriesPage"; // ✅ import form
 import OrdersPage from "./pages/admin/OrdersPage";
 import UsersPage from "./pages/admin/UsersPage";
 import CheckoutPage from "./pages/admin/CheckoutPage";
+import CategoryFormPage from "./components/admin/CategoryForm";
 
 function App() {
   return (
@@ -133,6 +134,11 @@ function App() {
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/products" element={<ProductsPage />} />
         <Route path="/admin/categories" element={<CategoriesPage />} />
+
+        {/* ✅ New Routes for Category CRUD */}
+        <Route path="/admin/categories/new" element={<CategoryFormPage />} />
+        <Route path="/admin/categories/edit/:id" element={<CategoryFormPage />} />
+
         <Route path="/admin/orders" element={<OrdersPage />} />
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/checkout" element={<CheckoutPage />} />

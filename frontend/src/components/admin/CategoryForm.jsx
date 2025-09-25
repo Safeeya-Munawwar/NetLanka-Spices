@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Sidebar from "../../components/admin/Sidebar";
+import CategoryLayout from "../../components/admin/CategoryLayout";
 
 export default function CategoryFormPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
-
   const editingCategory = state?.cat || null;
 
-  // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [active, setActive] = useState(true);
 
-  // Load existing category if editing
   useEffect(() => {
     if (editingCategory) {
       setTitle(editingCategory.title);
@@ -30,33 +27,27 @@ export default function CategoryFormPage() {
       id: editingCategory ? editingCategory.id : Date.now(),
       title,
       description,
-      image: image || "https://via.placeholder.com/50",
+      image: image || "/1.jpeg",
       active,
       dateCreated: editingCategory
         ? editingCategory.dateCreated
         : new Date().toLocaleDateString(),
     };
 
-    // Navigate back to categories page with state
     navigate("/admin/categories", {
       state: { newCategory, editing: !!editingCategory },
     });
   };
 
   return (
-    <div className="flex min-h-screen bg-yellow-50">
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main content */}
-      <div className="flex-1 p-10 flex justify-center items-start">
+    <CategoryLayout>
+      <div className="flex justify-center items-start">
         <div className="bg-yellow-100 rounded-2xl p-6 w-full max-w-2xl shadow-lg border border-yellow-300">
           <h2 className="text-2xl font-bold text-brown-900 mb-6">
             {editingCategory ? "Edit Category" : "New Category"}
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
             <div>
               <label className="block text-brown-800 mb-2">Category Title</label>
               <input
@@ -68,11 +59,8 @@ export default function CategoryFormPage() {
               />
             </div>
 
-            {/* Description */}
             <div>
-              <label className="block text-brown-800 mb-2">
-                Category Description
-              </label>
+              <label className="block text-brown-800 mb-2">Category Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -82,7 +70,6 @@ export default function CategoryFormPage() {
               />
             </div>
 
-            {/* Image */}
             <div>
               <label className="block text-brown-800 mb-2">Category Image</label>
               <input
@@ -102,7 +89,6 @@ export default function CategoryFormPage() {
               )}
             </div>
 
-            {/* Active checkbox */}
             <div className="flex items-center gap-2">
               <label className="text-brown-800">Active</label>
               <input
@@ -113,7 +99,6 @@ export default function CategoryFormPage() {
               />
             </div>
 
-            {/* Submit button */}
             <button
               type="submit"
               className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl transition"
@@ -123,6 +108,6 @@ export default function CategoryFormPage() {
           </form>
         </div>
       </div>
-    </div>
+    </CategoryLayout>
   );
 }
