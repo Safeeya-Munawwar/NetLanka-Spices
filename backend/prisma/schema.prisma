@@ -20,4 +20,6 @@ model User {
   password  String
   role      String   @default("user") // user or admin
   createdAt DateTime @default(now())
+  active    Boolean  @default(true)
 }
+
