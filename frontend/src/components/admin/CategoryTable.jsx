@@ -1,11 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import CategoryLayout from "../../components/admin/CategoryLayout";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function CategoryTable({ categories, onEdit, onDelete }) {
+export default function CategoryTable() {
+  const [categories, setCategories] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
+  const navigate = useNavigate();
 
   const toggleMenu = (id) => setOpenMenu(openMenu === id ? null : id);
+
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/categories");
+      setCategories(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  // Delete category
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      setCategories(categories.filter((cat) => cat.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <CategoryLayout>
@@ -43,7 +71,9 @@ export default function CategoryTable({ categories, onEdit, onDelete }) {
                       <span className="text-red-700 font-semibold">No</span>
                     )}
                   </td>
-                  <td className="py-3 px-4">{cat.dateCreated}</td>
+                  <td className="py-3 px-4">
+                    {new Date(cat.dateCreated).toLocaleDateString()}
+                  </td>
                   <td className="py-3 px-4 text-right relative">
                     <button
                       onClick={() => toggleMenu(cat.id)}
@@ -58,7 +88,7 @@ export default function CategoryTable({ categories, onEdit, onDelete }) {
                           <li>
                             <button
                               onClick={() => {
-                                onDelete(cat.id);
+                                handleDelete(cat.id);
                                 setOpenMenu(null);
                               }}
                               className="w-full text-left px-4 py-2 hover:bg-red-400 hover:text-white"
@@ -69,7 +99,9 @@ export default function CategoryTable({ categories, onEdit, onDelete }) {
                           <li>
                             <button
                               onClick={() => {
-                                onEdit(cat);
+                                navigate(`/admin/categories/edit/${cat.id}`, {
+                                  state: { cat },
+                                });
                                 setOpenMenu(null);
                               }}
                               className="w-full text-left px-4 py-2 hover:bg-yellow-400 hover:text-white"
@@ -83,6 +115,14 @@ export default function CategoryTable({ categories, onEdit, onDelete }) {
                   </td>
                 </tr>
               ))}
+
+              {categories.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center py-6 text-brown-400">
+                    No categories found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

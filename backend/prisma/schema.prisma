@@ -21,3 +21,30 @@ model User {
   role      String   @default("user") // user or admin
   createdAt DateTime @default(now())
 }
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  image       String
+  products    Product[]
+  active      Boolean  @default(true)
+  dateCreated DateTime @default(now())
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  price       Float
+  quantity    Int
+  image       String?
+  active      Boolean  @default(true)
+
+  // Relation to Category
+  categoryId  String   @db.ObjectId
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

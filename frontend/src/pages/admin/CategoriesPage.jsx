@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-
+import axios from "axios";
 
 export default function CategoriesPage() {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
 
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      title: "Spices",
-      description: "Various high quality spices",
-      image: "/1.jpeg",
-      active: true,
-      dateCreated: "2025-09-20",
-    },
-    {
-      id: 2,
-      title: "Herbs",
-      description: "Fresh organic herbs",
-      image: "/1.jpeg",
-      active: false,
-      dateCreated: "2025-09-21",
-    },
-  ]);
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/categories");
+      setCategories(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  const handleDelete = (id) => {
-    setCategories(categories.filter((cat) => cat.id !== id));
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      setCategories(categories.filter((cat) => cat.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -76,7 +76,9 @@ export default function CategoriesPage() {
                     <span className="text-red-700 font-semibold">Inactive</span>
                   )}
                 </td>
-                <td className="px-6 py-4">{cat.dateCreated}</td>
+                <td className="px-6 py-4">
+                  {new Date(cat.dateCreated).toLocaleDateString()}
+                </td>
                 <td className="px-6 py-4 flex gap-3">
                   <button
                     onClick={() =>
