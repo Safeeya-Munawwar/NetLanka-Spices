@@ -12,6 +12,11 @@ router.post("/", async (req, res) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return res.status(400).json({ msg: "User not found" });
 
+    // 🚫 Block inactive accounts
+    if (!user.active) {
+      return res.status(403).json({ msg: "Your account has been deactivated. Contact admin." });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 

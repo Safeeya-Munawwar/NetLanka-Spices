@@ -140,7 +140,7 @@ function App() {
         <Route path="/admin/categories" element={<CategoriesPage />} />
         <Route path="/admin/categories/new" element={<CategoryFormPage />} />
         <Route path="/admin/categories/edit/:id" element={<CategoryFormPage />} />
-
+        
         <Route path="/admin/orders" element={<OrdersPage />} />
 
 

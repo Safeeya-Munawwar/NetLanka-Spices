@@ -1,127 +1,146 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../components/admin/Sidebar";
+import { Link } from "react-router-dom";
+import { FaBoxOpen, FaThList, FaClipboardList, FaUsers } from "react-icons/fa";
+import axios from "axios";
 
-export default function CategoryFormPage() {
-  const { state } = useLocation();
-  const navigate = useNavigate();
+export default function Dashboard() {
+  const [stats, setStats] = useState({
+    products: 0,
+    categories: 0,
+    orders: 0,
+    users: 0,
+  });
 
-  const editingCategory = state?.cat || null;
+  const [visible, setVisible] = useState(false);
+  const dashboardRef = useRef(null);
 
-  // Form state
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [active, setActive] = useState(true);
+  const token = localStorage.getItem("token");
 
-  // Load existing category if editing
   useEffect(() => {
-    if (editingCategory) {
-      setTitle(editingCategory.title);
-      setDescription(editingCategory.description);
-      setImage(editingCategory.image);
-      setActive(editingCategory.active);
-    }
-  }, [editingCategory]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newCategory = {
-      id: editingCategory ? editingCategory.id : Date.now(),
-      title,
-      description,
-      image: image || "https://via.placeholder.com/50",
-      active,
-      dateCreated: editingCategory
-        ? editingCategory.dateCreated
-        : new Date().toLocaleDateString(),
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStats(res.data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats:", err);
+      }
     };
 
-    // Navigate back to categories page with state
-    navigate("/admin/categories", {
-      state: { newCategory, editing: !!editingCategory },
-    });
+    fetchStats();
+  }, [token]);
+
+// Animate cards when visible
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        setVisible(true);
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  const currentRef = dashboardRef.current; // ✅ store in variable
+
+  if (currentRef) observer.observe(currentRef);
+
+  return () => {
+    if (currentRef) observer.unobserve(currentRef);
   };
+}, []);
+
+  const dashboardItems = [
+    {
+      title: "Manage Products",
+      description: "Add, edit, or remove products from your store.",
+      icon: <FaBoxOpen className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/products",
+      count: stats.products,
+    },
+    {
+      title: "Manage Categories",
+      description: "Organize your products into categories.",
+      icon: <FaThList className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/categories",
+      count: stats.categories,
+    },
+    {
+      title: "Manage Orders",
+      description: "View and process customer orders.",
+      icon: <FaClipboardList className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/orders",
+      count: stats.orders,
+    },
+    {
+      title: "Manage Users",
+      description: "View and manage user accounts.",
+      icon: <FaUsers className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/users",
+      count: stats.users,
+    },
+  ];
 
   return (
-    <div className="flex min-h-screen bg-yellow-50">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
-      {/* Main content */}
-      <div className="flex-1 p-10 flex justify-center items-start">
-        <div className="bg-yellow-100 rounded-2xl p-6 w-full max-w-2xl shadow-lg border border-yellow-300">
-          <h2 className="text-2xl font-bold text-brown-900 mb-6">
-            {editingCategory ? "Edit Category" : "New Category"}
-          </h2>
+      <div className="flex-1">
+        {/* Hero Header */}
+        <section
+          className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-center bg-cover bg-no-repeat bg-fixed flex flex-col justify-center items-center"
+          style={{ backgroundImage: "url('/images/all.jpg')" }}
+        >
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold shadow-lg">
+            ADMIN DASHBOARD
+          </h1>
+          <p className="text-white mt-2 sm:mt-4 text-sm sm:text-base md:text-lg font-extralight">
+            Manage your store efficiently and easily
+          </p>
+        </section>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
-            <div>
-              <label className="block text-brown-800 mb-2">Category Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Type the category title"
-                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
+        {/* Dashboard Section */}
+        <section
+          ref={dashboardRef}
+          className="container mx-auto px-6 py-16 bg-white"
+        >
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-yellow-800 font-semibold text-lg mb-2">
+              Overview
+            </h2>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-12">
+              Manage Your Store
+            </h1>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+              {dashboardItems.map((item, idx) => (
+                <Link
+                  key={idx}
+                  to={item.link}
+                  className={`p-6 rounded-lg shadow-lg flex flex-col items-start gap-4 bg-yellow-100 hover:bg-yellow-200 transition transform duration-700 ${
+                    visible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${idx * 150}ms` }}
+                >
+                  <div className="p-3 bg-yellow-200 rounded-full shadow">
+                    {item.icon}
+                  </div>
+                  <h2 className="text-xl font-bold text-yellow-900">
+                    {item.title}
+                  </h2>
+                  <p className="text-yellow-800 text-sm">{item.description}</p>
+                  <span className="mt-auto font-bold text-yellow-900 text-lg">
+                    {item.count} {item.title.split(" ")[1]}
+                  </span>
+                </Link>
+              ))}
             </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-brown-800 mb-2">
-                Category Description
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Type the category description"
-                rows={3}
-                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
-
-            {/* Image */}
-            <div>
-              <label className="block text-brown-800 mb-2">Category Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setImage(URL.createObjectURL(e.target.files[0]))
-                }
-                className="block w-full text-brown-800"
-              />
-              {image && (
-                <img
-                  src={image}
-                  alt="Preview"
-                  className="mt-3 w-20 h-20 rounded-full object-cover border border-yellow-300"
-                />
-              )}
-            </div>
-
-            {/* Active checkbox */}
-            <div className="flex items-center gap-2">
-              <label className="text-brown-800">Active</label>
-              <input
-                type="checkbox"
-                checked={active}
-                onChange={() => setActive(!active)}
-                className="w-5 h-5 accent-yellow-500"
-              />
-            </div>
-
-            {/* Submit button */}
-            <button
-              type="submit"
-              className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl transition"
-            >
-              {editingCategory ? "Update Category" : "Create Category"}
-            </button>
-          </form>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   );
