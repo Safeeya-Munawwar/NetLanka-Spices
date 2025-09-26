@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaTrash, FaEdit } from "react-icons/fa";
 import CategoryLayout from "../../components/admin/CategoryLayout"; // Could be AdminLayout
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,8 @@ export default function ProductTable() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
     try {
       await axios.delete(`http://localhost:5000/api/products/${id}`);
       setProducts(products.filter((p) => p.id !== id));
@@ -98,12 +99,14 @@ export default function ProductTable() {
                     <td className="px-6 py-4">{prod.quantity}</td>
                     <td className="px-6 py-4">
                       {prod.active ? (
-                        <span className="text-green-700 font-semibold">Yes</span>
+                        <span className="text-green-700 font-semibold">
+                          Yes
+                        </span>
                       ) : (
                         <span className="text-red-700 font-semibold">No</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-right relative">
+                    <td className="px-6 py-4 flex items-center gap-3">
                       <button
                         onClick={() => toggleMenu(prod.id)}
                         className="p-2 rounded-full hover:bg-yellow-300"
@@ -120,9 +123,9 @@ export default function ProductTable() {
                                   handleDelete(prod.id);
                                   setOpenMenu(null);
                                 }}
-                                className="w-full text-left px-4 py-2 hover:bg-red-400 hover:text-white"
+                                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-red-400 hover:text-white"
                               >
-                                Delete
+                                <FaTrash /> Delete
                               </button>
                             </li>
                             <li>
@@ -133,9 +136,9 @@ export default function ProductTable() {
                                   });
                                   setOpenMenu(null);
                                 }}
-                                className="w-full text-left px-4 py-2 hover:bg-yellow-400 hover:text-white"
+                                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-yellow-400 hover:text-white"
                               >
-                                Edit
+                                <FaEdit /> Edit
                               </button>
                             </li>
                           </ul>

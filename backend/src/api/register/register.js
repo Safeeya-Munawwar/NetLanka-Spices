@@ -1,13 +1,13 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
   try {
+    const prisma = req.prisma; // use Prisma from index.js
     const { name, email, password } = req.body;
+
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) return res.status(400).json({ msg: "Email already exists" });
 

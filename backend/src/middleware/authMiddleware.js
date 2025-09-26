@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+// authMiddleware.js
+import jwt from "jsonwebtoken";
 
 async function authMiddleware(req, res, next) {
+  const prisma = req.prisma; // use Prisma from index.js
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) return res.status(401).json({ msg: "No token, authorization denied" });
 
@@ -21,4 +21,4 @@ async function authMiddleware(req, res, next) {
   }
 }
 
-module.exports = authMiddleware;
+export default authMiddleware;

@@ -1,24 +1,21 @@
-const express = require("express");
+import express from "express";
+import authMiddleware from "../../middleware/authMiddleware.js";
+
 const router = express.Router();
-const { PrismaClient } = require("@prisma/client");
-const authMiddleware = require("../../middleware/authMiddleware");
-const prisma = new PrismaClient();
 
 router.get("/", authMiddleware, async (req, res) => {
-  if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
-
   try {
+    const prisma = req.prisma; // use Prisma from index.js
+    if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
+
     const usersCount = await prisma.user.count();
-    // Later you can replace these with real counts from Product, Category, Order models
-    res.json({
-      users: usersCount,
-      products: 0,
-      categories: 0,
-      orders: 0,
-    });
+    const productsCount = await prisma.product.count();
+    const categoriesCount = await prisma.category.count();
+
+    res.json({ users: usersCount, products: productsCount, categories: categoriesCount });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 });
-   
-module.exports = router;
+
+export default router;

@@ -32,25 +32,25 @@ export default function Dashboard() {
     fetchStats();
   }, [token]);
 
-// Animate cards when visible
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) {
-        setVisible(true);
-      }
-    },
-    { threshold: 0.2 }
-  );
+  // Animate cards when visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
 
-  const currentRef = dashboardRef.current; // ✅ store in variable
+    const currentRef = dashboardRef.current; // ✅ store in variable
 
-  if (currentRef) observer.observe(currentRef);
+    if (currentRef) observer.observe(currentRef);
 
-  return () => {
-    if (currentRef) observer.unobserve(currentRef);
-  };
-}, []);
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, []);
 
   const dashboardItems = [
     {

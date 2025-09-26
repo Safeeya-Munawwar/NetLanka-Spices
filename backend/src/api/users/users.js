@@ -1,7 +1,9 @@
-const express = require("express");
+// src/api/users/users.js
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+import authMiddleware from "../../middleware/authMiddleware.js";
+
 const router = express.Router();
-const { PrismaClient } = require("@prisma/client");
-const authMiddleware = require("../../middleware/authMiddleware");
 const prisma = new PrismaClient();
 
 // Get all users (admin only)
@@ -44,7 +46,6 @@ router.patch("/:id", authMiddleware, async (req, res) => {
 });
 
 // Deactivate user (admin only)
-// Deactivate user (admin only)
 router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
@@ -52,7 +53,7 @@ router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { active: false },
-      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true }, // add createdAt
+      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
     });
 
     res.json(user);
@@ -61,15 +62,13 @@ router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
   }
 });
 
-
 // Activate user (admin only)
-// Activate user
 router.patch("/:id/activate", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
 
     const user = await prisma.user.update({
-      where: { id: req.params.id },  // use string directly
+      where: { id: req.params.id },
       data: { active: true },
       select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
     });
@@ -79,7 +78,6 @@ router.patch("/:id/activate", authMiddleware, async (req, res) => {
     res.status(500).json({ msg: err.message || "Account inactive or not found" });
   }
 });
-
 
 // Delete user (admin only)
 router.delete("/:id", authMiddleware, async (req, res) => {
@@ -95,4 +93,4 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

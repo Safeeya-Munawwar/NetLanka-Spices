@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";  
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
 import axios from "axios";
@@ -42,15 +42,16 @@ export default function CategoryFormPage() {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
-        await axios.post(
-          "http://localhost:5000/api/categories",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await axios.post("http://localhost:5000/api/categories", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
       navigate("/admin/categories");
     } catch (err) {
-      console.error("Error submitting category:", err.response?.data || err.message);
+      console.error(
+        "Error submitting category:",
+        err.response?.data || err.message
+      );
       alert("Failed to save category. Check console for details.");
     } finally {
       setLoading(false);
@@ -67,7 +68,9 @@ export default function CategoryFormPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-brown-800 mb-2">Category Title</label>
+              <label className="block text-brown-800 mb-2">
+                Category Title
+              </label>
               <input
                 type="text"
                 value={title}
@@ -79,7 +82,9 @@ export default function CategoryFormPage() {
             </div>
 
             <div>
-              <label className="block text-brown-800 mb-2">Category Description</label>
+              <label className="block text-brown-800 mb-2">
+                Category Description
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -90,7 +95,9 @@ export default function CategoryFormPage() {
             </div>
 
             <div>
-              <label className="block text-brown-800 mb-2">Category Image</label>
+              <label className="block text-brown-800 mb-2">
+                Category Image
+              </label>
               <input
                 type="file"
                 accept="image/*"

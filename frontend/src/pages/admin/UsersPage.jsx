@@ -362,7 +362,7 @@ export default function UsersPage() {
                       {/* Delete / deactivate (visible for all except self) */}
                       {user.id !== Number(currentUser?.id) && (
                         <button
-                          className="text-gray-700 hover:underline"
+                          className="text-red-700 hover:underline"
                           onClick={() => {
                             if (!window.confirm("Mark this user as inactive?"))
                               return;

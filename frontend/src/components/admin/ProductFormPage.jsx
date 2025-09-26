@@ -61,17 +61,18 @@ export default function ProductFormPage() {
 
     try {
       if (editingProduct) {
+        if (!imageFile && editingProduct?.image) {
+          formData.append("existingImage", editingProduct.image);
+        }
         await axios.put(
           `http://localhost:5000/api/products/${editingProduct.id}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
-        await axios.post(
-          "http://localhost:5000/api/products",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await axios.post("http://localhost:5000/api/products", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
       navigate("/admin/products");
     } catch (err) {
@@ -94,34 +95,64 @@ export default function ProductFormPage() {
             {/* Title */}
             <div>
               <label className="block text-brown-800 mb-1">Title</label>
-              <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)} required className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"/>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+              />
             </div>
 
             {/* Description */}
             <div>
               <label className="block text-brown-800 mb-1">Description</label>
-              <textarea value={description} onChange={(e)=>setDescription(e.target.value)} rows={3} className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"/>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+              />
             </div>
 
             {/* Price & Quantity */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-brown-800 mb-1">Price</label>
-                <input type="number" value={price} onChange={(e)=>setPrice(e.target.value)} required className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"/>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+                />
               </div>
               <div>
                 <label className="block text-brown-800 mb-1">Quantity</label>
-                <input type="number" value={quantity} onChange={(e)=>setQuantity(e.target.value)} required className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"/>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+                />
               </div>
             </div>
 
             {/* Category */}
             <div>
               <label className="block text-brown-800 mb-1">Category</label>
-              <select value={categoryId} onChange={(e)=>setCategoryId(e.target.value)} required className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none">
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                required
+                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+              >
                 <option value="">Select category</option>
-                {categories.map(cat=>(
-                  <option key={cat.id} value={cat.id}>{cat.title}</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.title}
+                  </option>
                 ))}
               </select>
             </div>
@@ -129,18 +160,48 @@ export default function ProductFormPage() {
             {/* Image */}
             <div>
               <label className="block text-brown-800 mb-1">Image</label>
-              <input type="file" accept="image/*" onChange={(e)=>{const f=e.target.files[0]; setImageFile(f); if(f)setImagePreview(URL.createObjectURL(f));}} className="w-full text-brown-800"/>
-              {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 w-24 h-24 object-cover rounded-lg border border-yellow-300"/>}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const f = e.target.files[0];
+                  setImageFile(f);
+                  if (f) setImagePreview(URL.createObjectURL(f));
+                }}
+                className="w-full text-brown-800"
+              />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mt-2 w-24 h-24 object-cover rounded-lg border border-yellow-300"
+                />
+              )}
             </div>
 
             {/* Active */}
             <div className="flex items-center gap-2">
               <label className="text-brown-800">Active</label>
-              <input type="checkbox" checked={active} onChange={()=>setActive(!active)} className="w-5 h-5 accent-yellow-500"/>
+              <input
+                type="checkbox"
+                checked={active}
+                onChange={() => setActive(!active)}
+                className="w-5 h-5 accent-yellow-500"
+              />
             </div>
 
-            <button type="submit" disabled={loading} className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl transition disabled:opacity-50">
-              {loading ? (editingProduct ? "Updating..." : "Creating...") : (editingProduct ? "Update Product" : "Create Product")}
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl transition disabled:opacity-50"
+            >
+              {loading
+                ? editingProduct
+                  ? "Updating..."
+                  : "Creating..."
+                : editingProduct
+                ? "Update Product"
+                : "Create Product"}
             </button>
           </form>
         </div>
