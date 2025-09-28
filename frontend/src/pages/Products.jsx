@@ -1,19 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
-
-const products = [
-  { id: 1, name: "Cinnamon", price: "LKR 1200/kg", image: "/images/cinnamon.PNG" },
-  { id: 2, name: "Cloves", price: "LKR 3800/kg", image: "/images/cloves.PNG" },
-  { id: 3, name: "Betel Nuts", price: "LKR 800/kg", image: "/images/betel-nuts.PNG" },
-  { id: 4, name: "Pepper", price: "LKR 900/kg", image: "/images/pepper.PNG" },
-  { id: 5, name: "Green Pepper", price: "LKR 1000/kg", image: "/images/green-pepper.PNG" },
-  { id: 6, name: "Nutmeg", price: "LKR 1500/kg", image: "/images/nutmeg.PNG" },
-  { id: 7, name: "Mace", price: "LKR 1800/kg", image: "/images/mace.PNG" },
-  { id: 8, name: "Belimal Tea", price: "LKR 2500/kg", image: "/images/belimal.jpg" },
-  { id: 9, name: "Moringa Tea", price: "LKR 3000/kg", image: "/images/moringa.jpg" },
-  { id: 10, name: "Green Tea", price: "LKR 2000/kg", image: "/images/green-tea.jpg" },
-  { id: 11, name: "Coffee Beans", price: "LKR 1500/kg", image: "/images/coffee-beans.jpg" },
-];
+import axios from "axios";
 
 export default function Products() {
   const headingRef = useRef(null);
@@ -22,9 +9,19 @@ export default function Products() {
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Fetch products from backend
+    axios
+      .get("http://localhost:5000/api/products") // ✅ change if your backend is deployed
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
+
   useEffect(() => {
     const observerOptions = { threshold: 0.3 };
-  
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === headingRef.current) {
@@ -35,20 +32,18 @@ export default function Products() {
         }
       });
     }, observerOptions);
-  
-    // ✅ Copy current refs into variables
+
     const headingEl = headingRef.current;
     const gridEl = gridRef.current;
-  
+
     if (headingEl) observer.observe(headingEl);
     if (gridEl) observer.observe(gridEl);
-  
+
     return () => {
       if (headingEl) observer.unobserve(headingEl);
       if (gridEl) observer.unobserve(gridEl);
     };
   }, []);
-  
 
   return (
     <div>
@@ -93,6 +88,12 @@ export default function Products() {
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
+
+            {products.length === 0 && (
+              <p className="text-center col-span-full text-gray-600">
+                No products found.
+              </p>
+            )}
           </div>
         </div>
       </section>

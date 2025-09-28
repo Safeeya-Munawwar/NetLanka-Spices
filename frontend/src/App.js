@@ -74,6 +74,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/spices"
           element={

@@ -14,6 +14,7 @@ import categoriesApi from "./api/categories/categories.js";
 import productsApi from "./api/products/products.js";
 import usersApi from "./api/users/users.js";
 import statsApi from "./api/stats/stats.js";
+import filteredProductsAPi from "./api/filtered-products/filteredProducts.js";
 
 dotenv.config();
 
@@ -44,7 +45,7 @@ app.use("/api/categories", categoriesApi);
 app.use("/api/products", productsApi);
 app.use("/api/users", usersApi);
 app.use("/api/stats", statsApi);
-
+app.use("/api/filtered-products", filteredProductsAPi);
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

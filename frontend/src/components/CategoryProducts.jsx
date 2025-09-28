@@ -1,24 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaInfoCircle, FaCartPlus, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import { products } from "../data/products";
+import axios from "axios";
 
-// ProductCard with top-right circular buttons
+// Product Card component
 function ProductCard({ product }) {
   const { addToCart } = useCart();
 
   return (
     <div className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
       transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]">
-
       <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={product.image}
-          alt={product.name}
+          alt={product.title}
           className="w-full h-48 object-cover transform hover:scale-110 transition duration-500"
         />
-
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           <Link
             to={`/products/${product.id}`}
@@ -38,14 +36,14 @@ function ProductCard({ product }) {
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-[#5C4033]">{product.name}</h3>
+        <h3 className="text-xl font-bold text-[#5C4033]">{product.title}</h3>
         <p className="text-[#3D2B1F] mt-2 font-semibold">{product.price}</p>
       </div>
     </div>
   );
 }
 
-// Category hero images
+// Hero images per category
 const heroImages = {
   herbs: "/images/hrb.jpg",
   spices: "/images/spice.jpg",
@@ -53,23 +51,22 @@ const heroImages = {
   coffee: "/images/coffee.jpg",
 };
 
-export default function CategoryProducts({ category }) {
-  // Hooks must be called first
+export default function CategoryProducts() {
+  const { category } = useParams(); // get category from URL
   const headingRef = useRef(null);
   const gridRef = useRef(null);
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // IntersectionObserver for animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.target === headingRef.current) {
-            setHeadingVisible(entry.isIntersecting);
-          }
-          if (entry.target === gridRef.current) {
-            setGridVisible(entry.isIntersecting);
-          }
+          if (entry.target === headingRef.current) setHeadingVisible(entry.isIntersecting);
+          if (entry.target === gridRef.current) setGridVisible(entry.isIntersecting);
         });
       },
       { threshold: 0.3 }
@@ -87,16 +84,40 @@ export default function CategoryProducts({ category }) {
     };
   }, []);
 
-  // Early return after hooks
-  if (!category) return null;
+  // Fetch filtered products using the new API
+  useEffect(() => {
+    if (!category) return;
 
-  // Inside component body
-  const filteredProducts = products.filter(
-    (p) => p.category?.toLowerCase() === category.toLowerCase()
-  );
-  const displayCategory =
-    category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-  const heroImage = heroImages[category.toLowerCase()] || "/images/cinbg.jpg";
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get("http://localhost:5000/api/filtered-products", {
+          params: { categoryId: categoryIdFromName(category) },
+        });
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
+
+  // Map category names to their IDs (you can fetch this dynamically too)
+  const categoryIdFromName = (name) => {
+    const mapping = {
+      herbs: 1,
+      spices: 2,
+      teas: 3,
+      coffee: 4,
+    };
+    return mapping[name.toLowerCase()] || null;
+  };
+
+  const displayCategory = category?.charAt(0).toUpperCase() + category?.slice(1).toLowerCase();
+  const heroImage = heroImages[category?.toLowerCase()] || "/images/cinbg.jpg";
 
   return (
     <div>
@@ -106,17 +127,16 @@ export default function CategoryProducts({ category }) {
         style={{ backgroundImage: `url('${heroImage}')` }}
       >
         <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold">
-          {displayCategory.toUpperCase()}
+          {displayCategory?.toUpperCase()}
         </h1>
         <p className="text-white mt-2 sm:mt-4 text-sm sm:text-base md:text-lg font-extralight">
-          Explore our finest {displayCategory.toLowerCase()}
+          Explore our finest {displayCategory?.toLowerCase()}
         </p>
       </section>
 
       {/* Breadcrumb and Products Grid */}
       <section className="bg-yellow-50 py-16">
         <div className="container mx-auto px-6">
-          {/* Breadcrumb */}
           <div className="mb-8 flex items-center gap-2 text-[#5C4033]">
             <Link
               to="/categories"
@@ -126,7 +146,6 @@ export default function CategoryProducts({ category }) {
             </Link>
           </div>
 
-          {/* Heading */}
           <div
             ref={headingRef}
             className={`text-center transition-opacity duration-700 ease-in-out ${
@@ -141,21 +160,31 @@ export default function CategoryProducts({ category }) {
             </h1>
           </div>
 
-          {/* Product Grid */}
           <div
             ref={gridRef}
             className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 transition-opacity duration-700 ease-in-out ${
               gridVisible ? "opacity-100 animate-fade-in" : "opacity-0"
             }`}
           >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
+            {loading ? (
+              <p className="text-center col-span-full text-[#3D2B1F]">Loading...</p>
+            ) : products.length > 0 ? (
+              products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))
             ) : (
-              <p className="text-center col-span-full text-[#3D2B1F]">
-                No products found in this category.
-              </p>
+              <div className="col-span-full text-center py-16">
+                <p className="text-[#3D2B1F] text-xl mb-6">
+                  No products found in this category.
+                </p>
+                <Link
+                  to="/categories"
+                  className="inline-block px-6 py-3 bg-yellow-900 text-white rounded-xl 
+                  hover:bg-yellow-800 shadow-md hover:shadow-lg transition transform hover:scale-105"
+                >
+                  Back to Categories
+                </Link>
+              </div>
             )}
           </div>
         </div>

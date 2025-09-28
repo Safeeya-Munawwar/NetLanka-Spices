@@ -26,13 +26,13 @@ export default function ProductFormPage() {
         const res = await axios.get("http://localhost:5000/api/categories");
         setCategories(res.data.map((c) => ({ id: c.id, title: c.title })));
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch categories:", err);
       }
     };
     fetchCategories();
   }, []);
 
-  // Pre-fill form
+  // Pre-fill form for editing
   useEffect(() => {
     if (editingProduct) {
       setTitle(editingProduct.title || "");
@@ -58,25 +58,20 @@ export default function ProductFormPage() {
     formData.append("categoryId", categoryId);
     formData.append("active", active);
     if (imageFile) formData.append("image", imageFile);
+    else if (editingProduct?.image) formData.append("existingImage", editingProduct.image);
 
     try {
       if (editingProduct) {
-        if (!imageFile && editingProduct?.image) {
-          formData.append("existingImage", editingProduct.image);
-        }
         await axios.put(
           `http://localhost:5000/api/products/${editingProduct.id}`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          formData
         );
       } else {
-        await axios.post("http://localhost:5000/api/products", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.post("http://localhost:5000/api/products", formData);
       }
       navigate("/admin/products");
     } catch (err) {
-      console.error(err.response?.data || err.message);
+      console.error("Product save failed:", err.response?.data || err.message);
       alert("Failed to save product. Check console.");
     } finally {
       setLoading(false);
