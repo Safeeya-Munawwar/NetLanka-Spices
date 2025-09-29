@@ -6,7 +6,8 @@ export default function Contact() {
       className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-end px-4 py-10 md:py-20"
       style={{ backgroundImage: `url('/images/bg.jpg')` }}
     >
-      <div className="max-w-4xl w-full md:w-3/4 lg:w-1/2 bg-black bg-opacity-50 rounded-xl p-6 sm:p-8 md:p-12 shadow-lg backdrop-blur-md
+      <div
+        className="max-w-4xl w-full md:w-3/4 lg:w-1/2 bg-black bg-opacity-50 rounded-xl p-6 sm:p-8 md:p-12 shadow-lg backdrop-blur-md
                       mx-auto md:mx-0"
       >
         {/* Contact Heading */}

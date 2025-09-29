@@ -14,6 +14,7 @@ import categoriesApi from "./api/categories/categories.js";
 import productsApi from "./api/products/products.js";
 import usersApi from "./api/users/users.js";
 import statsApi from "./api/stats/stats.js";
+import ordersApi from "./api/orders/orders.js";
 
 dotenv.config();
 
@@ -27,7 +28,6 @@ const __dirname = path.dirname(__filename);
 app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
 
 // Attach prisma, cloudinary, multer
 app.use((req, res, next) => {
@@ -44,6 +44,7 @@ app.use("/api/categories", categoriesApi);
 app.use("/api/products", productsApi);
 app.use("/api/users", usersApi);
 app.use("/api/stats", statsApi);
+app.use("/api/orders", ordersApi);
 
 // Start server
 const PORT = process.env.PORT || 5000;

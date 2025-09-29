@@ -1,13 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { products } from "../data/products";
+import axios from "axios";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
-  const product = products.find((p) => p.id === parseInt(id));
+
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        setProduct(res.data);
+        const all = await axios.get("http://localhost:5000/api/products");
+        setRelatedProducts(
+          all.data.filter(
+            (p) => p.categoryId === res.data.categoryId && p.id !== res.data.id
+          )
+        );
+      } catch (err) {
+        console.error("Failed to fetch product:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-6 py-20 text-center text-yellow-700">
+        Loading product details...
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -16,21 +47,16 @@ export default function ProductDetail() {
           Product Not Found
         </h2>
         <Link
-          to="/categories"
+          to="/products"
           className="inline-block px-6 py-3 bg-yellow-900 text-white rounded-xl 
           hover:bg-yellow-800 shadow-md hover:shadow-lg 
           transition transform hover:scale-105"
         >
-          Back to Categories
+          Back to Products
         </Link>
       </div>
     );
   }
-
-  // Related products (same category, excluding current one)
-  const relatedProducts = products.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  );
 
   return (
     <section className="bg-yellow-50 py-20">
@@ -40,20 +66,22 @@ export default function ProductDetail() {
           <div className="md:w-1/2 w-full relative overflow-hidden rounded-2xl shadow-lg group">
             <img
               src={product.image}
-              alt={product.name}
+              alt={product.title}
               className="w-full h-auto object-contain transform transition duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-yellow-900/40 via-transparent to-transparent 
-            opacity-0 group-hover:opacity-100 transition duration-500"></div>
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-yellow-900/40 via-transparent to-transparent 
+            opacity-0 group-hover:opacity-100 transition duration-500"
+            ></div>
           </div>
 
           {/* Product Details */}
           <div className="md:w-1/2 w-full">
             <h1 className="text-4xl font-bold text-yellow-900 mb-4">
-              {product.name}
+              {product.title}
             </h1>
             <p className="text-2xl font-semibold text-yellow-800 mb-4">
-              {product.price}
+              ${product.price}
             </p>
             <p className="text-yellow-700 leading-relaxed mb-6 text-justify">
               {product.description ||
@@ -71,13 +99,11 @@ export default function ProductDetail() {
               </button>
 
               <Link
-                to={`/${product.category}`}
+                to={`/categories/${product.category?.name || "products"}`}
                 className="px-6 py-3 bg-yellow-700 text-white rounded-xl shadow-md 
                 hover:bg-yellow-600 hover:shadow-lg transition transform hover:scale-105"
               >
-                Back to{" "}
-                {product.category?.charAt(0).toUpperCase() +
-                  product.category?.slice(1)}
+                Back to {product.category?.name || "Products"}
               </Link>
             </div>
           </div>

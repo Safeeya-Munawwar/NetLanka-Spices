@@ -5,10 +5,6 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Categories from "./pages/Categories";
-import SpicesPage from "./pages/Spices";
-import HerbsPage from "./pages/Herbs";
-import TeasPage from "./pages/Teas";
-import CoffeePage from "./pages/Coffee";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import LoginPage from "./components/LoginPage";
@@ -17,7 +13,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import CategoryProducts from "./components/CategoryProducts";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "./pages/admin/Dashboard";
-import CategoriesPage from "./pages/admin/CategoriesPage"; // ✅ import form
+import CategoriesPage from "./pages/admin/CategoriesPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import UsersPage from "./pages/admin/UsersPage";
 import CheckoutPage from "./pages/admin/CheckoutPage";
@@ -38,7 +34,9 @@ function App() {
           path="/"
           element={
             <PrivateRoute>
-              <Layout><Home /></Layout>
+              <Layout>
+                <Home />
+              </Layout>
             </PrivateRoute>
           }
         />
@@ -46,7 +44,9 @@ function App() {
           path="/products"
           element={
             <PrivateRoute>
-              <Layout><Products /></Layout>
+              <Layout>
+                <Products />
+              </Layout>
             </PrivateRoute>
           }
         />
@@ -54,7 +54,9 @@ function App() {
           path="/products/:id"
           element={
             <PrivateRoute>
-              <Layout><ProductDetail /></Layout>
+              <Layout>
+                <ProductDetail />
+              </Layout>
             </PrivateRoute>
           }
         />
@@ -62,7 +64,9 @@ function App() {
           path="/categories"
           element={
             <PrivateRoute>
-              <Layout><Categories /></Layout>
+              <Layout>
+                <Categories />
+              </Layout>
             </PrivateRoute>
           }
         />
@@ -70,40 +74,10 @@ function App() {
           path="/categories/:category"
           element={
             <PrivateRoute>
-              <Layout><CategoryProducts /></Layout>
+              <Layout>
+                <CategoryProducts />
+              </Layout>
             </PrivateRoute>
-          }
-        />
-        <Route
-          path="/spices"
-          element={
-            <PrivateRoute>
-              <Layout><SpicesPage /></Layout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/herbs"
-          element={
-            <PrivateRoute>
-              <Layout><HerbsPage /></Layout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/teas"
-          element={
-            <PrivateRoute>
-              <Layout><TeasPage /></Layout>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/coffee"
-          element={
-            <Layout>
-              <CoffeePage />
-            </Layout>
           }
         />
         <Route
@@ -118,7 +92,9 @@ function App() {
           path="/contact"
           element={
             <PrivateRoute>
-              <Layout><Contact /></Layout>
+              <Layout>
+                <Contact />
+              </Layout>
             </PrivateRoute>
           }
         />
@@ -126,25 +102,28 @@ function App() {
           path="/order-confirmation"
           element={
             <PrivateRoute>
-              <Layout><OrderConfirmation /></Layout>
+              <Layout>
+                <OrderConfirmation />
+              </Layout>
             </PrivateRoute>
           }
         />
 
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />
-        <Route path="/admin/products" element={<ProductPage/>} />
-        <Route path="/admin/products/form" element={<ProductFormPage/>} />
-        <Route path="/admin/products/edit/:id" element={<ProductFormPage/>} />
+        <Route path="/admin/products" element={<ProductPage />} />
+        <Route path="/admin/products/form" element={<ProductFormPage />} />
+        <Route path="/admin/products/edit/:id" element={<ProductFormPage />} />
 
         <Route path="/admin/categories" element={<CategoriesPage />} />
         <Route path="/admin/categories/new" element={<CategoryFormPage />} />
-        <Route path="/admin/categories/edit/:id" element={<CategoryFormPage />} />
-        
+        <Route
+          path="/admin/categories/edit/:id"
+          element={<CategoryFormPage />}
+        />
+
         <Route path="/admin/orders" element={<OrdersPage />} />
 
-
-        
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/checkout" element={<CheckoutPage />} />
       </Routes>

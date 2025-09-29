@@ -44,7 +44,6 @@ export default function ProductPage() {
     }
   };
 
-  // --- Sorting ---
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
@@ -94,7 +93,6 @@ export default function ProductPage() {
   return (
     <CategoryLayout>
       {/* --- Top Stats --- */}
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
           <h3 className="text-lg font-semibold text-brown-900">

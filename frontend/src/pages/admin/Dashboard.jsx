@@ -32,7 +32,6 @@ export default function Dashboard() {
     fetchStats();
   }, [token]);
 
-  // Animate cards when visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -43,7 +42,7 @@ export default function Dashboard() {
       { threshold: 0.2 }
     );
 
-    const currentRef = dashboardRef.current; // ✅ store in variable
+    const currentRef = dashboardRef.current;
 
     if (currentRef) observer.observe(currentRef);
 

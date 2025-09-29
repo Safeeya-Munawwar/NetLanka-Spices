@@ -26,7 +26,6 @@ export default function UsersPage() {
   const token = localStorage.getItem("token");
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`, {
@@ -44,7 +43,6 @@ export default function UsersPage() {
     fetchUsers();
   }, [fetchUsers]);
 
-  // Sorting
   const sortedUsers = [...users].sort((a, b) => {
     if (!sortConfig.key) return 0;
     const aValue = a[sortConfig.key];
@@ -61,7 +59,6 @@ export default function UsersPage() {
     }));
   };
 
-  // Pagination
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
@@ -74,7 +71,6 @@ export default function UsersPage() {
       u.role.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Deactivate (mark inactive)
   const handleDeactivate = async (id) => {
     if (id === currentUser?.id) {
       alert("You cannot deactivate your own account");
@@ -92,7 +88,6 @@ export default function UsersPage() {
     }
   };
 
-  // Activate (click on status)
   const handleActivate = async (id) => {
     try {
       const res = await axios.patch(
@@ -106,7 +101,6 @@ export default function UsersPage() {
     }
   };
 
-  // Save edit
   const handleSaveEdit = async (updatedUser) => {
     if (updatedUser.id === currentUser?.id && updatedUser.role !== "admin") {
       alert("You cannot remove your own admin role");
@@ -125,7 +119,6 @@ export default function UsersPage() {
     }
   };
 
-  // --- Modal ---
   const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
     const [name, setName] = useState(user?.name || "");
     const [email, setEmail] = useState(user?.email || "");
@@ -205,7 +198,6 @@ export default function UsersPage() {
     );
   };
 
-  // --- Stats ---
   const totalUsers = users.length;
   const totalAdmins = users.filter((u) => u.role === "admin").length;
   const totalRegular = totalUsers - totalAdmins;

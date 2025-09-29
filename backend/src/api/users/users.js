@@ -1,4 +1,3 @@
-// src/api/users/users.js
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import authMiddleware from "../../middleware/authMiddleware.js";
@@ -15,7 +14,14 @@ router.get("/", authMiddleware, async (req, res) => {
 
     const users = await prisma.user.findMany({
       orderBy: { createdAt: "desc" },
-      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        active: true,
+        createdAt: true,
+      },
     });
 
     res.json(users);
@@ -36,7 +42,14 @@ router.patch("/:id", authMiddleware, async (req, res) => {
     const updatedUser = await prisma.user.update({
       where: { id: req.params.id },
       data: { name, email, role },
-      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        active: true,
+        createdAt: true,
+      },
     });
 
     res.json(updatedUser);
@@ -48,12 +61,20 @@ router.patch("/:id", authMiddleware, async (req, res) => {
 // Deactivate user (admin only)
 router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
   try {
-    if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
+    if (req.user.role !== "admin")
+      return res.status(403).json({ msg: "Access denied" });
 
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { active: false },
-      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        active: true,
+        createdAt: true,
+      },
     });
 
     res.json(user);
@@ -65,17 +86,27 @@ router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
 // Activate user (admin only)
 router.patch("/:id/activate", authMiddleware, async (req, res) => {
   try {
-    if (req.user.role !== "admin") return res.status(403).json({ msg: "Access denied" });
+    if (req.user.role !== "admin")
+      return res.status(403).json({ msg: "Access denied" });
 
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { active: true },
-      select: { id: true, name: true, email: true, role: true, active: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        active: true,
+        createdAt: true,
+      },
     });
 
     res.json(user);
   } catch (err) {
-    res.status(500).json({ msg: err.message || "Account inactive or not found" });
+    res
+      .status(500)
+      .json({ msg: err.message || "Account inactive or not found" });
   }
 });
 

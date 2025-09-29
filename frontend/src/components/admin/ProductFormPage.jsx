@@ -19,7 +19,6 @@ export default function ProductFormPage() {
   const [active, setActive] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -32,7 +31,6 @@ export default function ProductFormPage() {
     fetchCategories();
   }, []);
 
-  // Pre-fill form
   useEffect(() => {
     if (editingProduct) {
       setTitle(editingProduct.title || "");

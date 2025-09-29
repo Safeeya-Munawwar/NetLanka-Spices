@@ -1,22 +1,16 @@
-import React from 'react';
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
-import '../styles.css';
-
-// import required modules
-import { Autoplay } from 'swiper/modules';
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "../styles.css";
+import { Autoplay } from "swiper/modules";
 
 export default function ImageSlider() {
   return (
     <div className="w-full">
       <Swiper
-        spaceBetween={20} // smaller space for mobile
+        spaceBetween={20}
         centeredSlides={true}
         autoplay={{
           delay: 2500,

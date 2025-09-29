@@ -16,26 +16,44 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-12 text-white grid md:grid-cols-3 gap-10 border-b border-[#4a3322]">
           {/* Left - Logo & Mission */}
           <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-            <h2 className="text-lg font-semibold text-[#b9843c]">Net Spice's</h2>
-            <img src="/images/logo.png" alt="Zest Logo" className="w-auto h-20 mx-auto md:mx-0" />
+            <h2 className="text-lg font-semibold text-[#b9843c]">
+              Net Spice's
+            </h2>
+            <img
+              src="/images/logo.png"
+              alt="Zest Logo"
+              className="w-auto h-20 mx-auto md:mx-0"
+            />
             <p className="text-sm text-gray-200 max-w-xs text-justify">
-              Our mission is to deliver purity, freshness,
-              and quality in every shipment.
+              Our mission is to deliver purity, freshness, and quality in every
+              shipment.
             </p>
           </div>
 
           {/* Middle - Quick Links */}
           <div className="flex flex-col items-center md:items-start space-y-3">
-            <h2 className="text-lg font-semibold text-[#b9843c]">Quick Links</h2>
-            <a href="/" className="hover:text-gray-300 text-sm">Home</a>
-            <a href="/" className="hover:text-gray-300 text-sm">Products</a>
-            <a href="/" className="hover:text-gray-300 text-sm">About Us</a>
-            <a href="/" className="hover:text-gray-300 text-sm">Contact Us</a>
+            <h2 className="text-lg font-semibold text-[#b9843c]">
+              Quick Links
+            </h2>
+            <a href="/" className="hover:text-gray-300 text-sm">
+              Home
+            </a>
+            <a href="/" className="hover:text-gray-300 text-sm">
+              Products
+            </a>
+            <a href="/" className="hover:text-gray-300 text-sm">
+              About Us
+            </a>
+            <a href="/" className="hover:text-gray-300 text-sm">
+              Contact Us
+            </a>
           </div>
 
           {/* Right - Newsletter & Contact */}
           <div className="flex flex-col items-center md:items-start space-y-4">
-            <h2 className="text-lg font-semibold text-[#b9843c]">SIGNUP FOR NEWSLETTER</h2>
+            <h2 className="text-lg font-semibold text-[#b9843c]">
+              SIGNUP FOR NEWSLETTER
+            </h2>
             <div className="flex w-full max-w-xs">
               <input
                 type="email"
@@ -68,9 +86,15 @@ export default function Footer() {
         {/* Social Media & Bottom Copyright */}
         <div className="w-full bg-[#27170f] py-6">
           <div className="flex justify-center space-x-6 text-xl text-[#b9843c] mb-4">
-            <a href="/" className="hover:text-gray-300"><FaFacebookF /></a>
-            <a href="/" className="hover:text-gray-300"><FaWhatsapp /></a>
-            <a href="/" className="hover:text-gray-300"><FaInstagram /></a>
+            <a href="/" className="hover:text-gray-300">
+              <FaFacebookF />
+            </a>
+            <a href="/" className="hover:text-gray-300">
+              <FaWhatsapp />
+            </a>
+            <a href="/" className="hover:text-gray-300">
+              <FaInstagram />
+            </a>
           </div>
           <div className="text-center text-sm text-gray-300">
             Copyright © 2025 Net Spices | Powered by NetIT Technology (Pvt) Ltd

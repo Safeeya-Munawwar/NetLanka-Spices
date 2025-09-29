@@ -16,7 +16,7 @@ function ProductCard({ product }) {
       <div className="relative overflow-hidden rounded-t-2xl">
         <img
           src={product.image}
-          alt={product.name}
+          alt={product.title}
           className="w-full h-48 object-contain bg-white transform transition duration-500"
         />
 
@@ -51,8 +51,10 @@ function ProductCard({ product }) {
 
       {/* Product Info */}
       <div className="p-4 flex flex-col flex-grow text-center z-10">
-        <h3 className="text-lg font-bold text-yellow-900">{product.name}</h3>
-        <p className="text-yellow-800 mt-2 font-semibold">{product.price}</p>
+        <h3 className="text-lg font-bold text-yellow-900">{product.title}</h3>
+        <p className="text-yellow-800 mt-2 font-semibold">
+          LKR {product.price?.toLocaleString()}
+        </p>
       </div>
     </div>
   );

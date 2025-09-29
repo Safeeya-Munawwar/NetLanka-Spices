@@ -3,10 +3,38 @@ import { Link } from "react-router-dom";
 import { FaLeaf, FaSeedling, FaSpa, FaCoffee } from "react-icons/fa";
 
 const categories = [
-  { id: 1, name: "Herbs", icon: <FaLeaf size={40} />, link: "/herbs", color: "bg-green-100", hoverColor: "hover:bg-green-200" },
-  { id: 2, name: "Spices", icon: <FaSeedling size={40} />, link: "/spices", color: "bg-yellow-100", hoverColor: "hover:bg-yellow-200" },
-  { id: 3, name: "Teas", icon: <FaSpa size={40} />, link: "/teas", color: "bg-orange-100", hoverColor: "hover:bg-orange-200" },
-  { id: 4, name: "Coffee", icon: <FaCoffee size={40} />, link: "/coffee", color: "bg-red-100", hoverColor: "hover:bg-red-200" },
+  {
+    id: 1,
+    name: "Herbs",
+    icon: <FaLeaf size={40} />,
+    link: "/herbs",
+    color: "bg-green-100",
+    hoverColor: "hover:bg-green-200",
+  },
+  {
+    id: 2,
+    name: "Spices",
+    icon: <FaSeedling size={40} />,
+    link: "/spices",
+    color: "bg-yellow-100",
+    hoverColor: "hover:bg-yellow-200",
+  },
+  {
+    id: 3,
+    name: "Teas",
+    icon: <FaSpa size={40} />,
+    link: "/teas",
+    color: "bg-orange-100",
+    hoverColor: "hover:bg-orange-200",
+  },
+  {
+    id: 4,
+    name: "Coffee",
+    icon: <FaCoffee size={40} />,
+    link: "/coffee",
+    color: "bg-red-100",
+    hoverColor: "hover:bg-red-200",
+  },
 ];
 
 export default function Category() {
@@ -24,8 +52,20 @@ export default function Category() {
         <div className="flex items-center justify-start mb-10 gap-4">
           <div className="w-20 h-px bg-gray-200"></div>
           <div className="w-10 h-8 flex items-center justify-center">
-            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12" stroke="#9FCB70" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              width="40"
+              height="24"
+              viewBox="0 0 40 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12"
+                stroke="#9FCB70"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
           <div className="w-20 h-px bg-gray-200"></div>

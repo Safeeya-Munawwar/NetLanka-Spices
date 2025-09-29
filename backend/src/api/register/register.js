@@ -5,11 +5,12 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const prisma = req.prisma; // use Prisma from index.js
+    const prisma = req.prisma;
     const { name, email, password } = req.body;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) return res.status(400).json({ msg: "Email already exists" });
+    if (existingUser)
+      return res.status(400).json({ msg: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({

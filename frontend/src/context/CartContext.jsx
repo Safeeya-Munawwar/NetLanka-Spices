@@ -1,11 +1,17 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // Add item
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const addToCart = (product) => {
     setCartItems((prev) => {
       const exist = prev.find((item) => item.id === product.id);
@@ -16,17 +22,29 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
-        return [...prev, { ...product, quantity: 1 }];
+        const price =
+          typeof product.price === "string"
+            ? parseFloat(product.price.replace(/[^0-9.-]+/g, ""))
+            : product.price;
+
+        return [
+          ...prev,
+          {
+            id: product.id,
+            name: product.name,
+            image: product.image,
+            price,
+            quantity: 1,
+          },
+        ];
       }
     });
   };
 
-  // Remove item
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Update quantity
   const updateQuantity = (id, quantity) => {
     setCartItems((prev) =>
       prev.map((item) =>
@@ -35,13 +53,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Clear cart
   const clearCart = () => setCartItems([]);
 
-  // Total price
   const totalPrice = cartItems.reduce(
-    (sum, item) =>
-      sum + parseInt(item.price.replace(/[^\d]/g, "")) * item.quantity,
+    (sum, item) => sum + (item.price || 0) * item.quantity,
     0
   );
 
@@ -61,5 +76,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Hook
 export const useCart = () => useContext(CartContext);

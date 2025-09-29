@@ -9,10 +9,13 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
+        email,
+        password,
+      });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      window.location.href = "/"; // redirect to Home page
+      window.location.href = "/";
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }
@@ -28,7 +31,9 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Email</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -41,7 +46,9 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Password</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Password
+            </label>
             <input
               type="password"
               value={password}

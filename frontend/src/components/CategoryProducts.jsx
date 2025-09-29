@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaInfoCircle, FaCartPlus, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import { products } from "../data/products";
+import axios from "axios";
 
-// ProductCard with top-right circular buttons
 function ProductCard({ product }) {
   const { addToCart } = useCart();
 
   return (
-    <div className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
-      transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]">
-
+    <div
+      className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
+      transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]"
+    >
       <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={product.image}
-          alt={product.name}
+          alt={product.title}
           className="w-full h-48 object-cover transform hover:scale-110 transition duration-500"
         />
 
@@ -38,8 +38,8 @@ function ProductCard({ product }) {
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-[#5C4033]">{product.name}</h3>
-        <p className="text-[#3D2B1F] mt-2 font-semibold">{product.price}</p>
+        <h3 className="text-xl font-bold text-[#5C4033]">{product.title}</h3>
+        <p className="text-[#3D2B1F] mt-2 font-semibold">${product.price}</p>
       </div>
     </div>
   );
@@ -54,11 +54,30 @@ const heroImages = {
 };
 
 export default function CategoryProducts({ category }) {
-  // Hooks must be called first
   const headingRef = useRef(null);
   const gridRef = useRef(null);
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!category) return;
+
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products");
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Error fetching products", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,15 +106,15 @@ export default function CategoryProducts({ category }) {
     };
   }, []);
 
-  // Early return after hooks
   if (!category) return null;
 
-  // Inside component body
   const filteredProducts = products.filter(
-    (p) => p.category?.toLowerCase() === category.toLowerCase()
+    (p) => p.category?.name?.toLowerCase() === category.toLowerCase()
   );
+
   const displayCategory =
     category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+
   const heroImage = heroImages[category.toLowerCase()] || "/images/cinbg.jpg";
 
   return (
@@ -142,22 +161,28 @@ export default function CategoryProducts({ category }) {
           </div>
 
           {/* Product Grid */}
-          <div
-            ref={gridRef}
-            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 transition-opacity duration-700 ease-in-out ${
-              gridVisible ? "opacity-100 animate-fade-in" : "opacity-0"
-            }`}
-          >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              <p className="text-center col-span-full text-[#3D2B1F]">
-                No products found in this category.
-              </p>
-            )}
-          </div>
+          {loading ? (
+            <p className="text-center mt-10 text-[#3D2B1F]">
+              Loading products...
+            </p>
+          ) : (
+            <div
+              ref={gridRef}
+              className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 transition-opacity duration-700 ease-in-out ${
+                gridVisible ? "opacity-100 animate-fade-in" : "opacity-0"
+              }`}
+            >
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              ) : (
+                <p className="text-center col-span-full text-[#3D2B1F]">
+                  No products found in this category.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </div>

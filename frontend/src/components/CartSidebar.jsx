@@ -3,11 +3,12 @@ import { FaTimes, FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
-export default function CartSidebar({ open: parentOpen, setOpen: parentSetOpen }) {
+export default function CartSidebar({
+  open: parentOpen,
+  setOpen: parentSetOpen,
+}) {
   const { cartItems, removeFromCart, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
-
-  // Local state if parent doesn't control open
   const [localOpen, setLocalOpen] = useState(false);
   const open = parentOpen !== undefined ? parentOpen : localOpen;
   const setOpen = parentSetOpen !== undefined ? parentSetOpen : setLocalOpen;
@@ -49,26 +50,36 @@ export default function CartSidebar({ open: parentOpen, setOpen: parentSetOpen }
         </div>
 
         <div className="flex-grow overflow-y-auto">
-          {cartItems.length === 0 ? (
-            <p className="text-yellow-800">Cart is empty.</p>
-          ) : (
-            cartItems.map((item) => (
-              <div key={item.id} className="flex justify-between items-center mb-4">
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between mb-4"
+            >
+              <div className="flex items-center gap-3">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-12 h-12 object-contain rounded border"
+                  />
+                )}
                 <div>
-                  <h3 className="text-yellow-900 font-semibold">{item.name}</h3>
+                  <h3 className="text-yellow-900 font-semibold">
+                    {item.title}
+                  </h3>
                   <p className="text-yellow-800">
                     {item.price} x {item.quantity}
                   </p>
                 </div>
-                <button
-                  className="text-red-600 font-bold"
-                  onClick={() => removeFromCart(item.id)}
-                >
-                  X
-                </button>
               </div>
-            ))
-          )}
+              <button
+                className="text-red-600 font-bold"
+                onClick={() => removeFromCart(item.id)}
+              >
+                X
+              </button>
+            </div>
+          ))}
         </div>
 
         {cartItems.length > 0 && (

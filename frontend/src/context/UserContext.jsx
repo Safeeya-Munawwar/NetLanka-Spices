@@ -1,10 +1,9 @@
-// src/context/UserContext.jsx
 import React, { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState(null); // null = not logged in
+  const [user, setUser] = useState(null);
 
   const login = (userData) => setUser(userData);
   const logout = () => setUser(null);

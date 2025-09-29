@@ -7,7 +7,9 @@ const upload = multer({ dest: "uploads/" });
 // Get all products
 router.get("/", async (req, res) => {
   try {
-    const products = await req.prisma.product.findMany({ include: { category: true } });
+    const products = await req.prisma.product.findMany({
+      include: { category: true },
+    });
     res.json(products);
   } catch (err) {
     console.error(err);
@@ -35,7 +37,9 @@ router.post("/", upload.single("image"), async (req, res) => {
   try {
     let imageUrl = "";
     if (req.file) {
-      const result = await req.cloudinary.uploader.upload(req.file.path, { folder: "spices_products" });
+      const result = await req.cloudinary.uploader.upload(req.file.path, {
+        folder: "spices_products",
+      });
       imageUrl = result.secure_url;
     }
 
@@ -63,23 +67,25 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     let imageUrl = req.body.existingImage || "";
 
-if (req.file) {
-  const result = await req.cloudinary.uploader.upload(req.file.path, { folder: "spices_products" });
-  imageUrl = result.secure_url;
-}
+    if (req.file) {
+      const result = await req.cloudinary.uploader.upload(req.file.path, {
+        folder: "spices_products",
+      });
+      imageUrl = result.secure_url;
+    }
 
-const updatedProduct = await req.prisma.product.update({
-  where: { id: req.params.id },
-  data: {
-    title: req.body.title,
-    description: req.body.description,
-    price: parseFloat(req.body.price),
-    quantity: parseInt(req.body.quantity),
-    image: imageUrl,
-    active: req.body.active === "true" || req.body.active === true,
-    categoryId: req.body.categoryId,
-  },
-});
+    const updatedProduct = await req.prisma.product.update({
+      where: { id: req.params.id },
+      data: {
+        title: req.body.title,
+        description: req.body.description,
+        price: parseFloat(req.body.price),
+        quantity: parseInt(req.body.quantity),
+        image: imageUrl,
+        active: req.body.active === "true" || req.body.active === true,
+        categoryId: req.body.categoryId,
+      },
+    });
 
     res.json(updatedProduct);
   } catch (err) {

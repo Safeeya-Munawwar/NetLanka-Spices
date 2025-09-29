@@ -36,18 +36,30 @@ export default function Products() {
     <section className="w-full py-12 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="">
-            {/* Heading */}
-        <h1 className="font-serif text-yellow-800 mt-10 mb-3 text-left text-xl">
-          Net Spice's
-        </h1>
-        <h1 className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left">
-          FEATURED PRODUCTS
-        </h1>
+          {/* Heading */}
+          <h1 className="font-serif text-yellow-800 mt-10 mb-3 text-left text-xl">
+            Net Spice's
+          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left">
+            FEATURED PRODUCTS
+          </h1>
           <div className="flex items-center justify-start mb-10 gap-4">
             <div className="w-20 h-px bg-gray-200"></div>
             <div className="w-10 h-8 flex items-center justify-center">
-              <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12" stroke="#9FCB70" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                width="40"
+                height="24"
+                viewBox="0 0 40 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12"
+                  stroke="#9FCB70"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
             <div className="w-20 h-px bg-gray-200"></div>
@@ -75,9 +87,26 @@ export default function Products() {
                     className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:scale-105 transition-transform"
                   >
                     {/* magnifier icon */}
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M21 21L15 15" stroke="#111827" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      <circle cx="11" cy="11" r="6" stroke="#111827" strokeWidth="1.5" />
+                    <svg
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M21 21L15 15"
+                        stroke="#111827"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="6"
+                        stroke="#111827"
+                        strokeWidth="1.5"
+                      />
                     </svg>
                   </button>
 
@@ -86,8 +115,19 @@ export default function Products() {
                     className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:scale-105 transition-transform"
                   >
                     {/* cart icon */}
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="#111827" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 6h15l-1.5 9h-12L6 6z"
+                        stroke="#111827"
+                        strokeWidth="1.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                       <circle cx="10" cy="20" r="1" fill="#111827" />
                       <circle cx="18" cy="20" r="1" fill="#111827" />
                     </svg>
@@ -101,9 +141,13 @@ export default function Products() {
                   <span>{p.category}</span>
                 </div>
 
-                <h3 className="text-lg font-medium text-gray-800 mb-3">{p.title}</h3>
+                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                  {p.title}
+                </h3>
 
-                <p className="text-xl font-extrabold text-gray-800">{p.price}</p>
+                <p className="text-xl font-extrabold text-gray-800">
+                  {p.price}
+                </p>
               </div>
             </article>
           ))}

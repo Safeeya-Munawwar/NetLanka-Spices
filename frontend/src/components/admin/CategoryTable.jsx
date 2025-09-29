@@ -11,7 +11,6 @@ export default function CategoryTable() {
 
   const toggleMenu = (id) => setOpenMenu(openMenu === id ? null : id);
 
-  // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/categories");
@@ -25,7 +24,6 @@ export default function CategoryTable() {
     fetchCategories();
   }, []);
 
-  // Delete category
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/categories/${id}`);

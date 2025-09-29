@@ -43,7 +43,6 @@ export default function CategoriesPage() {
     }
   };
 
-  // --- Sorting ---
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
@@ -90,7 +89,6 @@ export default function CategoriesPage() {
     currentPage * categoriesPerPage
   );
 
-  // Stats
   const totalCategories = categories.length;
   const totalActive = categories.filter((c) => c.active).length;
   const totalInactive = totalCategories - totalActive;
@@ -130,7 +128,7 @@ export default function CategoriesPage() {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setCurrentPage(1); // Reset page on search
+            setCurrentPage(1);
           }}
           className="w-full md:w-64 px-4 py-2 rounded-xl border border-yellow-300 bg-yellow-50 text-brown-900 focus:outline-none focus:ring-2 focus:ring-yellow-500"
         />

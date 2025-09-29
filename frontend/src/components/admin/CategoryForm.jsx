@@ -13,7 +13,7 @@ export default function CategoryFormPage() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [active, setActive] = useState(true);
-  const [loading, setLoading] = useState(false); // optional: loading state
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (editingCategory) {

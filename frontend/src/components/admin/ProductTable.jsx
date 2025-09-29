@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaEllipsisV, FaTrash, FaEdit } from "react-icons/fa";
-import CategoryLayout from "../../components/admin/CategoryLayout"; // Could be AdminLayout
+import CategoryLayout from "../../components/admin/CategoryLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

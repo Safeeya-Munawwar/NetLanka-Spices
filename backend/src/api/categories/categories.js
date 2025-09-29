@@ -13,14 +13,14 @@ router.post("/", async (req, res) => {
       const prisma = req.prisma;
       const cloudinary = req.cloudinary;
 
-      let imageUrl = "/1.jpeg"; // default image
+      let imageUrl = "/1.jpeg";
       if (req.file) {
         try {
           const result = await cloudinary.uploader.upload(req.file.path, {
             folder: "spices_categories",
           });
           imageUrl = result.secure_url;
-          fs.unlinkSync(req.file.path); // remove temp file
+          fs.unlinkSync(req.file.path);
         } catch (uploadErr) {
           return res.status(500).json({ error: uploadErr.message });
         }

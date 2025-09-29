@@ -5,11 +5,11 @@ const WhyChooseUs = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const currentRef = sectionRef.current; // cache the current ref
+    const currentRef = sectionRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting); // toggle visibility
+          setIsVisible(entry.isIntersecting);
         });
       },
       { threshold: 0.2 }
@@ -33,14 +33,10 @@ const WhyChooseUs = () => {
     <section ref={sectionRef} className="bg-white py-12">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
-        <h1
-          className="font-serif text-yellow-800 mt-10 mb-3 text-left text-xl transition-transform"
-        >
+        <h1 className="font-serif text-yellow-800 mt-10 mb-3 text-left text-xl transition-transform">
           Net Spice's
         </h1>
-        <h1
-          className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left transition-transform"
-        >
+        <h1 className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left transition-transform">
           WHY CHOOSE US
         </h1>
 
@@ -134,8 +130,8 @@ const WhyChooseUs = () => {
           <p className="text-gray-700 text-base leading-relaxed mb-4">
             At Net Spice's, our promise is to deliver nature’s purest treasures,
             cultivated with care, crafted with integrity, and shared with pride.
-            We honor centuries of Sri Lankan heritage, working hand-in-hand
-            with local farmers to bring you products of unmatched purity,
+            We honor centuries of Sri Lankan heritage, working hand-in-hand with
+            local farmers to bring you products of unmatched purity,
             authenticity, and excellence.
             <br />
             <span className="text-[#a86300]">
@@ -209,7 +205,9 @@ const WhyChooseUs = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="text-sm font-bold text-gray-800">{user.name}</h4>
+                  <h4 className="text-sm font-bold text-gray-800">
+                    {user.name}
+                  </h4>
                   <p className="text-xs text-gray-500">{user.country}</p>
                 </div>
                 <div className="ml-auto text-blue-400 text-xl">🐦</div>

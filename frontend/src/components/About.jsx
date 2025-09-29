@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-
 export default function About() {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
@@ -22,8 +21,10 @@ export default function About() {
 
         if (target === leftRef.current) setLeftVisible(isIntersecting);
         if (target === rightRef.current) setRightVisible(isIntersecting);
-        if (target === storyLeftRef.current) setStoryLeftVisible(isIntersecting);
-        if (target === storyRightRef.current) setStoryRightVisible(isIntersecting);
+        if (target === storyLeftRef.current)
+          setStoryLeftVisible(isIntersecting);
+        if (target === storyRightRef.current)
+          setStoryRightVisible(isIntersecting);
       });
     }, observerOptions);
 
@@ -68,9 +69,9 @@ export default function About() {
             </h2>
             <h1 className="text-3xl sm:text-4xl font-bold mb-4">WHO WE ARE</h1>
             <p className="text-gray-700 text-justify leading-relaxed mb-4 text-sm sm:text-base">
-              Net Spice's (Pvt) Ltd. is a leading exporter of premium
-              True Ceylon Cinnamon, high-quality spices, and essential oils from
-              Sri Lanka...
+              Net Spice's (Pvt) Ltd. is a leading exporter of premium True
+              Ceylon Cinnamon, high-quality spices, and essential oils from Sri
+              Lanka...
             </p>
             <p className="text-gray-700 text-justify leading-relaxed mb-4 text-sm sm:text-base">
               Our range includes cinnamon, black pepper, cloves, nutmeg, mace,
@@ -90,7 +91,7 @@ export default function About() {
             }`}
           >
             <img
-              src='/images/all1.jpg'
+              src="/images/all1.jpg"
               alt="About spices"
               className="w-full h-auto rounded-lg shadow-lg"
             />
@@ -115,7 +116,7 @@ export default function About() {
               }`}
             >
               <img
-                src= '/images/all2.jpg'
+                src="/images/all2.jpg"
                 alt="Cinnamon bundle"
                 className="w-full h-auto rounded-lg shadow-md"
               />

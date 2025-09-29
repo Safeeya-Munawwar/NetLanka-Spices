@@ -3,8 +3,9 @@ import { useCart } from "../context/CartContext";
 import { SiVisa, SiMastercard, SiPaypal } from "react-icons/si";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-export default function CheckoutPage() {
+export default function OrderConfirmation() {
   const { cartItems, clearCart, totalPrice, removeFromCart, updateQuantity } =
     useCart();
   const [confirmed, setConfirmed] = useState(false);
@@ -19,6 +20,7 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState({});
   const [animateBadge, setAnimateBadge] = useState({});
 
+  const userId = localStorage.getItem("userId");
   const formatCardNumber = (value) =>
     value
       .replace(/\D/g, "")
@@ -30,13 +32,14 @@ export default function CheckoutPage() {
     setCardDetails({ ...cardDetails, [field]: value });
   };
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     const newErrors = {};
     if (paymentMethod === "creditCard") {
       const cleanNumber = cardDetails.cardNumber.replace(/\s+/g, "");
       if (!/^\d{16}$/.test(cleanNumber))
         newErrors.cardNumber = "Card number must be 16 digits";
-      if (!cardDetails.cardName) newErrors.cardName = "Cardholder name required";
+      if (!cardDetails.cardName)
+        newErrors.cardName = "Cardholder name required";
       if (!/^\d{2}\/\d{2}$/.test(cardDetails.expiry))
         newErrors.expiry = "Expiry must be MM/YY";
       if (!/^\d{3,4}$/.test(cardDetails.cvv))
@@ -46,10 +49,31 @@ export default function CheckoutPage() {
       setErrors(newErrors);
       return;
     }
-    const id = "ORD-" + Math.floor(Math.random() * 1000000);
-    setOrderId(id);
-    setConfirmed(true);
-    clearCart();
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/orders`,
+        {
+          userId,
+          items: cartItems.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: parseFloat(item.price.replace(/[^\d]/g, "")),
+            quantity: item.quantity,
+            image: item.image,
+          })),
+          totalPrice,
+          paymentMethod,
+        }
+      );
+
+      setOrderId(response.data.id);
+      setConfirmed(true);
+      clearCart();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to place order. Try again.");
+    }
   };
 
   const handleQuantityChange = (itemId, newQty) => {
@@ -67,14 +91,15 @@ export default function CheckoutPage() {
     cod: <FaMoneyBillWave className="h-8 w-8 text-green-600" />,
   };
 
-  // Hero Section
   const heroBg = "/images/chc.jpg";
 
   if (cartItems.length === 0 && !confirmed) {
     return (
       <div className="container mx-auto py-16 text-center">
-        <h2 className="text-3xl font-bold text-[#5C4033] mb-4">Your cart is empty</h2>
-        <p className="text-[#3D2B1F] mb-4">Add more products in cart to proceed an order!</p>
+        <h2 className="text-3xl font-bold text-[#5C4033] mb-4">
+          Your cart is empty
+        </h2>
+        <p className="text-[#3D2B1F] mb-4">Add products to proceed!</p>
         <Link to="/products">
           <button className="text-[#A65B05] font-bold px-4 py-2 bg-transparent rounded-lg border-2 border-[#A65B05] hover:bg-[#A65B05] hover:text-white transition">
             View Products
@@ -87,7 +112,9 @@ export default function CheckoutPage() {
   if (confirmed) {
     return (
       <div className="container mx-auto py-16 text-center">
-        <h2 className="text-3xl font-bold text-green-800 mb-4">Order Confirmed!</h2>
+        <h2 className="text-3xl font-bold text-green-800 mb-4">
+          Order Confirmed!
+        </h2>
         <p className="text-[#5C4033] mb-2">
           Your order ID: <strong>{orderId}</strong>
         </p>
@@ -130,13 +157,15 @@ export default function CheckoutPage() {
                 <div className="relative">
                   <img
                     src={item.image}
-                    alt={item.name}
+                    alt={item.title}
                     className="w-24 h-24 object-cover rounded hover:scale-105 transition-transform duration-300"
                   />
                   {item.quantity > 0 && (
                     <span
                       className={`absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg transition-transform ${
-                        animateBadge[item.id] ? "scale-125 animate-bounce" : "scale-100"
+                        animateBadge[item.id]
+                          ? "scale-125 animate-bounce"
+                          : "scale-100"
                       }`}
                     >
                       {item.quantity}
@@ -145,23 +174,28 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <h3 className="font-semibold text-[#5C4033]">{item.name}</h3>
-                  <p className="text-[#3D2B1F]">
-                    Price: LKR {parseInt(item.price.replace(/[^\d]/g, ""))}
-                  </p>
+                  <h3 className="font-semibold text-[#5C4033]">{item.title}</h3>
+                  <p className="text-[#3D2B1F]">Price: LKR {item.price}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <button
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                       onClick={() =>
-                        handleQuantityChange(item.id, Math.max(item.quantity - 1, 1))
+                        handleQuantityChange(
+                          item.id,
+                          Math.max(item.quantity - 1, 1)
+                        )
                       }
                     >
                       -
                     </button>
-                    <span className="px-2 py-1 border rounded">{item.quantity}</span>
+                    <span className="px-2 py-1 border rounded">
+                      {item.quantity}
+                    </span>
                     <button
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                      onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                      onClick={() =>
+                        handleQuantityChange(item.id, item.quantity + 1)
+                      }
                     >
                       +
                     </button>
@@ -170,7 +204,7 @@ export default function CheckoutPage() {
 
                 <div className="flex flex-col items-end gap-2">
                   <span className="font-bold text-[#5C4033]">
-                    LKR {parseInt(item.price.replace(/[^\d]/g, "")) * item.quantity}
+                    LKR {item.price * item.quantity}
                   </span>
                   <button
                     className="text-red-600 font-semibold hover:text-red-800"
@@ -185,7 +219,9 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="lg:w-1/3 p-6 border rounded-lg shadow bg-yellow-50 sticky top-20 h-fit flex flex-col gap-4">
-            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">Order Summary</h3>
+            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">
+              Order Summary
+            </h3>
             <div className="flex justify-between font-semibold mb-2">
               <span>Items:</span>
               <span>{cartItems.length}</span>
@@ -196,7 +232,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* Payment Methods */}
-            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">Payment Method</h3>
+            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">
+              Payment Method
+            </h3>
             <div className="flex flex-col gap-3 mb-4">
               <label className="flex items-center gap-2 bg-yellow-100 p-3 rounded-lg border hover:border-[#5C4033] cursor-pointer">
                 <input
@@ -237,7 +275,9 @@ export default function CheckoutPage() {
                   type="text"
                   placeholder="Card Number"
                   value={cardDetails.cardNumber}
-                  onChange={(e) => handleCardChange("cardNumber", e.target.value)}
+                  onChange={(e) =>
+                    handleCardChange("cardNumber", e.target.value)
+                  }
                   maxLength={19}
                   className="p-2 border rounded"
                 />
@@ -252,7 +292,9 @@ export default function CheckoutPage() {
                   onChange={(e) => handleCardChange("cardName", e.target.value)}
                   className="p-2 border rounded"
                 />
-                {errors.cardName && <p className="text-red-600 text-sm">{errors.cardName}</p>}
+                {errors.cardName && (
+                  <p className="text-red-600 text-sm">{errors.cardName}</p>
+                )}
 
                 <div className="flex gap-2">
                   <input
@@ -273,7 +315,9 @@ export default function CheckoutPage() {
                   />
                 </div>
                 {(errors.expiry || errors.cvv) && (
-                  <div className="text-red-600 text-sm">{errors.expiry || errors.cvv}</div>
+                  <div className="text-red-600 text-sm">
+                    {errors.expiry || errors.cvv}
+                  </div>
                 )}
               </div>
             )}

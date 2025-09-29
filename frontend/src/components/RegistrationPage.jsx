@@ -16,14 +16,17 @@ export default function RegistrationPage() {
     }
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-        name,
-        email,
-        password
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        {
+          name,
+          email,
+          password,
+        }
+      );
 
-      alert(res.data.msg); // e.g., "User registered successfully"
-      window.location.href = "/login"; // redirect to login page
+      alert(res.data.msg);
+      window.location.href = "/login";
     } catch (err) {
       alert(err.response?.data?.msg || "Registration failed");
     }
@@ -39,7 +42,9 @@ export default function RegistrationPage() {
         <form onSubmit={handleRegister} className="space-y-5">
           {/* Full Name */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Full Name</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Full Name
+            </label>
             <input
               type="text"
               value={name}
@@ -52,7 +57,9 @@ export default function RegistrationPage() {
 
           {/* Email */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Email</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -65,7 +72,9 @@ export default function RegistrationPage() {
 
           {/* Password */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Password</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -78,7 +87,9 @@ export default function RegistrationPage() {
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-gray-600 font-medium mb-2">Confirm Password</label>
+            <label className="block text-gray-600 font-medium mb-2">
+              Confirm Password
+            </label>
             <input
               type="password"
               value={confirmPassword}

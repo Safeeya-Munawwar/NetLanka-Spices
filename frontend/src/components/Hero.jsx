@@ -11,7 +11,6 @@ export default function Hero() {
     const thirdLeftCurrent = thirdLeftRef.current;
     const thirdRightCurrent = thirdRightRef.current;
 
-    // Intersection observer for second section
     const observerSecond = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => setSecondVisible(entry.isIntersecting));
@@ -21,7 +20,6 @@ export default function Hero() {
 
     if (secondRefCurrent) observerSecond.observe(secondRefCurrent);
 
-    // Intersection observer for third section cards
     const observerCards = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -61,13 +59,13 @@ export default function Hero() {
               <p className="mt-7 text-justify text-gray-700">
                 Sri Lanka, renowned as the island of spices, is home to Zest
                 Ceylon—your ultimate online destination for premium Sri Lankan
-                spices. Whether you’re seeking bold, aromatic flavors or stocking
-                up in bulk, Zest Ceylon brings you a rich selection of both
-                organic and conventional spices, all in one place. As one of the
-                country’s leading wholesale spice suppliers, we’re proud to offer
-                top-quality herbs, spices, and culinary ingredients at the best
-                prices. Taste the essence of Sri Lanka—pure, fresh, and full of
-                zest.
+                spices. Whether you’re seeking bold, aromatic flavors or
+                stocking up in bulk, Zest Ceylon brings you a rich selection of
+                both organic and conventional spices, all in one place. As one
+                of the country’s leading wholesale spice suppliers, we’re proud
+                to offer top-quality herbs, spices, and culinary ingredients at
+                the best prices. Taste the essence of Sri Lanka—pure, fresh, and
+                full of zest.
               </p>
             </div>
 
@@ -130,9 +128,8 @@ export default function Hero() {
             }`}
           >
             “From the heart of Ceylon to your table — Net Spices Ceylon delivers
-            nature’s finest treasures with care <br />
-            – Experience the richness of tradition, every sip and every
-            sprinkle.”
+            nature’s finest treasures with care <br />– Experience the richness
+            of tradition, every sip and every sprinkle.”
           </p>
         </div>
       </section>
@@ -155,13 +152,13 @@ export default function Hero() {
                 SEE HOW IT PROCESSED
               </h2>
               <p className="mt-6 italic text-justify text-gray-600 px-6 pb-6">
-                Handpicked at dawn, only the finest Cinnamon are carefully plucked
-                by skilled hands in Sri Lanka’s lush highlands. These tender leaves
-                are quickly transported to the factory, where they undergo expert
-                withering, rolling, oxidation, and drying processes to preserve
-                their rich flavor and aroma. Once perfected, the tea is
-                meticulously sorted, graded, and packaged with care, to deliver the
-                pure taste of Ceylon to the world.
+                Handpicked at dawn, only the finest Cinnamon are carefully
+                plucked by skilled hands in Sri Lanka’s lush highlands. These
+                tender leaves are quickly transported to the factory, where they
+                undergo expert withering, rolling, oxidation, and drying
+                processes to preserve their rich flavor and aroma. Once
+                perfected, the tea is meticulously sorted, graded, and packaged
+                with care, to deliver the pure taste of Ceylon to the world.
               </p>
             </div>
 
@@ -179,13 +176,14 @@ export default function Hero() {
                 SPECIALITY OF CEYLON SPICES
               </h2>
               <p className="mt-6 italic text-justify text-gray-600 px-6 pb-6">
-                Ceylon spices, including pepper and cinnamon, are renowned for their
-                exceptional quality and unique flavor profiles. Ceylon pepper is
-                aromatic and mild, adding depth to dishes without overwhelming the
-                taste. Ceylon cinnamon, known as “true cinnamon,” has a delicate,
-                sweet flavor, distinct from its stronger counterpart, Cassia. These
-                spices are harvested from Sri Lanka’s fertile lands and are integral
-                to the island’s rich culinary and cultural heritage.
+                Ceylon spices, including pepper and cinnamon, are renowned for
+                their exceptional quality and unique flavor profiles. Ceylon
+                pepper is aromatic and mild, adding depth to dishes without
+                overwhelming the taste. Ceylon cinnamon, known as “true
+                cinnamon,” has a delicate, sweet flavor, distinct from its
+                stronger counterpart, Cassia. These spices are harvested from
+                Sri Lanka’s fertile lands and are integral to the island’s rich
+                culinary and cultural heritage.
               </p>
             </div>
           </div>
