@@ -6,13 +6,13 @@ import ProductsSection from "../components/ProductsSection";
 import WhyChooseUs from "../components/WhyChooseUs";
 
 export default function Home() {
-  const user = JSON.parse(localStorage.getItem("user"));
+ // const user = JSON.parse(localStorage.getItem("user"));
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("user");
+  //   window.location.href = "/login";
+  // };
 
   return (
     <div>

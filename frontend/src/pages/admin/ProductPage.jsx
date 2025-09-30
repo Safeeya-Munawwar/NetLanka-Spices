@@ -145,29 +145,6 @@ export default function ProductPage() {
         </button>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
-          >
-            Next
-          </button>
-        </div>
-      )}
-
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse bg-yellow-100 rounded-xl shadow-md">
@@ -263,7 +240,33 @@ export default function ProductPage() {
             )}
           </tbody>
         </table>
+
+              {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
+          >
+            Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
+          >
+            Next
+          </button>
+        </div>
+      )}
+      
       </div>
+
+      
     </CategoryLayout>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import ProductCard from "../components/ProductCard";
+import axios from "axios";
 
 export default function Products() {
   const headingRef = useRef(null);
@@ -8,25 +8,20 @@ export default function Products() {
 
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
+
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/products");
-        setProducts(res.data);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
+    // Fetch products from backend
+    axios
+      .get("http://localhost:5000/api/products") // ✅ change if your backend is deployed
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
   useEffect(() => {
     const observerOptions = { threshold: 0.3 };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === headingRef.current) {
@@ -90,18 +85,14 @@ export default function Products() {
               gridVisible ? "animate-fade-in" : "opacity-0"
             }`}
           >
-            {loading ? (
-              <p className="col-span-full text-center text-yellow-700">
-                Loading products...
-              </p>
-            ) : products.length === 0 ? (
-              <p className="col-span-full text-center text-yellow-700">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+
+            {products.length === 0 && (
+              <p className="text-center col-span-full text-gray-600">
                 No products found.
               </p>
-            ) : (
-              products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
             )}
           </div>
         </div>

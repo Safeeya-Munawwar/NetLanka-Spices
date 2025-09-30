@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
         status: "Pending",
         items: {
           create: items.map((i) => ({
-            productId: i.id,
+            productId: i.productId,
             name: i.name,
             price: i.price,
             quantity: i.quantity,
@@ -27,6 +27,7 @@ router.post("/", async (req, res) => {
       },
       include: {
         items: true,
+        user: { select: { id: true, name: true, email: true } }, // works after schema update
       },
     });
 
@@ -42,7 +43,10 @@ router.get("/", async (req, res) => {
   try {
     const orders = await req.prisma.order.findMany({
       orderBy: { createdAt: "desc" },
-      include: { items: true },
+      include: {
+        items: true,
+        user: { select: { id: true, name: true, email: true } },
+      },
     });
     res.json(orders);
   } catch (err) {
@@ -51,20 +55,69 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get orders by user
+// Update order status (Admin)
+router.patch("/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedOrder = await req.prisma.order.update({
+      where: { id },
+      data: { status },
+      include: {
+        items: true,
+        user: { select: { id: true, name: true, email: true } },
+      },
+    });
+
+    res.json(updatedOrder);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update order status" });
+  }
+});
+
+// Get orders for a specific user
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
-    const orders = await req.prisma.order.findMany({
+    const userOrders = await req.prisma.order.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      include: { items: true },
+      include: {
+        items: true,
+        user: { select: { id: true, name: true, email: true } },
+      },
     });
-    res.json(orders);
+    res.json(userOrders);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to fetch user orders" });
   }
 });
+
+// Delete an order (Admin)
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Delete all related items first
+    await req.prisma.orderItem.deleteMany({
+      where: { orderId: id },
+    });
+
+    // Then delete the order
+    await req.prisma.order.delete({
+      where: { id },
+    });
+
+    res.json({ message: "Order deleted successfully" });
+  } catch (err) {
+    console.error("Delete failed:", err);
+    res.status(500).json({ message: "Failed to delete order" });
+  }
+});
+
+
 
 export default router;

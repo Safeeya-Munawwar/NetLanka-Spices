@@ -1,76 +1,77 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useUser } from "./UserContext";
+import axios from "axios";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const { user } = useUser();
+  const [cartItems, setCartItems] = useState([]);
 
+  // Fetch cart when user logs in
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (user?.id) {
+      axios.get(`http://localhost:5000/api/carts/${user.id}`)
+        .then(res => {
+          // Map items to have productId, name, price, quantity, image
+          const items = res.data.items?.map(i => ({
+            productId: i.productId,
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            image: i.image
+          })) || [];
+          setCartItems(items);
+        })
+        .catch(err => console.error("Failed to fetch cart:", err));
+    } else {
+      setCartItems([]);
+    }
+  }, [user?.id]);
+
+  // Sync cart to backend whenever cartItems change
+  useEffect(() => {
+    if (user?.id) {
+      axios.post(`http://localhost:5000/api/carts/${user.id}`, { items: cartItems })
+        .catch(err => console.error("Failed to update cart:", err));
+    }
+  }, [cartItems, user?.id]);
 
   const addToCart = (product) => {
-    setCartItems((prev) => {
-      const exist = prev.find((item) => item.id === product.id);
+    setCartItems(prev => {
+      const exist = prev.find(item => item.productId === product.id);
       if (exist) {
-        return prev.map((item) =>
-          item.id === product.id
+        return prev.map(item =>
+          item.productId === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        const price =
-          typeof product.price === "string"
-            ? parseFloat(product.price.replace(/[^0-9.-]+/g, ""))
-            : product.price;
-
-        return [
-          ...prev,
-          {
-            id: product.id,
-            name: product.name,
-            image: product.image,
-            price,
-            quantity: 1,
-          },
-        ];
+        return [...prev, {
+          productId: product.id,
+          name: product.title,
+          price: product.price,
+          quantity: 1,
+          image: product.image
+        }];
       }
     });
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
+  const removeFromCart = (productId) =>
+    setCartItems(prev => prev.filter(item => item.productId !== productId));
 
-  const updateQuantity = (id, quantity) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
-      )
-    );
-  };
+  const updateQuantity = (productId, quantity) =>
+    setCartItems(prev => prev.map(item =>
+      item.productId === productId ? { ...item, quantity } : item
+    ));
 
   const clearCart = () => setCartItems([]);
 
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + (item.price || 0) * item.quantity,
-    0
-  );
+  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        totalPrice,
-      }}
-    >
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, totalPrice }}>
       {children}
     </CartContext.Provider>
   );

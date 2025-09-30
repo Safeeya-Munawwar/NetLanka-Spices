@@ -47,6 +47,7 @@ export default function Sidebar() {
           >
             <FaClipboardList /> Orders
           </Link>
+
           <Link
             to="/admin/users"
             className="flex items-center gap-2 p-2 hover:bg-yellow-200 rounded"

@@ -16,7 +16,6 @@ import Dashboard from "./pages/admin/Dashboard";
 import CategoriesPage from "./pages/admin/CategoriesPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import UsersPage from "./pages/admin/UsersPage";
-import CheckoutPage from "./pages/admin/CheckoutPage";
 import CategoryFormPage from "./components/admin/CategoryForm";
 import ProductPage from "./pages/admin/ProductPage";
 import ProductFormPage from "./components/admin/ProductFormPage";
@@ -80,6 +79,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/about"
           element={
@@ -124,8 +124,7 @@ function App() {
 
         <Route path="/admin/orders" element={<OrdersPage />} />
 
-        <Route path="/admin/users" element={<UsersPage />} />
-        <Route path="/admin/checkout" element={<CheckoutPage />} />
+        <Route path="/admin/users" element={<UsersPage />} />\
       </Routes>
     </Router>
   );

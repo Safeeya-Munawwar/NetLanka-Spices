@@ -15,6 +15,8 @@ import productsApi from "./api/products/products.js";
 import usersApi from "./api/users/users.js";
 import statsApi from "./api/stats/stats.js";
 import ordersApi from "./api/orders/orders.js";
+import filteredProductsAPi from "./api/filtered-products/filteredProducts.js";
+import cartsApi from "./api/carts/carts.js";
 
 dotenv.config();
 
@@ -45,6 +47,8 @@ app.use("/api/products", productsApi);
 app.use("/api/users", usersApi);
 app.use("/api/stats", statsApi);
 app.use("/api/orders", ordersApi);
+app.use("/api/filtered-products", filteredProductsAPi);
+app.use("/api/carts", cartsApi);
 
 // Start server
 const PORT = process.env.PORT || 5000;

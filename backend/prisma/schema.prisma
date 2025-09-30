@@ -18,9 +18,11 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      String   @default("user") // user or admin
+  role      String   @default("user")
   createdAt DateTime @default(now())
   active    Boolean  @default(true)
+
+  orders    Order[]  // add this relation
 }
 
 model Category {
@@ -28,6 +30,7 @@ model Category {
   title       String
   description String
   image       String
+  slug        String   @unique   // <-- non-nullable now
   products    Product[]
   active      Boolean  @default(true)
   dateCreated DateTime @default(now())
@@ -50,14 +53,33 @@ model Product {
   updatedAt   DateTime @updatedAt
 }
 
+model Cart {
+  id      String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String      @unique
+  items   CartItem[]
+  updatedAt DateTime  @updatedAt
+}
+
+model CartItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId String
+  name      String
+  price     Float
+  quantity  Int
+  image     String?
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id])
+}
+
 model Order {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String
-  items        OrderItem[]
-  totalPrice   Float
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String?     @db.ObjectId
+  user          User?       @relation(fields: [userId], references: [id])
+  items         OrderItem[]
+  totalPrice    Float
   paymentMethod String
-  status       String      @default("Pending") // Pending / Completed / Cancelled
-  createdAt    DateTime    @default(now())
+  status        String      @default("Pending")
+  createdAt     DateTime    @default(now())
 }
 
 model OrderItem {

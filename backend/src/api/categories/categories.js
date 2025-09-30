@@ -26,14 +26,18 @@ router.post("/", async (req, res) => {
         }
       }
 
+      const slugify = (text) =>
+        text.toString().toLowerCase().replace(/\s+/g, "-");
+      
       const newCategory = await prisma.category.create({
         data: {
           title,
+          slug: slugify(title),  // generate slug
           description,
           image: imageUrl,
           active: active === "true",
         },
-      });
+      });      
 
       res.status(201).json(newCategory);
     });
