@@ -11,7 +11,6 @@ import {
 
 export default function Sidebar() {
   const navigate = useNavigate();
-
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     navigate("/login");
@@ -28,7 +27,6 @@ export default function Sidebar() {
           >
             <FaTachometerAlt /> Dashboard
           </Link>
-
           <Link
             to="/admin/products"
             className="flex items-center gap-2 p-2 hover:bg-yellow-200 rounded"
@@ -56,7 +54,6 @@ export default function Sidebar() {
           </Link>
         </nav>
       </div>
-
       {/* Logout Button */}
       <button
         onClick={handleLogout}

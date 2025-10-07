@@ -7,7 +7,6 @@ export default function ProductFormPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const editingProduct = state?.product || null;
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -19,7 +18,6 @@ export default function ProductFormPage() {
   const [active, setActive] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -32,7 +30,6 @@ export default function ProductFormPage() {
     fetchCategories();
   }, []);
 
-  // Pre-fill form for editing
   useEffect(() => {
     if (editingProduct) {
       setTitle(editingProduct.title || "");
@@ -48,7 +45,6 @@ export default function ProductFormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!categoryId) return alert("Select a category.");
-
     setLoading(true);
     const formData = new FormData();
     formData.append("title", title);
@@ -58,8 +54,8 @@ export default function ProductFormPage() {
     formData.append("categoryId", categoryId);
     formData.append("active", active);
     if (imageFile) formData.append("image", imageFile);
-    else if (editingProduct?.image) formData.append("existingImage", editingProduct.image);
-
+    else if (editingProduct?.image)
+      formData.append("existingImage", editingProduct.image);
     try {
       if (editingProduct) {
         await axios.put(
@@ -85,7 +81,6 @@ export default function ProductFormPage() {
           <h2 className="text-2xl font-bold text-brown-900 mb-6">
             {editingProduct ? "Edit Product" : "New Product"}
           </h2>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title */}
             <div>
@@ -98,7 +93,6 @@ export default function ProductFormPage() {
                 className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
               />
             </div>
-
             {/* Description */}
             <div>
               <label className="block text-brown-800 mb-1">Description</label>
@@ -109,7 +103,6 @@ export default function ProductFormPage() {
                 className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
               />
             </div>
-
             {/* Price & Quantity */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -133,7 +126,6 @@ export default function ProductFormPage() {
                 />
               </div>
             </div>
-
             {/* Category */}
             <div>
               <label className="block text-brown-800 mb-1">Category</label>
@@ -151,7 +143,6 @@ export default function ProductFormPage() {
                 ))}
               </select>
             </div>
-
             {/* Image */}
             <div>
               <label className="block text-brown-800 mb-1">Image</label>
@@ -173,7 +164,6 @@ export default function ProductFormPage() {
                 />
               )}
             </div>
-
             {/* Active */}
             <div className="flex items-center gap-2">
               <label className="text-brown-800">Active</label>
@@ -184,7 +174,6 @@ export default function ProductFormPage() {
                 className="w-5 h-5 accent-yellow-500"
               />
             </div>
-
             <button
               type="submit"
               disabled={loading}

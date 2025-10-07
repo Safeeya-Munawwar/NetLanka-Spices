@@ -4,10 +4,8 @@ const router = express.Router();
 // Create Order
 router.post("/", async (req, res) => {
   const { userId, items, totalPrice, paymentMethod } = req.body;
-
   if (!items || items.length === 0)
     return res.status(400).json({ message: "Cart is empty" });
-
   try {
     const order = await req.prisma.order.create({
       data: {
@@ -27,10 +25,9 @@ router.post("/", async (req, res) => {
       },
       include: {
         items: true,
-        user: { select: { id: true, name: true, email: true } }, // works after schema update
+        user: { select: { id: true, name: true, email: true } },
       },
     });
-
     res.status(201).json(order);
   } catch (err) {
     console.error("Order creation failed:", err.message);
@@ -59,7 +56,6 @@ router.get("/", async (req, res) => {
 router.patch("/:id/status", async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-
   try {
     const updatedOrder = await req.prisma.order.update({
       where: { id },
@@ -69,7 +65,6 @@ router.patch("/:id/status", async (req, res) => {
         user: { select: { id: true, name: true, email: true } },
       },
     });
-
     res.json(updatedOrder);
   } catch (err) {
     console.error(err);
@@ -99,25 +94,18 @@ router.get("/:userId", async (req, res) => {
 // Delete an order (Admin)
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-
   try {
-    // Delete all related items first
     await req.prisma.orderItem.deleteMany({
       where: { orderId: id },
     });
-
-    // Then delete the order
     await req.prisma.order.delete({
       where: { id },
     });
-
     res.json({ message: "Order deleted successfully" });
   } catch (err) {
     console.error("Delete failed:", err);
     res.status(500).json({ message: "Failed to delete order" });
   }
 });
-
-
 
 export default router;

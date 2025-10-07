@@ -8,9 +8,7 @@ export default function CategoryTable() {
   const [categories, setCategories] = useState([]);
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
-
   const toggleMenu = (id) => setOpenMenu(openMenu === id ? null : id);
-
   const fetchCategories = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/categories");
@@ -79,7 +77,6 @@ export default function CategoryTable() {
                     >
                       <FaEllipsisV />
                     </button>
-
                     {openMenu === cat.id && (
                       <div className="absolute right-4 mt-2 w-40 bg-yellow-100 border border-yellow-300 rounded-xl shadow-lg z-10">
                         <ul className="py-2 text-sm text-brown-900">
@@ -113,7 +110,6 @@ export default function CategoryTable() {
                   </td>
                 </tr>
               ))}
-
               {categories.length === 0 && (
                 <tr>
                   <td colSpan="5" className="text-center py-6 text-brown-400">

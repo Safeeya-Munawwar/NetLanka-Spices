@@ -9,7 +9,6 @@ export default function ProductTable() {
   const [loading, setLoading] = useState(true);
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
-
   const toggleMenu = (id) => setOpenMenu(openMenu === id ? null : id);
 
   const fetchProducts = async () => {
@@ -51,7 +50,6 @@ export default function ProductTable() {
             + Add Product
           </button>
         </div>
-
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse bg-yellow-100 rounded-xl shadow-md">
             <thead className="bg-yellow-200 text-brown-900 uppercase text-sm">
@@ -113,7 +111,6 @@ export default function ProductTable() {
                       >
                         <FaEllipsisV />
                       </button>
-
                       {openMenu === prod.id && (
                         <div className="absolute right-4 mt-2 w-40 bg-yellow-100 border border-yellow-300 rounded-xl shadow-lg z-10">
                           <ul className="py-2 text-sm text-brown-900">

@@ -2,7 +2,16 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
 import axios from "axios";
-import { FaTrash, FaEdit, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import {
+  FaTrash,
+  FaEdit,
+  FaSort,
+  FaSortUp,
+  FaSortDown,
+  FaFolderOpen,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 
 export default function CategoriesPage() {
   const navigate = useNavigate();
@@ -10,10 +19,12 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const [sortConfig, setSortConfig] = useState({
     key: "dateCreated",
     direction: "desc",
   });
+
   const categoriesPerPage = 10;
 
   const fetchCategories = async () => {
@@ -56,17 +67,14 @@ export default function CategoriesPage() {
     return sortable.sort((a, b) => {
       let aValue = a[sortConfig.key];
       let bValue = b[sortConfig.key];
-
       if (sortConfig.key === "active") {
         aValue = aValue ? 1 : 0;
         bValue = bValue ? 1 : 0;
       }
-
       if (sortConfig.key === "dateCreated") {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
       }
-
       if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
@@ -95,9 +103,10 @@ export default function CategoriesPage() {
 
   return (
     <CategoryLayout>
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* --- Stats with Icons --- */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaFolderOpen className="text-3xl mx-auto mb-2 text-yellow-700" />
           <h3 className="text-lg font-semibold text-brown-900">
             Total Categories
           </h3>
@@ -105,21 +114,23 @@ export default function CategoriesPage() {
             {totalCategories}
           </p>
         </div>
+
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaCheckCircle className="text-3xl mx-auto mb-2 text-green-600" />
           <h3 className="text-lg font-semibold text-brown-900">Active</h3>
           <p className="text-3xl font-bold text-green-600">{totalActive}</p>
         </div>
+
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaTimesCircle className="text-3xl mx-auto mb-2 text-red-600" />
           <h3 className="text-lg font-semibold text-brown-900">Inactive</h3>
           <p className="text-3xl font-bold text-red-600">{totalInactive}</p>
         </div>
       </div>
-
       {/* Heading */}
       <h2 className="text-2xl font-bold text-brown-900 mb-6">
         Category Management
       </h2>
-
       {/* Header + Search + Add */}
       <div className="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-3">
         <input
@@ -139,7 +150,6 @@ export default function CategoriesPage() {
           + New Category
         </button>
       </div>
-
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse bg-yellow-100 rounded-xl shadow-md">
@@ -257,7 +267,6 @@ export default function CategoriesPage() {
           </tbody>
         </table>
       </div>
-
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">

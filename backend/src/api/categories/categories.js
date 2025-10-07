@@ -8,11 +8,9 @@ router.post("/", async (req, res) => {
     const upload = req.upload.single("image");
     upload(req, res, async (err) => {
       if (err) return res.status(500).json({ error: err.message });
-
       const { title, description, active } = req.body;
       const prisma = req.prisma;
       const cloudinary = req.cloudinary;
-
       let imageUrl = "/1.jpeg";
       if (req.file) {
         try {
@@ -25,20 +23,17 @@ router.post("/", async (req, res) => {
           return res.status(500).json({ error: uploadErr.message });
         }
       }
-
       const slugify = (text) =>
         text.toString().toLowerCase().replace(/\s+/g, "-");
-      
       const newCategory = await prisma.category.create({
         data: {
           title,
-          slug: slugify(title),  // generate slug
+          slug: slugify(title),
           description,
           image: imageUrl,
           active: active === "true",
         },
-      });      
-
+      });
       res.status(201).json(newCategory);
     });
   } catch (error) {
@@ -79,17 +74,14 @@ router.put("/:id", async (req, res) => {
     const upload = req.upload.single("image");
     upload(req, res, async (err) => {
       if (err) return res.status(500).json({ error: err.message });
-
       const { title, description, active } = req.body;
       const prisma = req.prisma;
       const cloudinary = req.cloudinary;
-
       const dataToUpdate = {
         title,
         description,
         active: active === "true",
       };
-
       if (req.file) {
         try {
           const result = await cloudinary.uploader.upload(req.file.path, {
@@ -101,12 +93,10 @@ router.put("/:id", async (req, res) => {
           return res.status(500).json({ error: uploadErr.message });
         }
       }
-
       const updatedCategory = await prisma.category.update({
         where: { id: req.params.id },
         data: dataToUpdate,
       });
-
       res.json(updatedCategory);
     });
   } catch (error) {

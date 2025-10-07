@@ -7,7 +7,6 @@ export default function CategoryFormPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const editingCategory = state?.cat || null;
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
@@ -27,13 +26,11 @@ export default function CategoryFormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("active", active);
     if (imageFile) formData.append("image", imageFile);
-
     try {
       if (editingCategory) {
         await axios.put(
@@ -65,7 +62,6 @@ export default function CategoryFormPage() {
           <h2 className="text-2xl font-bold text-brown-900 mb-6">
             {editingCategory ? "Edit Category" : "New Category"}
           </h2>
-
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-brown-800 mb-2">
@@ -80,7 +76,6 @@ export default function CategoryFormPage() {
                 className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
               />
             </div>
-
             <div>
               <label className="block text-brown-800 mb-2">
                 Category Description
@@ -93,7 +88,6 @@ export default function CategoryFormPage() {
                 className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
               />
             </div>
-
             <div>
               <label className="block text-brown-800 mb-2">
                 Category Image
@@ -116,7 +110,6 @@ export default function CategoryFormPage() {
                 />
               )}
             </div>
-
             <div className="flex items-center gap-2">
               <label className="text-brown-800">Active</label>
               <input
@@ -126,7 +119,6 @@ export default function CategoryFormPage() {
                 className="w-5 h-5 accent-yellow-500"
               />
             </div>
-
             <button
               type="submit"
               disabled={loading}

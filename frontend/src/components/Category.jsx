@@ -3,10 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { FaLeaf, FaSeedling, FaSpa, FaCoffee } from "react-icons/fa";
 
 const categories = [
-  { name: "Herbs", icon: <FaLeaf size={40} />, color: "bg-green-100", hoverColor: "hover:bg-green-200" },
-  { name: "Spices", icon: <FaSeedling size={40} />, color: "bg-yellow-100", hoverColor: "hover:bg-yellow-200" },
-  { name: "Teas", icon: <FaSpa size={40} />, color: "bg-orange-100", hoverColor: "hover:bg-orange-200" },
-  { name: "Coffee", icon: <FaCoffee size={40} />, color: "bg-red-100", hoverColor: "hover:bg-red-200" },
+  {
+    name: "Herbs",
+    icon: <FaLeaf size={40} />,
+    color: "bg-green-100",
+    hoverColor: "hover:bg-green-200",
+  },
+  {
+    name: "Spices",
+    icon: <FaSeedling size={40} />,
+    color: "bg-yellow-100",
+    hoverColor: "hover:bg-yellow-200",
+  },
+  {
+    name: "Teas",
+    icon: <FaSpa size={40} />,
+    color: "bg-orange-100",
+    hoverColor: "hover:bg-orange-200",
+  },
+  {
+    name: "Coffee",
+    icon: <FaCoffee size={40} />,
+    color: "bg-red-100",
+    hoverColor: "hover:bg-red-200",
+  },
 ];
 
 export default function Category() {
@@ -20,15 +40,22 @@ export default function Category() {
     <section className="w-full py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
-        <h1 className="font-serif text-yellow-800 mb-2 text-left text-xl">Net Spice's</h1>
+        <h1 className="font-serif text-yellow-800 mb-2 text-left text-xl">
+          Net Spice's
+        </h1>
         <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6 text-left">
           FEATURED CATEGORIES
         </h1>
-
         <div className="flex items-center justify-start mb-10 gap-4">
           <div className="w-20 h-px bg-gray-200"></div>
           <div className="w-10 h-8 flex items-center justify-center">
-            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="40"
+              height="24"
+              viewBox="0 0 40 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12"
                 stroke="#9FCB70"
@@ -40,7 +67,6 @@ export default function Category() {
           </div>
           <div className="w-20 h-px bg-gray-200"></div>
         </div>
-
         {/* Categories grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {categories.map((cat) => (
@@ -68,7 +94,6 @@ export default function Category() {
             </div>
           ))}
         </div>
-
         {/* See More button */}
         <div className="flex justify-center mt-8">
           <button

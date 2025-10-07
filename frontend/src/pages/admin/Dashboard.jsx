@@ -14,7 +14,6 @@ export default function Dashboard() {
 
   const [visible, setVisible] = useState(false);
   const dashboardRef = useRef(null);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -41,11 +40,8 @@ export default function Dashboard() {
       },
       { threshold: 0.2 }
     );
-
     const currentRef = dashboardRef.current;
-
     if (currentRef) observer.observe(currentRef);
-
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
@@ -85,7 +81,6 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-
       <div className="flex-1">
         {/* Hero Header */}
         <section
@@ -99,7 +94,6 @@ export default function Dashboard() {
             Manage your store efficiently and easily
           </p>
         </section>
-
         {/* Dashboard Section */}
         <section
           ref={dashboardRef}

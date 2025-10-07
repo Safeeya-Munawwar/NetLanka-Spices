@@ -14,9 +14,7 @@ export default function Header() {
       },
       { threshold: 0.2 }
     );
-
     if (currentRef) observer.observe(currentRef);
-
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
@@ -54,7 +52,6 @@ export default function Header() {
               </button>
             </Link>
           </div>
-
           {/* Image Slider */}
           <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
             <div className="w-full max-w-lg sm:max-w-md md:max-w-full">
@@ -63,7 +60,6 @@ export default function Header() {
           </div>
         </div>
       </section>
-
       {/* Feature Strip */}
       <section
         ref={sectionRef}

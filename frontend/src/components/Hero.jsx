@@ -10,16 +10,13 @@ export default function Hero() {
     const secondRefCurrent = secondSectionRef.current;
     const thirdLeftCurrent = thirdLeftRef.current;
     const thirdRightCurrent = thirdRightRef.current;
-
     const observerSecond = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => setSecondVisible(entry.isIntersecting));
       },
       { threshold: 0.2 }
     );
-
     if (secondRefCurrent) observerSecond.observe(secondRefCurrent);
-
     const observerCards = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -68,7 +65,6 @@ export default function Hero() {
                 full of zest.
               </p>
             </div>
-
             <div className="md:w-1/2 flex justify-center mt-10 md:mt-0">
               <div className="w-full md:max-w-lg rounded-xl overflow-hidden shadow-lg">
                 <img
@@ -81,7 +77,6 @@ export default function Hero() {
           </div>
         </div>
       </section>
-
       {/* Second Section */}
       <section
         ref={secondSectionRef}
@@ -95,7 +90,6 @@ export default function Hero() {
           >
             NET SPICE'S - beyond tradition
           </h2>
-
           <div
             className={`flex items-center justify-center mb-6 gap-4 slide-in-up ${
               secondVisible ? "in-view" : ""
@@ -133,7 +127,6 @@ export default function Hero() {
           </p>
         </div>
       </section>
-
       {/* Third Section */}
       <section className="w-full bg-white py-14">
         <div className="max-w-7xl mx-auto px-6">
@@ -161,7 +154,6 @@ export default function Hero() {
                 with care, to deliver the pure taste of Ceylon to the world.
               </p>
             </div>
-
             {/* Right Card */}
             <div
               ref={thirdRightRef}

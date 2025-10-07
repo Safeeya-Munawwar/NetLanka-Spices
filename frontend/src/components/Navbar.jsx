@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { FaTruck, FaUserCircle } from "react-icons/fa"; // Truck icon instead of cart
 import { useCart } from "../context/CartContext";
 import CartSidebar from "./CartSidebar";
 
@@ -8,10 +8,10 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { cartItems } = useCart();
   const navigate = useNavigate();
   const profileRef = useRef();
-
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const isAdmin = user?.role === "admin";
 
@@ -26,6 +26,15 @@ export default function Nav() {
     navigate("/login");
     setProfileOpen(false);
     setOpen(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -65,12 +74,12 @@ export default function Nav() {
               Contact us
             </NavLink>
 
-            {/* Cart Icon (desktop only) */}
+            {/* Lorry Icon (Cart Replacement) */}
             <div
               className="relative flex items-center ml-4 cursor-pointer"
               onClick={() => setCartOpen(true)}
             >
-              <FaShoppingCart size={24} className="text-white" />
+              <FaTruck size={24} className="text-white" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                   {cartItems.length}
@@ -88,6 +97,7 @@ export default function Nav() {
                 />
               </div>
             )}
+
           </nav>
 
           {/* Hamburger (Mobile Only) */}
@@ -166,6 +176,19 @@ export default function Nav() {
               </NavLink>
             </li>
 
+            {/* Mobile Search */}
+            <li>
+              <form onSubmit={handleSearch} className="mt-2">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full px-3 py-2 rounded-xl border border-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+                />
+              </form>
+            </li>
+
             {user && (
               <>
                 <li className="px-2 py-2 border-t border-gray-600">
@@ -210,7 +233,7 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* Profile Dropdown on Page Right Side */}
+      {/* Profile Dropdown */}
       {user && profileOpen && (
         <div
           ref={profileRef}
@@ -249,7 +272,7 @@ export default function Nav() {
         </div>
       )}
 
-      {/* Cart Sidebar */}
+      {/* Cart/Lorry Sidebar */}
       <CartSidebar open={cartOpen} setOpen={setCartOpen} />
     </>
   );

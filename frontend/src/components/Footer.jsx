@@ -10,7 +10,6 @@ export default function Footer() {
         className="w-full h-[180px] bg-cover bg-center"
         style={{ backgroundImage: "url('/foot.png')" }}
       ></div>
-
       {/* Footer Content */}
       <section className="w-full bg-[#302019]">
         <div className="max-w-7xl mx-auto px-6 py-12 text-white grid md:grid-cols-3 gap-10 border-b border-[#4a3322]">
@@ -29,7 +28,6 @@ export default function Footer() {
               shipment.
             </p>
           </div>
-
           {/* Middle - Quick Links */}
           <div className="flex flex-col items-center md:items-start space-y-3">
             <h2 className="text-lg font-semibold text-[#b9843c]">
@@ -42,13 +40,15 @@ export default function Footer() {
               Products
             </a>
             <a href="/" className="hover:text-gray-300 text-sm">
+              Categories
+            </a>
+            <a href="/" className="hover:text-gray-300 text-sm">
               About Us
             </a>
             <a href="/" className="hover:text-gray-300 text-sm">
               Contact Us
             </a>
           </div>
-
           {/* Right - Newsletter & Contact */}
           <div className="flex flex-col items-center md:items-start space-y-4">
             <h2 className="text-lg font-semibold text-[#b9843c]">
@@ -64,7 +64,6 @@ export default function Footer() {
                 Send
               </button>
             </div>
-
             {/* Contact Info */}
             <div className="space-y-2 text-sm text-gray-200">
               <p className="flex items-center gap-2">
@@ -82,7 +81,6 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
         {/* Social Media & Bottom Copyright */}
         <div className="w-full bg-[#27170f] py-6">
           <div className="flex justify-center space-x-6 text-xl text-[#b9843c] mb-4">

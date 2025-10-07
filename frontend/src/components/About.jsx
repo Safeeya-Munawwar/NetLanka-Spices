@@ -5,7 +5,6 @@ export default function About() {
   const rightRef = useRef(null);
   const storyLeftRef = useRef(null);
   const storyRightRef = useRef(null);
-
   const [leftVisible, setLeftVisible] = useState(false);
   const [rightVisible, setRightVisible] = useState(false);
   const [storyLeftVisible, setStoryLeftVisible] = useState(false);
@@ -13,12 +12,10 @@ export default function About() {
 
   useEffect(() => {
     const observerOptions = { threshold: 0.3 };
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const target = entry.target;
         const isIntersecting = entry.isIntersecting;
-
         if (target === leftRef.current) setLeftVisible(isIntersecting);
         if (target === rightRef.current) setRightVisible(isIntersecting);
         if (target === storyLeftRef.current)
@@ -27,7 +24,6 @@ export default function About() {
           setStoryRightVisible(isIntersecting);
       });
     }, observerOptions);
-
     [leftRef, rightRef, storyLeftRef, storyRightRef].forEach((ref) => {
       if (ref.current) observer.observe(ref.current);
     });
@@ -53,7 +49,6 @@ export default function About() {
           The journey of a best spice's exporter
         </p>
       </section>
-
       {/* WHO WE ARE Section */}
       <section className="w-full bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
@@ -82,7 +77,6 @@ export default function About() {
               citronella oil, clove oil, and more.
             </p>
           </div>
-
           {/* Right Image */}
           <div
             ref={rightRef}
@@ -98,7 +92,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* OUR STORY Section */}
       <section className="bg-[#f7f2e9] py-16 px-6">
         <div className="max-w-6xl mx-auto">
@@ -106,7 +99,6 @@ export default function About() {
             A Journey to Remember
           </h2>
           <h1 className="text-3xl sm:text-4xl font-bold mb-12">OUR STORY</h1>
-
           <div className="flex flex-col md:flex-row items-center gap-12">
             {/* Image */}
             <div
@@ -121,7 +113,6 @@ export default function About() {
                 className="w-full h-auto rounded-lg shadow-md"
               />
             </div>
-
             {/* Text */}
             <div
               ref={storyRightRef}

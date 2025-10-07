@@ -14,9 +14,7 @@ const WhyChooseUs = () => {
       },
       { threshold: 0.2 }
     );
-
     if (currentRef) observer.observe(currentRef);
-
     return () => {
       if (currentRef) observer.unobserve(currentRef);
     };
@@ -39,7 +37,6 @@ const WhyChooseUs = () => {
         <h1 className="text-2xl md:text-3xl font-bold text-green-800 mt-3 mb-2 text-left transition-transform">
           WHY CHOOSE US
         </h1>
-
         <div
           className={`flex items-center justify-start mb-10 gap-4 transition-transform duration-700 delay-400 ${
             isVisible ? "slide-in-up opacity-100" : "opacity-0 translate-y-10"
@@ -65,7 +62,6 @@ const WhyChooseUs = () => {
           </div>
           <div className="w-20 h-px bg-gray-200"></div>
         </div>
-
         {/* Cards Grid with staggered animation */}
         <div className="bg-slate-100 p-6 rounded-md grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 shadow">
           {cards.map((item, index) => (
@@ -91,7 +87,6 @@ const WhyChooseUs = () => {
           ))}
         </div>
       </div>
-
       {/* OUR PROMISE Section */}
       <div className="max-w-7xl mx-auto px-6 mt-20 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="w-full">
@@ -101,7 +96,6 @@ const WhyChooseUs = () => {
             className="w-full rounded-lg shadow-md object-cover h-[400px]"
           />
         </div>
-
         <div>
           <h2 className="text-[60px] font-bold text-green-800 uppercase mb-4">
             Our Promise
@@ -142,7 +136,6 @@ const WhyChooseUs = () => {
           </p>
         </div>
       </div>
-
       {/* CUSTOMER TESTIMONIALS Section */}
       <div className="max-w-7xl mx-auto px-6 mt-20">
         {/* Heading */}
