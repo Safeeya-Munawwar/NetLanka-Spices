@@ -8,8 +8,10 @@ function ProductCard({ product }) {
   const { addToCart } = useCart();
 
   return (
-    <div className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
-      transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]">
+    <div
+      className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
+      transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]"
+    >
       <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={product.image}
@@ -58,41 +60,39 @@ export default function CategoryProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // IntersectionObserver for animations
   useEffect(() => {
     const headingEl = headingRef.current;
     const gridEl = gridRef.current;
-  
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.target === headingEl) setHeadingVisible(entry.isIntersecting);
+          if (entry.target === headingEl)
+            setHeadingVisible(entry.isIntersecting);
           if (entry.target === gridEl) setGridVisible(entry.isIntersecting);
         });
       },
       { threshold: 0.3 }
     );
-  
+
     if (headingEl) observer.observe(headingEl);
     if (gridEl) observer.observe(gridEl);
-  
+
     return () => {
       if (headingEl) observer.unobserve(headingEl);
       if (gridEl) observer.unobserve(gridEl);
     };
   }, []);
-  
 
-  // Fetch products for the selected category
   useEffect(() => {
     if (!category) return;
-  
+
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const res = await axios.get(
           "http://localhost:5000/api/filtered-products",
-          { params: { category } } // send slug
+          { params: { category } }
         );
         setProducts(res.data);
       } catch (err) {
@@ -101,12 +101,12 @@ export default function CategoryProducts() {
         setLoading(false);
       }
     };
-  
+
     fetchProducts();
   }, [category]);
-  
 
-  const displayCategory = category?.charAt(0).toUpperCase() + category?.slice(1).toLowerCase();
+  const displayCategory =
+    category?.charAt(0).toUpperCase() + category?.slice(1).toLowerCase();
   const heroImage = heroImages[category?.toLowerCase()] || "/images/cinbg.jpg";
 
   return (
@@ -123,7 +123,6 @@ export default function CategoryProducts() {
           Explore our finest {displayCategory?.toLowerCase()}
         </p>
       </section>
-
       {/* Products Grid */}
       <section className="bg-yellow-50 py-16">
         <div className="container mx-auto px-6">
@@ -135,7 +134,6 @@ export default function CategoryProducts() {
               <FaArrowLeft /> Back to Categories
             </Link>
           </div>
-
           <div
             ref={headingRef}
             className={`text-center transition-opacity duration-700 ease-in-out ${
@@ -149,7 +147,6 @@ export default function CategoryProducts() {
               {displayCategory}
             </h1>
           </div>
-
           <div
             ref={gridRef}
             className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 transition-opacity duration-700 ease-in-out ${
@@ -157,9 +154,13 @@ export default function CategoryProducts() {
             }`}
           >
             {loading ? (
-              <p className="text-center col-span-full text-[#3D2B1F]">Loading...</p>
+              <p className="text-center col-span-full text-[#3D2B1F]">
+                Loading...
+              </p>
             ) : products.length > 0 ? (
-              products.map((product) => <ProductCard key={product.id} product={product} />)
+              products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
             ) : (
               <div className="col-span-full text-center py-16">
                 <p className="text-[#3D2B1F] text-xl mb-6">

@@ -2,7 +2,16 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
 import axios from "axios";
-import { FaTrash, FaEdit, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import {
+  FaTrash,
+  FaEdit,
+  FaSort,
+  FaSortUp,
+  FaSortDown,
+  FaBoxOpen,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -92,9 +101,10 @@ export default function ProductPage() {
 
   return (
     <CategoryLayout>
-      {/* --- Top Stats --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* --- Top Stats with Icons --- */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaBoxOpen className="text-3xl mx-auto mb-2 text-yellow-700" />
           <h3 className="text-lg font-semibold text-brown-900">
             Total Products
           </h3>
@@ -102,7 +112,9 @@ export default function ProductPage() {
             {products.length}
           </p>
         </div>
+
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaCheckCircle className="text-3xl mx-auto mb-2 text-green-600" />
           <h3 className="text-lg font-semibold text-brown-900">
             Active Products
           </h3>
@@ -110,7 +122,9 @@ export default function ProductPage() {
             {products.filter((p) => p.active).length}
           </p>
         </div>
+
         <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <FaTimesCircle className="text-3xl mx-auto mb-2 text-red-600" />
           <h3 className="text-lg font-semibold text-brown-900">
             Inactive Products
           </h3>
@@ -241,32 +255,29 @@ export default function ProductPage() {
           </tbody>
         </table>
 
-              {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
-          >
-            Next
-          </button>
-        </div>
-      )}
-      
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
+            >
+              Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
-
-      
     </CategoryLayout>
   );
 }

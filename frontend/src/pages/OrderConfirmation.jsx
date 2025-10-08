@@ -49,7 +49,9 @@ export default function OrderConfirmation() {
 
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders/${user.id}`);
+        const res = await axios.get(
+          `http://localhost:5000/api/orders/${user.id}`
+        );
         setOrders(res.data);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
@@ -63,14 +65,20 @@ export default function OrderConfirmation() {
 
   const handleCardChange = (field, value) => {
     if (field === "cardNumber")
-      value = value.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim();
+      value = value
+        .replace(/\D/g, "")
+        .replace(/(.{4})/g, "$1 ")
+        .trim();
     setCardDetails({ ...cardDetails, [field]: value });
   };
 
   const handleQuantityChange = (itemId, newQty) => {
     updateQuantity(itemId, newQty);
     setAnimateBadge((prev) => ({ ...prev, [itemId]: true }));
-    setTimeout(() => setAnimateBadge((prev) => ({ ...prev, [itemId]: false })), 300);
+    setTimeout(
+      () => setAnimateBadge((prev) => ({ ...prev, [itemId]: false })),
+      300
+    );
   };
 
   const handlePlaceOrder = async () => {
@@ -81,7 +89,8 @@ export default function OrderConfirmation() {
       const cleanNumber = cardDetails.cardNumber.replace(/\s+/g, "");
       if (!/^\d{16}$/.test(cleanNumber))
         newErrors.cardNumber = "Card number must be 16 digits";
-      if (!cardDetails.cardName) newErrors.cardName = "Cardholder name required";
+      if (!cardDetails.cardName)
+        newErrors.cardName = "Cardholder name required";
       if (!/^\d{2}\/\d{2}$/.test(cardDetails.expiry))
         newErrors.expiry = "Expiry must be MM/YY";
       if (!/^\d{3,4}$/.test(cardDetails.cvv))
@@ -111,7 +120,9 @@ export default function OrderConfirmation() {
   if (confirmed) {
     return (
       <div className="container mx-auto py-16 text-center">
-        <h2 className="text-3xl font-bold text-green-800 mb-4">Order Confirmed!</h2>
+        <h2 className="text-3xl font-bold text-green-800 mb-4">
+          Order Confirmed!
+        </h2>
         <p className="text-[#5C4033] mb-2">
           Your order ID: <strong>{orderId}</strong>
         </p>
@@ -131,7 +142,9 @@ export default function OrderConfirmation() {
       {/* Empty cart message */}
       {!cartItems.length && (
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#5C4033] mb-4">Your cart is empty</h2>
+          <h2 className="text-3xl font-bold text-[#5C4033] mb-4">
+            Your cart is empty
+          </h2>
           <p className="text-[#3D2B1F] mb-4">Add products to proceed!</p>
           <a
             href="/products"
@@ -161,7 +174,9 @@ export default function OrderConfirmation() {
                   {item.quantity > 0 && (
                     <span
                       className={`absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg transition-transform ${
-                        animateBadge[item.id] ? "scale-125 animate-bounce" : "scale-100"
+                        animateBadge[item.id]
+                          ? "scale-125 animate-bounce"
+                          : "scale-100"
                       }`}
                     >
                       {item.quantity}
@@ -175,15 +190,22 @@ export default function OrderConfirmation() {
                     <button
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                       onClick={() =>
-                        handleQuantityChange(item.id, Math.max(item.quantity - 1, 1))
+                        handleQuantityChange(
+                          item.id,
+                          Math.max(item.quantity - 1, 1)
+                        )
                       }
                     >
                       -
                     </button>
-                    <span className="px-2 py-1 border rounded">{item.quantity}</span>
+                    <span className="px-2 py-1 border rounded">
+                      {item.quantity}
+                    </span>
                     <button
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                      onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                      onClick={() =>
+                        handleQuantityChange(item.id, item.quantity + 1)
+                      }
                     >
                       +
                     </button>
@@ -206,7 +228,9 @@ export default function OrderConfirmation() {
 
           {/* Order Summary / Payment */}
           <div className="lg:w-1/3 p-6 border rounded-lg shadow bg-yellow-50 sticky top-20 h-fit flex flex-col gap-4">
-            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">Order Summary</h3>
+            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">
+              Order Summary
+            </h3>
             <div className="flex justify-between font-semibold mb-2">
               <span>Items:</span>
               <span>{cartItems.length}</span>
@@ -216,7 +240,9 @@ export default function OrderConfirmation() {
               <span>LKR {totalPrice}</span>
             </div>
 
-            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">Payment Method</h3>
+            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">
+              Payment Method
+            </h3>
             <div className="flex flex-col gap-3 mb-4">
               {["cod", "creditCard", "paypal"].map((method) => (
                 <label
@@ -245,7 +271,9 @@ export default function OrderConfirmation() {
                   type="text"
                   placeholder="Card Number"
                   value={cardDetails.cardNumber}
-                  onChange={(e) => handleCardChange("cardNumber", e.target.value)}
+                  onChange={(e) =>
+                    handleCardChange("cardNumber", e.target.value)
+                  }
                   maxLength={19}
                   className="p-2 border rounded"
                 />
@@ -259,7 +287,9 @@ export default function OrderConfirmation() {
                   onChange={(e) => handleCardChange("cardName", e.target.value)}
                   className="p-2 border rounded"
                 />
-                {errors.cardName && <p className="text-red-600 text-sm">{errors.cardName}</p>}
+                {errors.cardName && (
+                  <p className="text-red-600 text-sm">{errors.cardName}</p>
+                )}
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -279,7 +309,9 @@ export default function OrderConfirmation() {
                   />
                 </div>
                 {(errors.expiry || errors.cvv) && (
-                  <div className="text-red-600 text-sm">{errors.expiry || errors.cvv}</div>
+                  <div className="text-red-600 text-sm">
+                    {errors.expiry || errors.cvv}
+                  </div>
                 )}
               </div>
             )}
@@ -300,7 +332,9 @@ export default function OrderConfirmation() {
 
       {/* Previous Orders */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">Your Previous Orders</h2>
+        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">
+          Your Previous Orders
+        </h2>
         {orders.length === 0 ? (
           <p className="text-[#3D2B1F]">You have no previous orders.</p>
         ) : (
@@ -310,10 +344,14 @@ export default function OrderConfirmation() {
               className="border rounded-lg p-4 mb-4 shadow-sm bg-white hover:shadow-lg transition"
             >
               <div className="flex justify-between mb-2">
-                <span className="font-semibold text-[#5C4033]">Order ID: {order.id}</span>
+                <span className="font-semibold text-[#5C4033]">
+                  Order ID: {order.id}
+                </span>
                 <span
                   className={`text-sm font-semibold ${
-                    order.status === "Pending" ? "text-orange-600" : "text-green-700"
+                    order.status === "Pending"
+                      ? "text-orange-600"
+                      : "text-green-700"
                   }`}
                 >
                   {order.status}
@@ -342,7 +380,9 @@ export default function OrderConfirmation() {
 
       {/* Recommended Products */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">Recommended for you</h2>
+        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">
+          Recommended for you
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {recommendedProducts.map((product) => (
             <div
@@ -354,7 +394,9 @@ export default function OrderConfirmation() {
                 alt={product.title}
                 className="w-full h-36 object-cover mb-2 rounded"
               />
-              <p className="text-sm font-semibold text-[#5C4033] mb-1">{product.title}</p>
+              <p className="text-sm font-semibold text-[#5C4033] mb-1">
+                {product.title}
+              </p>
               <p className="text-sm text-[#3D2B1F] mb-2">LKR {product.price}</p>
               <button className="w-full py-1 bg-yellow-900 text-white rounded hover:bg-yellow-800 transition">
                 Add to Cart

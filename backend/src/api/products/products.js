@@ -1,7 +1,7 @@
 import express from "express";
-const router = express.Router();
 import multer from "multer";
 
+const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 // Get all products
@@ -42,7 +42,6 @@ router.post("/", upload.single("image"), async (req, res) => {
       });
       imageUrl = result.secure_url;
     }
-
     const newProduct = await req.prisma.product.create({
       data: {
         title: req.body.title,
@@ -54,7 +53,6 @@ router.post("/", upload.single("image"), async (req, res) => {
         categoryId: req.body.categoryId,
       },
     });
-
     res.json(newProduct);
   } catch (err) {
     console.error(err);
@@ -73,7 +71,6 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       });
       imageUrl = result.secure_url;
     }
-
     const updatedProduct = await req.prisma.product.update({
       where: { id: req.params.id },
       data: {
@@ -86,7 +83,6 @@ router.put("/:id", upload.single("image"), async (req, res) => {
         categoryId: req.body.categoryId,
       },
     });
-
     res.json(updatedProduct);
   } catch (err) {
     console.error(err);

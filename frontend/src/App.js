@@ -27,7 +27,6 @@ function App() {
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
-
         {/* Protected routes */}
         <Route
           path="/"
@@ -79,7 +78,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        
         <Route
           path="/about"
           element={
@@ -108,22 +106,18 @@ function App() {
             </PrivateRoute>
           }
         />
-
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/products" element={<ProductPage />} />
         <Route path="/admin/products/form" element={<ProductFormPage />} />
         <Route path="/admin/products/edit/:id" element={<ProductFormPage />} />
-
         <Route path="/admin/categories" element={<CategoriesPage />} />
         <Route path="/admin/categories/new" element={<CategoryFormPage />} />
         <Route
           path="/admin/categories/edit/:id"
           element={<CategoryFormPage />}
         />
-
         <Route path="/admin/orders" element={<OrdersPage />} />
-
         <Route path="/admin/users" element={<UsersPage />} />\
       </Routes>
     </Router>

@@ -83,9 +83,10 @@ export default function CategoriesPage() {
                   ref={(el) => (refs.current[index] = el)}
                   data-id={cat.id}
                   className={`flex flex-col items-center justify-between p-8 rounded-2xl border-2 border-amber-900 shadow-md transition-transform duration-700 transform bg-white hover:-translate-y-1 hover:scale-105 hover:shadow-2xl
-                    ${visibleItems[cat.id]
-                      ? "opacity-100 translate-y-0 animate-slide-in-top"
-                      : "opacity-0 translate-y-10"
+                    ${
+                      visibleItems[cat.id]
+                        ? "opacity-100 translate-y-0 animate-slide-in-top"
+                        : "opacity-0 translate-y-10"
                     }`}
                   style={{ transitionDelay: `${index * 150}ms` }}
                 >
@@ -106,12 +107,13 @@ export default function CategoriesPage() {
                   </div>
 
                   {/* View Products Button */}
-                 
-                  <Link to={`/categories/${cat.slug}`}
-                   className="px-6 py-3 bg-yellow-900 text-white rounded-lg shadow-md hover:bg-yellow-800 hover:shadow-lg transition transform hover:scale-105"
-                   >
-  View Products
-</Link>
+
+                  <Link
+                    to={`/categories/${cat.slug}`}
+                    className="px-6 py-3 bg-yellow-900 text-white rounded-lg shadow-md hover:bg-yellow-800 hover:shadow-lg transition transform hover:scale-105"
+                  >
+                    View Products
+                  </Link>
                 </div>
               ))}
             </div>

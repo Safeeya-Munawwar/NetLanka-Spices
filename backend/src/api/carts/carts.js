@@ -12,14 +12,12 @@ router.get("/:userId", async (req, res) => {
       include: { items: true },
     });
 
-    // Create cart if it doesn't exist
     if (!cart) {
       cart = await prisma.cart.create({
         data: { userId },
         include: { items: true },
       });
     }
-
     res.json(cart);
   } catch (err) {
     console.error(err);
@@ -32,24 +30,21 @@ router.post("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
   const { items } = req.body;
-
   try {
-    // Get or create cart
-    let cart = await prisma.cart.findUnique({ where: { userId }, include: { items: true } });
+    let cart = await prisma.cart.findUnique({
+      where: { userId },
+      include: { items: true },
+    });
     if (!cart) {
       cart = await prisma.cart.create({ data: { userId } });
     }
-
-    // Delete old items
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
-
-    // Add new items
     const createdItems = await Promise.all(
-      items.map(item =>
+      items.map((item) =>
         prisma.cartItem.create({
           data: {
             cartId: cart.id,
-            productId: item.productId, // frontend must send this
+            productId: item.productId,
             name: item.name,
             price: item.price,
             quantity: item.quantity,

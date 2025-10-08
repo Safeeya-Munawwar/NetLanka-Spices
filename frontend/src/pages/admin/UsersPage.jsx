@@ -209,17 +209,22 @@ export default function UsersPage() {
       <div className="flex-1 p-10">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center cursor-pointer">
+            <FaUser className="text-3xl mx-auto mb-2 text-yellow-700" />
             <h3 className="text-lg font-semibold text-brown-900">
               Total Users
             </h3>
             <p className="text-3xl font-bold text-yellow-700">{totalUsers}</p>
           </div>
-          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+
+          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center cursor-pointer">
+            <FaShieldAlt className="text-3xl mx-auto mb-2 text-red-600" />
             <h3 className="text-lg font-semibold text-brown-900">Admins</h3>
             <p className="text-3xl font-bold text-red-600">{totalAdmins}</p>
           </div>
-          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center">
+
+          <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center cursor-pointer">
+            <FaUser className="text-3xl mx-auto mb-2 text-green-600" />
             <h3 className="text-lg font-semibold text-brown-900">
               Regular Users
             </h3>

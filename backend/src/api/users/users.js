@@ -11,7 +11,6 @@ router.get("/", authMiddleware, async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ msg: "Access denied" });
     }
-
     const users = await prisma.user.findMany({
       orderBy: { createdAt: "desc" },
       select: {
@@ -23,7 +22,6 @@ router.get("/", authMiddleware, async (req, res) => {
         createdAt: true,
       },
     });
-
     res.json(users);
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -36,9 +34,7 @@ router.patch("/:id", authMiddleware, async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ msg: "Access denied" });
     }
-
     const { name, email, role } = req.body;
-
     const updatedUser = await prisma.user.update({
       where: { id: req.params.id },
       data: { name, email, role },
@@ -51,7 +47,6 @@ router.patch("/:id", authMiddleware, async (req, res) => {
         createdAt: true,
       },
     });
-
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -63,7 +58,6 @@ router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin")
       return res.status(403).json({ msg: "Access denied" });
-
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { active: false },
@@ -76,7 +70,6 @@ router.patch("/:id/deactivate", authMiddleware, async (req, res) => {
         createdAt: true,
       },
     });
-
     res.json(user);
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -88,7 +81,6 @@ router.patch("/:id/activate", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin")
       return res.status(403).json({ msg: "Access denied" });
-
     const user = await prisma.user.update({
       where: { id: req.params.id },
       data: { active: true },
@@ -101,7 +93,6 @@ router.patch("/:id/activate", authMiddleware, async (req, res) => {
         createdAt: true,
       },
     });
-
     res.json(user);
   } catch (err) {
     res
@@ -116,7 +107,6 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ msg: "Access denied" });
     }
-
     await prisma.user.delete({ where: { id: req.params.id } });
     res.json({ msg: "User deleted successfully" });
   } catch (err) {

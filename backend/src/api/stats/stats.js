@@ -8,12 +8,10 @@ router.get("/", authMiddleware, async (req, res) => {
     const prisma = req.prisma;
     if (req.user.role !== "admin")
       return res.status(403).json({ msg: "Access denied" });
-
     const usersCount = await prisma.user.count();
     const productsCount = await prisma.product.count();
     const categoriesCount = await prisma.category.count();
     const ordersCount = await prisma.order.count();
-
     res.json({
       users: usersCount,
       products: productsCount,

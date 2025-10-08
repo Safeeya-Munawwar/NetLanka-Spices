@@ -12,7 +12,6 @@ export default function Nav() {
 
   const navigate = useNavigate();
   const profileRef = useRef();
-
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const isAdmin = user?.role === "admin";
 
@@ -168,7 +167,7 @@ export default function Nav() {
         )}
       </header>
 
-      {/* Cart Sidebar */}
+      {/* Cart/Lorry Sidebar */}
       <CartSidebar open={cartOpen} setOpen={setCartOpen} />
     </>
   );
