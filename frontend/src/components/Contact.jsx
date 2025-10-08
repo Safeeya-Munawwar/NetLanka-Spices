@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import NewsletterSection from "./NewsletterSection";
 
 export default function Contact() {
   const [faqOpen, setFaqOpen] = useState({});
@@ -56,7 +57,7 @@ export default function Contact() {
       {/* Hero Section */}
       <section
         className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-center bg-cover bg-no-repeat bg-fixed flex flex-col justify-center items-center"
-        style={{ backgroundImage: "url('/images/c1.PNG')" }}
+        style={{ backgroundImage: "url('/40944.jpg')" }}
       >
         <h1 className="text-black text-3xl sm:text-4xl md:text-5xl font-bold">
           CONTACT US
@@ -192,51 +193,7 @@ export default function Contact() {
         </div>
       </div>
 
-      <div className="bg-white relative overflow-hidden pt-32 pb-32 md:px-8">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 items-center relative">
-          {/* Image - Left */}
-          <div className="relative flex justify-center md:justify-start">
-            <img
-              src="/images/10.PNG"
-              alt="Newsletter"
-              className="w-full max-w-md rounded-2xl object-cover absolute bottom-0 translate-y-1/2"
-            />
-          </div>
-
-          {/* Signup Form - Right */}
-          <div className="bg-white rounded-xl p-8 flex flex-col justify-center h-full">
-            <p className="text-gray-500 font-semibold mb-2 text-lg">
-              Don't Miss Out...!
-            </p>
-            <h2 className="text-3xl md:text-2xl font-bold text-yellow-900 mb-4">
-              Sign Up for Our Newsletter
-            </h2>
-            <p className="text-gray-700 mb-6">
-              Get the latest updates and offers directly in your inbox.
-            </p>
-            <form className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-md transition-all duration-300"
-              >
-                Sign Up
-              </button>
-            </form>
-            <p className="text-yellow-700 mt-4 text-sm">
-              Will be used in accordance with our{" "}
-              <span className="text-yellow-800 font-semibold underline cursor-pointer">
-                Privacy Policy
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+     <NewsletterSection/>
     </div>
   );
 }
