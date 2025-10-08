@@ -1,194 +1,203 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
+
 
 export default function Hero() {
-  const secondSectionRef = useRef(null);
-  const thirdLeftRef = useRef(null);
-  const thirdRightRef = useRef(null);
-  const [secondVisible, setSecondVisible] = useState(false);
-
-  useEffect(() => {
-    const secondRefCurrent = secondSectionRef.current;
-    const thirdLeftCurrent = thirdLeftRef.current;
-    const thirdRightCurrent = thirdRightRef.current;
-
-    const observerSecond = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => setSecondVisible(entry.isIntersecting));
-      },
-      { threshold: 0.2 }
-    );
-
-    if (secondRefCurrent) observerSecond.observe(secondRefCurrent);
-
-    const observerCards = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-          } else {
-            entry.target.classList.remove("in-view");
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (thirdLeftCurrent) observerCards.observe(thirdLeftCurrent);
-    if (thirdRightCurrent) observerCards.observe(thirdRightCurrent);
-
-    return () => {
-      if (secondRefCurrent) observerSecond.unobserve(secondRefCurrent);
-      if (thirdLeftCurrent) observerCards.unobserve(thirdLeftCurrent);
-      if (thirdRightCurrent) observerCards.unobserve(thirdRightCurrent);
-    };
-  }, []);
-
   return (
-    <div>
-      {/* First Section */}
-      <section className="w-full bg-gray-200 py-12 mt-5">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
-            <div className="md:w-1/2">
-              <h1 className="font-serif mt-10 text-yellow-800 mb-3 text-left text-xl">
-                Net Spice's
-              </h1>
-              <h2 className="text-2xl md:text-3xl font-bold mt-3 text-green-800 text-left">
-                ALL SPICES AT ONE PLACE
-              </h2>
-              <p className="mt-7 text-justify text-gray-700">
-                Sri Lanka, renowned as the island of spices, is home to Zest
-                Ceylon—your ultimate online destination for premium Sri Lankan
-                spices. Whether you’re seeking bold, aromatic flavors or
-                stocking up in bulk, Zest Ceylon brings you a rich selection of
-                both organic and conventional spices, all in one place. As one
-                of the country’s leading wholesale spice suppliers, we’re proud
-                to offer top-quality herbs, spices, and culinary ingredients at
-                the best prices. Taste the essence of Sri Lanka—pure, fresh, and
-                full of zest.
-              </p>
-            </div>
+    <div className="bg-white text-gray-800">
+      {/* SERVICES SECTION */}
+      <section className="py-16 px-6 md:px-20 text-center">
+        <h2 className="text-4xl font-extrabold text-[#4b2e05] mb-10 tracking-wide">
+          Services
+        </h2>
 
-            <div className="md:w-1/2 flex justify-center mt-10 md:mt-0">
-              <div className="w-full md:max-w-lg rounded-xl overflow-hidden shadow-lg">
-                <img
-                  src="/images/all.jpg"
-                  alt="spice"
-                  className="w-full h-auto object-cover block"
-                />
-              </div>
-            </div>
+        <div className="grid md:grid-cols-3 gap-8 bg-[#f7f7f7] p-8 rounded-lg">
+          {/* Card 1 */}
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/1.webp"
+              alt="Steam Sterilization"
+              className="w-full h-56 object-cover"
+            />
+            <h3 className="font-semibold text-lg mt-4 mb-2">
+              Steam Sterilization
+            </h3>
+            <p className="text-sm mb-4 max-w-xs mx-auto text-gray-700">
+              SAFESTERIL EU Patented Technology for safe & efficient
+              sterilization whilst safeguarding Volatile oils.
+            </p>
+            <button className="bg-[#4b2e05] text-white px-5 py-2 text-sm rounded font-semibold tracking-wide hover:bg-[#3a2404]">
+              LEARN MORE
+            </button>
+          </div>
+
+          {/* Card 2 */}
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/6webp.webp"
+              alt="Fine Grinding"
+              className="w-full h-56 object-cover"
+            />
+            <h3 className="font-semibold text-lg mt-4 mb-2">Fine Grinding</h3>
+            <p className="text-sm mb-4 max-w-xs mx-auto text-gray-700">
+              Offering a wide range of fine powdering solutions (60–2500 Mesh size)
+            </p>
+            <button className="bg-[#4b2e05] text-white px-5 py-2 text-sm rounded font-semibold tracking-wide hover:bg-[#3a2404]">
+              LEARN MORE
+            </button>
+          </div>
+
+          {/* Card 3 */}
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/2.webp"
+              alt="Pre Cutting"
+              className="w-full h-56 object-cover"
+            />
+            <h3 className="font-semibold text-lg mt-4 mb-2">Pre Cutting</h3>
+            <p className="text-sm mb-4 max-w-xs mx-auto text-gray-700">
+              Offering a wide range of granular sizes (0.5mm–20mm) with high yields.
+            </p>
+            <button className="bg-[#4b2e05] text-white px-5 py-2 text-sm rounded font-semibold tracking-wide hover:bg-[#3a2404]">
+              LEARN MORE
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Second Section */}
-      <section
-        ref={secondSectionRef}
-        className="w-full bg-[rgb(204,235,173)] flex flex-col justify-center py-8"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <h2
-            className={`text-2xl md:text-3xl font-semibold text-[rgb(78,98,57)] text-center font-serif mb-4 slide-in-left ${
-              secondVisible ? "in-view" : ""
-            }`}
-          >
-            NET SPICE'S - beyond tradition
-          </h2>
+     {/* OUR PROMISE SECTION */}
+<section className="relative py-16 px-6 md:px-40">
+  {/* Background Image */}
+  <div
+    className="absolute inset-0 bg-cover bg-center bg-no-repeat brightness-90 opacity-80"
+    style={{
+      backgroundImage: "url('/simple.jpg')",
+    }}
+  ></div>
 
-          <div
-            className={`flex items-center justify-center mb-6 gap-4 slide-in-up ${
-              secondVisible ? "in-view" : ""
-            }`}
-          >
-            <div className="w-20 h-px bg-gray-400"></div>
-            <div className="w-10 h-8 flex items-center justify-center">
-              <svg
-                width="40"
-                height="24"
-                viewBox="0 0 40 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2 12C8 6 14 6 20 12C26 18 32 18 38 12"
-                  stroke="#9FCB70"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="w-20 h-px bg-gray-400"></div>
-          </div>
+  {/* Transparent Overlay for smooth look */}
+  <div className="absolute inset-0 bg-white/70"></div>
 
-          <p
-            className={`mt-6 text-center text-gray-600 slide-in-right ${
-              secondVisible ? "in-view" : ""
-            }`}
-          >
-            “From the heart of Ceylon to your table — Net Spices Ceylon delivers
-            nature’s finest treasures with care <br />– Experience the richness
-            of tradition, every sip and every sprinkle.”
-          </p>
-        </div>
-      </section>
+  {/* Content (in front of background) */}
+  <div className="relative grid md:grid-cols-2 gap-10 items-center z-10">
+    <div className="overflow-hidden rounded-lg">
+      <img
+        src="/all.jpg"
+        alt="Our Promise"
+        className="w-[500px] h-auto object-cover"
+      />
+    </div>
 
-      {/* Third Section */}
-      <section className="w-full bg-white py-14">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-start justify-between gap-10">
-            {/* Left Card */}
-            <div
-              ref={thirdLeftRef}
-              className="w-full md:w-[48%] border shadow-sm border-gray-300 rounded-lg overflow-hidden slide-left"
-            >
-              <img
-                src="/images/cin.jpg"
-                alt=""
-                className="w-full h-auto md:h-[350px] object-cover"
-              />
-              <h2 className="text-2xl md:text-3xl font-semibold text-[rgb(80,70,1)] px-5 py-5 text-left">
-                SEE HOW IT PROCESSED
-              </h2>
-              <p className="mt-6 italic text-justify text-gray-600 px-6 pb-6">
-                Handpicked at dawn, only the finest Cinnamon are carefully
-                plucked by skilled hands in Sri Lanka’s lush highlands. These
-                tender leaves are quickly transported to the factory, where they
-                undergo expert withering, rolling, oxidation, and drying
-                processes to preserve their rich flavor and aroma. Once
-                perfected, the tea is meticulously sorted, graded, and packaged
-                with care, to deliver the pure taste of Ceylon to the world.
-              </p>
-            </div>
+    <div className="p-4 md:p-10">
+      <h2 className="text-4xl font-extrabold text-[#5c3601] mb-6">
+        Our Promise
+      </h2>
+      <p className="text-[#3d2d11] mb-4 leading-relaxed text-[16px]">
+        At Net Spice’s, our promise is to deliver nature's purest treasures,
+        cultivated with care, crafted with integrity, and shared with pride.
+        We honor centuries of Sri Lankan heritage, working hand-in-hand with
+        local farmers to bring you products of unmatched purity,
+        authenticity, and excellence.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil ipsum suscipit, quo voluptatibus repellat similique quisquam animi libero ratione minima cupiditate consequuntur optio ut aliquid eveniet laboriosam debitis fuga vel.
+      </p>
+      <p className="text-[#3d2d11] leading-relaxed text-[16px]">
+        From sustainable sourcing to artisanal craftsmanship, every detail
+        reflects our deep respect for nature and our commitment to offering
+        you only the finest.
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio doloribus assumenda quaerat minima suscipit molestiae laboriosam ad animi odit officia fuga sapiente accusantium deserunt, delectus voluptates. Reiciendis voluptatibus minus at.
+      </p>
+    </div>
+  </div>
+</section>
 
-            {/* Right Card */}
-            <div
-              ref={thirdRightRef}
-              className="w-full md:w-[48%] border shadow-sm border-gray-300 rounded-lg overflow-hidden slide-right"
-            >
-              <img
-                src="/images/tu.jpg"
-                alt=""
-                className="w-full h-auto md:h-[350px] object-cover"
-              />
-              <h2 className="text-2xl md:text-3xl font-semibold text-[rgb(80,70,1)] px-5 py-5 text-left">
-                SPECIALITY OF CEYLON SPICES
-              </h2>
-              <p className="mt-6 italic text-justify text-gray-600 px-6 pb-6">
-                Ceylon spices, including pepper and cinnamon, are renowned for
-                their exceptional quality and unique flavor profiles. Ceylon
-                pepper is aromatic and mild, adding depth to dishes without
-                overwhelming the taste. Ceylon cinnamon, known as “true
-                cinnamon,” has a delicate, sweet flavor, distinct from its
-                stronger counterpart, Cassia. These spices are harvested from
-                Sri Lanka’s fertile lands and are integral to the island’s rich
-                culinary and cultural heritage.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+
+        {/* OUR BLOG SECTION */}
+<section className="py-16 px-6 md:px-20 text-center">
+  <h2 className="text-4xl font-extrabold text-[#4b2e05] mb-10">
+    Our Blog
+  </h2>
+
+  <div className="grid md:grid-cols-3 gap-8 bg-[#f7f7f7] p-8 rounded-lg">
+    {/* Blog 1 */}
+    <div className="relative rounded-lg overflow-hidden shadow-lg">
+      <img
+        src="/4.jpg"
+        alt="A Tale of Spices"
+        className="w-full h-96 object-cover"
+      />
+
+      {/* Date Tag */}
+      <div className="absolute top-4 left-4 bg-white text-[#4b2e05] px-4 py-2 font-bold rounded text-sm leading-tight">
+        02<br />OCT
+      </div>
+
+      {/* Center Button */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <button className="bg-[#875535] hover:bg-[#c5a24f] text-white font-semibold text-[14px] px-8 py-2 rounded-lg  shadow-md transition-all">
+          CEYLON SPICES, HERBS AND SPICES
+        </button>
+      </div>
+
+      {/* Bottom Overlay */}
+      <div className="absolute bottom-0 w-full text-white p-4 text-center">
+        <h3 className="text-lg font-semibold uppercase tracking-wide">
+          A TALE OF SPICES
+        </h3>
+      </div>
+    </div>
+
+    {/* Blog 2 */}
+    <div className="relative rounded-lg overflow-hidden shadow-lg">
+      <img
+        src="/6.jpg"
+        alt="Spice for Health"
+        className="w-full h-96 object-cover"
+      />
+
+      <div className="absolute top-4 left-4 bg-white text-[#4b2e05] px-4 py-2 font-bold rounded text-sm leading-tight">
+        02<br />OCT
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <button className="bg-[#875535] hover:bg-[#c5a24f] text-white font-semibold text-[14px] px-8 py-2 rounded-lg  shadow-md transition-all">
+          HERBS AND SPICES
+        </button>
+      </div>
+
+      <div className="absolute bottom-0 w-full  text-white p-4 text-center">
+        <h3 className="text-lg font-semibold uppercase tracking-wide">
+          SPICE FOR HEALTH
+        </h3>
+      </div>
+    </div>
+
+    {/* Blog 3 */}
+    <div className="relative rounded-lg overflow-hidden shadow-lg">
+      <img
+        src="/cinbg.jpg"
+        alt="Ceylon Cinnamon"
+        className="w-full h-96 object-cover"
+      />
+
+      <div className="absolute top-4 left-4 bg-white text-[#4b2e05] px-4 py-2 font-bold rounded text-sm leading-tight">
+        02<br />OCT
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <button className="bg-[#875535] hover:bg-[#c5a24f] text-white font-semibold text-[14px] px-8 py-2 rounded-lg shadow-md transition-all">
+          CEYLON SPICES, CINNAMON
+        </button>
+      </div>
+
+      <div className="absolute bottom-0 w-full  text-white p-4 text-center">
+        <h3 className="text-lg font-semibold uppercase tracking-wide">
+          CEYLON CINNAMON
+        </h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+
     </div>
   );
 }

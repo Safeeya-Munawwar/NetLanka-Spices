@@ -11,8 +11,8 @@ router.post("/", async (req, res) => {
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return res.status(400).json({ msg: "User not found" });
-    if (!user.active)
-      return res.status(403).json({ msg: "Account deactivated" });
+    //if (!user.active)
+     // return res.status(403).json({ msg: "Account deactivated" });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });

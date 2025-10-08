@@ -1,36 +1,37 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
-import { useCart } from "../context/CartContext";
+import {  FaUserCircle } from "react-icons/fa";
+
 import CartSidebar from "./CartSidebar";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const { cartItems } = useCart();
+  const [searchTerm, setSearchTerm] = useState("");
+
   const navigate = useNavigate();
   const profileRef = useRef();
 
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const isAdmin = user?.role === "admin";
 
-  const linkClass = ({ isActive }) =>
-    `block px-2 py-2 rounded hover:text-blue-300 transition ${
-      isActive ? "text-blue-400 font-semibold" : "text-gray-200 font-bold"
-    }`;
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/login");
     setProfileOpen(false);
-    setOpen(false);
+    navigate("/login");
+  };
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileOpen(false);
       }
     };
@@ -40,214 +41,132 @@ export default function Nav() {
 
   return (
     <>
-      <header className="w-full bg-[#302019] top-0 z-50 border-b border-white">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-5 py-4 md:py-7">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/images/logo.png" alt="Logo" className="h-20 w-auto" />
+      <header className="w-full bg-[#fff6af] shadow-sm border-b border-[#eee] z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          {/* Left: Logo & Brand */}
+          <Link to="/" className="flex items-center space-x-3">
+            <img
+              src="/images/logo1.png"
+              alt="Net Spices Logo"
+              className="w-16 h-full  object-cover"
+            />
+          
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <NavLink to="/" className={linkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/about" className={linkClass}>
-              About us
-            </NavLink>
-            <NavLink to="/products" className={linkClass}>
-              Products
-            </NavLink>
-            <NavLink to="/categories" className={linkClass}>
-              Categories
-            </NavLink>
-            <NavLink to="/contact" className={linkClass}>
-              Contact us
-            </NavLink>
+          {/* Center: Navigation Links */}
+          <nav className="hidden md:flex space-x-8 text-[#4A2F1D] font-bold text-lg">
+            <NavLink to="/" className="hover:text-yellow-600">Home</NavLink>
+            <NavLink to="/about" className="hover:text-yellow-600">About us</NavLink>
+            <NavLink to="/products" className="hover:text-yellow-600">Products</NavLink>
+            <NavLink to="/categories" className="hover:text-yellow-600">Categories</NavLink>
+            <NavLink to="/contact" className="hover:text-yellow-600">Contact Us</NavLink>
+          </nav>
 
-            {/* Cart Icon (desktop only) */}
-            <div
-              className="relative flex items-center ml-4 cursor-pointer"
-              onClick={() => setCartOpen(true)}
+          {/* Right: Cart, Profile, Search */}
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl">🚚</span>
+
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Enter.."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 py-2 rounded bg-[#BDA895] text-[#4A2F1D] placeholder-[#4A2F1D] outline-none w-32 md:w-48"
+            />
+            <button
+              onClick={handleSearch}
+              className="bg-[#E6C152] text-white font-bold px-4 py-2 rounded"
             >
-              <FaShoppingCart size={24} className="text-white" />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  {cartItems.length}
-                </span>
-              )}
-            </div>
+              Search
+            </button>
+
+         
 
             {/* Profile Icon */}
             {user && (
-              <div className="relative ml-4" ref={profileRef}>
+              <div className="relative" ref={profileRef}>
                 <FaUserCircle
                   size={28}
-                  className="text-white cursor-pointer"
+                  className="text-[#514944] cursor-pointer"
                   onClick={() => setProfileOpen(!profileOpen)}
                 />
+
+                {/* Profile Dropdown */}
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border z-50">
+                    <div className="px-4 py-3 border-b">
+                      <p className="font-semibold truncate">{user.name}</p>
+                      <p className="text-sm text-gray-600 truncate">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigate("/order-confirmation");
+                        setProfileOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                    >
+                      My Orders
+                    </button>
+                    {isAdmin && (
+                      <button
+                        onClick={() => {
+                          navigate("/admin");
+                          setProfileOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                      >
+                        Dashboard
+                      </button>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 hover:bg-red-50 text-sm text-red-600 font-semibold"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             )}
-          </nav>
 
-          {/* Hamburger (Mobile Only) */}
-          <button
-            className="md:hidden flex flex-col justify-between w-6 h-5 focus:outline-none"
-            onClick={() => setOpen(!open)}
-          >
-            <span
-              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${
-                open ? "rotate-45 translate-y-2" : ""
-              }`}
-            ></span>
-            <span
-              className={`h-0.5 w-6 bg-white transition-opacity duration-300 ${
-                open ? "opacity-0" : ""
-              }`}
-            ></span>
-            <span
-              className={`h-0.5 w-6 bg-white transition-transform duration-300 ${
-                open ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            ></span>
-          </button>
+            {/* Mobile Hamburger */}
+            <button
+              className="md:hidden flex flex-col justify-between w-6 h-5 ml-3"
+              onClick={() => setOpen(!open)}
+            >
+              <span className="h-0.5 w-6 bg-[#4A2F1D]"></span>
+              <span className="h-0.5 w-6 bg-[#4A2F1D]"></span>
+              <span className="h-0.5 w-6 bg-[#4A2F1D]"></span>
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Nav */}
-        <div
-          className={`md:hidden bg-[#302019] border-t overflow-hidden transition-all duration-300 ${
-            open ? "max-h-screen" : "max-h-0"
-          }`}
-        >
-          <ul className="flex flex-col space-y-2 px-4 py-4">
-            <li>
-              <NavLink
-                to="/"
-                className={linkClass}
-                onClick={() => setOpen(false)}
-              >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/about"
-                className={linkClass}
-                onClick={() => setOpen(false)}
-              >
-                About us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/products"
-                className={linkClass}
-                onClick={() => setOpen(false)}
-              >
-                Products
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/categories"
-                className={linkClass}
-                onClick={() => setOpen(false)}
-              >
-                Categories
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/contact"
-                className={linkClass}
-                onClick={() => setOpen(false)}
-              >
-                Contact us
-              </NavLink>
-            </li>
+        {/* Mobile Menu */}
+        {open && (
+          <div className="md:hidden px-4 pb-4 space-y-2 text-[#4A2F1D] font-semibold text-base">
+            <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
+            <NavLink to="/about" onClick={() => setOpen(false)}>About us</NavLink>
+            <NavLink to="/products" onClick={() => setOpen(false)}>Products</NavLink>
+            <NavLink to="/categories" onClick={() => setOpen(false)}>Categories</NavLink>
+            <NavLink to="/contact" onClick={() => setOpen(false)}>Contact Us</NavLink>
 
             {user && (
               <>
-                <li className="px-2 py-2 border-t border-gray-600">
-                  <p className="text-white font-semibold">{user.name}</p>
-                  <p className="text-gray-400 text-sm">{user.email}</p>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      navigate("/order-confirmation");
-                      setOpen(false);
-                    }}
-                    className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
-                  >
-                    My Orders
-                  </button>
-                </li>
+                <div className="border-t pt-2">
+                  <p>{user.name}</p>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+                </div>
+                <button onClick={() => { navigate("/order-confirmation"); setOpen(false); }}>My Orders</button>
                 {isAdmin && (
-                  <li>
-                    <button
-                      onClick={() => {
-                        navigate("/admin");
-                        setOpen(false);
-                      }}
-                      className="w-full text-left px-2 py-2 text-white hover:bg-gray-700 rounded transition"
-                    >
-                      Dashboard
-                    </button>
-                  </li>
+                  <button onClick={() => { navigate("/admin"); setOpen(false); }}>Dashboard</button>
                 )}
-                <li>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-2 py-2 text-red-500 font-semibold hover:bg-gray-700 rounded transition"
-                  >
-                    Logout
-                  </button>
-                </li>
+                <button onClick={handleLogout} className="text-red-600">Logout</button>
               </>
             )}
-          </ul>
-        </div>
-      </header>
-
-      {/* Profile Dropdown on Page Right Side */}
-      {user && profileOpen && (
-        <div
-          ref={profileRef}
-          className="fixed top-20 right-5 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 text-gray-700 py-2 z-50 transition-all duration-300 ease-out"
-        >
-          <div className="px-5 py-4 border-b border-gray-200">
-            <p className="font-semibold truncate">{user.name}</p>
-            <p className="text-sm text-gray-500 truncate">{user.email}</p>
           </div>
-          <button
-            onClick={() => {
-              navigate("/order-confirmation");
-              setProfileOpen(false);
-            }}
-            className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
-          >
-            My Orders
-          </button>
-          {isAdmin && (
-            <button
-              onClick={() => {
-                navigate("/admin");
-                setProfileOpen(false);
-              }}
-              className="w-full text-left px-5 py-3 hover:bg-gray-100 transition text-gray-700 font-medium"
-            >
-              Dashboard
-            </button>
-          )}
-          <button
-            onClick={handleLogout}
-            className="w-full text-left px-5 py-3 hover:bg-red-50 transition text-red-500 font-semibold"
-          >
-            Logout
-          </button>
-        </div>
-      )}
+        )}
+      </header>
 
       {/* Cart Sidebar */}
       <CartSidebar open={cartOpen} setOpen={setCartOpen} />

@@ -1,106 +1,97 @@
 import React from "react";
-import { FaFacebookF, FaWhatsapp, FaInstagram } from "react-icons/fa";
-import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
+import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <div className="w-full">
-      {/* Top decorative background */}
+    <footer className="relative w-full text-[#3c2a1a] overflow-hidden">
+      {/* Background Image */}
       <div
-        className="w-full h-[180px] bg-cover bg-center"
-        style={{ backgroundImage: "url('/foot.png')" }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat brightness-95"
+        style={{
+          backgroundImage: "url('/40944.jpg')", // replace with your spice pattern image
+        }}
       ></div>
 
+      {/* Transparent Overlay for smooth readability */}
+      <div className="absolute inset-0 bg-white/60"></div>
+
       {/* Footer Content */}
-      <section className="w-full bg-[#302019]">
-        <div className="max-w-7xl mx-auto px-6 py-12 text-white grid md:grid-cols-3 gap-10 border-b border-[#4a3322]">
-          {/* Left - Logo & Mission */}
-          <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-            <h2 className="text-lg font-semibold text-[#b9843c]">
-              Net Spice's
-            </h2>
-            <img
-              src="/images/logo.png"
-              alt="Zest Logo"
-              className="w-auto h-20 mx-auto md:mx-0"
-            />
-            <p className="text-sm text-gray-200 max-w-xs text-justify">
-              Our mission is to deliver purity, freshness, and quality in every
-              shipment.
-            </p>
-          </div>
-
-          {/* Middle - Quick Links */}
-          <div className="flex flex-col items-center md:items-start space-y-3">
-            <h2 className="text-lg font-semibold text-[#b9843c]">
-              Quick Links
-            </h2>
-            <a href="/" className="hover:text-gray-300 text-sm">
-              Home
-            </a>
-            <a href="/" className="hover:text-gray-300 text-sm">
-              Products
-            </a>
-            <a href="/" className="hover:text-gray-300 text-sm">
-              About Us
-            </a>
-            <a href="/" className="hover:text-gray-300 text-sm">
-              Contact Us
-            </a>
-          </div>
-
-          {/* Right - Newsletter & Contact */}
-          <div className="flex flex-col items-center md:items-start space-y-4">
-            <h2 className="text-lg font-semibold text-[#b9843c]">
-              SIGNUP FOR NEWSLETTER
-            </h2>
-            <div className="flex w-full max-w-xs">
-              <input
-                type="email"
-                placeholder="enter your e-mail"
-                className="w-full px-4 py-2 rounded-l-full text-black outline-none"
-              />
-              <button className="px-5 py-2 bg-[#fff1d0] text-black rounded-r-full font-medium hover:bg-yellow-200">
-                Send
-              </button>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-2 text-sm text-gray-200">
-              <p className="flex items-center gap-2">
-                <MdLocationOn className="text-[#b9843c]" />
-                13/2 , Yatimeeya, Kotadeniyawa.
-              </p>
-              <p className="flex items-center gap-2">
-                <MdPhone className="text-[#b9843c]" />
-                +94 77 448 9793
-              </p>
-              <p className="flex items-center gap-2">
-                <MdEmail className="text-[#b9843c]" />
-                info@netspices.com
-              </p>
-            </div>
-          </div>
+      <div className="relative max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Left Section - Logo & Mission */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-4">
+          <img
+            src="/images/logo1.png"
+            alt="Net Spices Logo"
+            className="w-32 h-32 object-contain"
+          />
+          <h2 className="text-2xl font-bold text-[#7b5941]">Net Spices</h2>
+          <p className="text-lg font-semibold text-black leading-relaxed">
+            Our mission is to deliver purity, <br />
+            freshness and quality in every shipment.
+          </p>
         </div>
 
-        {/* Social Media & Bottom Copyright */}
-        <div className="w-full bg-[#27170f] py-6">
-          <div className="flex justify-center space-x-6 text-xl text-[#b9843c] mb-4">
-            <a href="/" className="hover:text-gray-300">
+        {/* Middle Section - Quick Links */}
+        <div className="flex flex-col items-center md:items-start space-y-3">
+          <h3 className="text-2xl font-bold text-[#4b3a2b] mb-2">
+            Quick Links
+          </h3>
+          <a href="/" className="text-lg font-semibold hover:text-[#8d6a4a] transition">
+            Home
+          </a>
+          <a href="/about" className="text-lg font-semibold hover:text-[#8d6a4a] transition">
+            About Us
+          </a>
+          <a href="/products" className="text-lg font-semibold hover:text-[#8d6a4a] transition">
+            Products
+          </a>
+          <a href="/categories" className="text-lg font-semibold hover:text-[#8d6a4a] transition">
+            Categories
+          </a>
+          <a href="/contact" className="text-lg font-semibold hover:text-[#8d6a4a] transition">
+            Contact Us
+          </a>
+        </div>
+
+        {/* Right Section - Contact Info */}
+        <div className="flex flex-col items-center md:items-start space-y-4">
+          <h3 className="text-2xl font-bold text-[#4b3a2b] mb-2">Contact Us</h3>
+
+          <p className="flex items-center gap-3 text-lg font-semibold">
+            <MdEmail className="text-[#8d6a4a] text-2xl" />
+            info@netspices.com
+          </p>
+          <p className="flex items-center gap-3 text-lg font-semibold">
+            <MdPhone className="text-[#8d6a4a] text-2xl" />
+            +94 77 448 9793
+          </p>
+          <p className="flex items-center gap-3 text-lg font-semibold leading-snug text-center md:text-left">
+            <MdLocationOn className="text-[#8d6a4a] text-2xl" />
+            13/2, Yatimeeya, <br /> Kotadeniyawa.
+          </p>
+
+          {/* Social Icons */}
+          <div className="flex space-x-6 pt-3 text-3xl text-[#3c2a1a]">
+            <Link href="#" className="hover:text-[#8d6a4a] transition">
               <FaFacebookF />
-            </a>
-            <a href="/" className="hover:text-gray-300">
-              <FaWhatsapp />
-            </a>
-            <a href="/" className="hover:text-gray-300">
+            </Link>
+            <Link href="#" className="hover:text-[#8d6a4a] transition">
               <FaInstagram />
-            </a>
-          </div>
-          <div className="text-center text-sm text-gray-300">
-            Copyright © 2025 Net Spices | Powered by NetIT Technology (Pvt) Ltd
+            </Link>
+            <Link href="#" className="hover:text-[#8d6a4a] transition">
+              <FaYoutube />
+            </Link>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+
+      {/* Bottom Copyright Bar */}
+      <div className="relative bg-[#4b2f22] text-white py-4 text-center text-sm font-medium">
+        Copyright © {new Date().getFullYear()} Net Spices | Powered By{" "}
+        <span className="text-[#f7d9b3]">NetIT Technology</span>
+      </div>
+    </footer>
   );
 }
