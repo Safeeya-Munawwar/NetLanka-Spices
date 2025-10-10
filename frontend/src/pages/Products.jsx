@@ -1,35 +1,49 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
 
 export default function Products() {
   const headingRef = useRef(null);
   const gridRef = useRef(null);
-
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
-
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    // Fetch products from backend
-    axios
-      .get("http://localhost:5000/api/products") // ✅ change if your backend is deployed
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
-  }, []);
+  const location = useLocation();
+  const query = new URLSearchParams(location.search).get("query");
 
+  // ✅ Fetch products (full list or search results)
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        let res;
+        if (query) {
+          // If there's a search query, use search endpoint
+          res = await axios.get(`http://localhost:5000/api/search?query=${query}`);
+          setProducts(res.data.products || []);
+        } else {
+          // Otherwise, fetch all products
+          res = await axios.get("http://localhost:5000/api/products");
+          setProducts(res.data);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setProducts([]);
+      }
+    };
+
+    fetchProducts();
+  }, [query]); // Re-fetch whenever the search query changes
+
+  // ✅ Intersection animations
   useEffect(() => {
     const observerOptions = { threshold: 0.3 };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.target === headingRef.current) {
-          setHeadingVisible(entry.isIntersecting);
-        }
-        if (entry.target === gridRef.current) {
-          setGridVisible(entry.isIntersecting);
-        }
+        if (entry.target === headingRef.current) setHeadingVisible(entry.isIntersecting);
+        if (entry.target === gridRef.current) setGridVisible(entry.isIntersecting);
       });
     }, observerOptions);
 
@@ -85,11 +99,11 @@ export default function Products() {
               gridVisible ? "animate-fade-in" : "opacity-0"
             }`}
           >
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-
-            {products.length === 0 && (
+            {products.length > 0 ? (
+              products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : (
               <p className="text-center col-span-full text-gray-600">
                 No products found.
               </p>
