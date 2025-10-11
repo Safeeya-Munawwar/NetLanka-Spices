@@ -20,6 +20,8 @@ import CategoryFormPage from "./components/admin/CategoryForm";
 import ProductPage from "./pages/admin/ProductPage";
 import ProductFormPage from "./components/admin/ProductFormPage";
 import SearchResults from "./pages/SearchResults";
+import BulkOrders from "./pages/admin/BulkOrdersPage";
+import BulkOrderForm from "./pages/BulkOrderForm";
 
 function App() {
   return (
@@ -118,6 +120,18 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+  path="/bulk-order/:id"
+  element={
+    <PrivateRoute>
+      <Layout>
+        <BulkOrderForm />
+      </Layout>
+    </PrivateRoute>
+  }
+/>
+
+       
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/products" element={<ProductPage />} />
@@ -130,7 +144,8 @@ function App() {
           element={<CategoryFormPage />}
         />
         <Route path="/admin/orders" element={<OrdersPage />} />
-        <Route path="/admin/users" element={<UsersPage />} />\
+        <Route path="/admin/bulk-orders" element={<BulkOrders />} />
+        <Route path="/admin/users" element={<UsersPage />} />
       </Routes>
     </Router>
   );

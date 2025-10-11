@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../components/admin/Sidebar";
 import { Link } from "react-router-dom";
-import { FaBoxOpen, FaThList, FaClipboardList, FaUsers } from "react-icons/fa";
+import {
+  FaBoxOpen,
+  FaThList,
+  FaClipboardList,
+  FaUsers,
+  FaBoxes, // ✅ Added for Bulk Orders
+} from "react-icons/fa";
 import axios from "axios";
 
 export default function Dashboard() {
@@ -10,7 +16,9 @@ export default function Dashboard() {
     categories: 0,
     orders: 0,
     users: 0,
+    bulkOrders: 0, // 👈 added
   });
+  
 
   const [visible, setVisible] = useState(false);
   const dashboardRef = useRef(null);
@@ -70,6 +78,13 @@ export default function Dashboard() {
       count: stats.orders,
     },
     {
+      title: "Manage Bulk Orders",
+      description: "View and manage all bulk order requests.",
+      icon: <FaBoxes className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/bulk-orders",
+      count: stats.bulkOrders,
+    },
+    {
       title: "Manage Users",
       description: "View and manage user accounts.",
       icon: <FaUsers className="h-8 w-8 text-yellow-900" />,
@@ -94,6 +109,7 @@ export default function Dashboard() {
             Manage your store efficiently and easily
           </p>
         </section>
+
         {/* Dashboard Section */}
         <section
           ref={dashboardRef}

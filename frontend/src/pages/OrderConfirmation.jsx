@@ -6,22 +6,17 @@ import { SiVisa, SiMastercard, SiPaypal } from "react-icons/si";
 import { FaMoneyBillWave } from "react-icons/fa";
 
 export default function OrderConfirmation() {
-  const { cartItems, totalPrice, clearCart, updateQuantity, removeFromCart } =
-    useCart();
+  const { cartItems, clearCart, updateQuantity, removeFromCart, addToCart } = useCart();
   const { user } = useUser();
   const [orders, setOrders] = useState([]);
   const [confirmed, setConfirmed] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [cardDetails, setCardDetails] = useState({
-    cardNumber: "",
-    cardName: "",
-    expiry: "",
-    cvv: "",
-  });
+  const [cardDetails, setCardDetails] = useState({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
   const [errors, setErrors] = useState({});
   const [animateBadge, setAnimateBadge] = useState({});
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [selectedWeights, setSelectedWeights] = useState({});
 
   const paymentLogos = {
     visa: <SiVisa className="h-8 w-8 text-blue-600" />,
@@ -30,12 +25,32 @@ export default function OrderConfirmation() {
     cod: <FaMoneyBillWave className="h-8 w-8 text-green-600" />,
   };
 
+  // Helper: convert weight string or number to kg
+  const parseWeight = (weight) => {
+    if (!weight) return 1;
+    if (typeof weight === "number") return weight;
+    const w = weight.toString().toLowerCase();
+    if (w.endsWith("kg")) return parseFloat(w);
+    if (w.endsWith("g")) return parseFloat(w) / 1000;
+    return 1;
+  };
+
+  // Total price based on weight and quantity
+  const calculateTotalPrice = () =>
+    cartItems.reduce(
+      (sum, item) => sum + (item.price || 0) * parseWeight(item.weight) * item.quantity,
+      0
+    );
+
   // Fetch recommended products
   useEffect(() => {
     const fetchRecommended = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
         setRecommendedProducts(res.data);
+        const defaultWeights = {};
+        res.data.forEach(p => defaultWeights[p.id] = 1);
+        setSelectedWeights(defaultWeights);
       } catch (err) {
         console.error("Failed to fetch recommended products:", err);
       }
@@ -43,42 +58,32 @@ export default function OrderConfirmation() {
     fetchRecommended();
   }, []);
 
-  // Fetch user orders and poll every 10 seconds
+  // Fetch user orders
   useEffect(() => {
     if (!user?.id) return;
-
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/orders/${user.id}`
-        );
+        const res = await axios.get(`http://localhost:5000/api/orders/${user.id}`);
         setOrders(res.data);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
       }
     };
-
-    fetchOrders(); // initial fetch
-    const interval = setInterval(fetchOrders, 10000); // poll every 10 sec
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 10000);
     return () => clearInterval(interval);
   }, [user]);
 
   const handleCardChange = (field, value) => {
     if (field === "cardNumber")
-      value = value
-        .replace(/\D/g, "")
-        .replace(/(.{4})/g, "$1 ")
-        .trim();
+      value = value.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim();
     setCardDetails({ ...cardDetails, [field]: value });
   };
 
   const handleQuantityChange = (itemId, newQty) => {
     updateQuantity(itemId, newQty);
-    setAnimateBadge((prev) => ({ ...prev, [itemId]: true }));
-    setTimeout(
-      () => setAnimateBadge((prev) => ({ ...prev, [itemId]: false })),
-      300
-    );
+    setAnimateBadge(prev => ({ ...prev, [itemId]: true }));
+    setTimeout(() => setAnimateBadge(prev => ({ ...prev, [itemId]: false })), 300);
   };
 
   const handlePlaceOrder = async () => {
@@ -87,14 +92,10 @@ export default function OrderConfirmation() {
     const newErrors = {};
     if (paymentMethod === "creditCard") {
       const cleanNumber = cardDetails.cardNumber.replace(/\s+/g, "");
-      if (!/^\d{16}$/.test(cleanNumber))
-        newErrors.cardNumber = "Card number must be 16 digits";
-      if (!cardDetails.cardName)
-        newErrors.cardName = "Cardholder name required";
-      if (!/^\d{2}\/\d{2}$/.test(cardDetails.expiry))
-        newErrors.expiry = "Expiry must be MM/YY";
-      if (!/^\d{3,4}$/.test(cardDetails.cvv))
-        newErrors.cvv = "CVV must be 3 or 4 digits";
+      if (!/^\d{16}$/.test(cleanNumber)) newErrors.cardNumber = "Card number must be 16 digits";
+      if (!cardDetails.cardName) newErrors.cardName = "Cardholder name required";
+      if (!/^\d{2}\/\d{2}$/.test(cardDetails.expiry)) newErrors.expiry = "Expiry must be MM/YY";
+      if (!/^\d{3,4}$/.test(cardDetails.cvv)) newErrors.cvv = "CVV must be 3 or 4 digits";
     }
     if (Object.keys(newErrors).length) {
       setErrors(newErrors);
@@ -102,12 +103,20 @@ export default function OrderConfirmation() {
     }
 
     try {
+      // Prepare items with weight and price multiplied
+      const itemsWithWeightPrice = cartItems.map(item => ({
+        ...item,
+        price: item.price * parseWeight(item.weight),
+        weightKg: parseWeight(item.weight),
+      }));
+
       const response = await axios.post("http://localhost:5000/api/orders", {
         userId: user.id,
-        items: cartItems,
-        totalPrice,
+        items: itemsWithWeightPrice,
+        totalPrice: calculateTotalPrice(),
         paymentMethod,
       });
+
       setOrderId(response.data.id);
       setConfirmed(true);
       clearCart();
@@ -120,107 +129,51 @@ export default function OrderConfirmation() {
   if (confirmed) {
     return (
       <div className="container mx-auto py-16 text-center">
-        <h2 className="text-3xl font-bold text-green-800 mb-4">
-          Order Confirmed!
-        </h2>
-        <p className="text-[#5C4033] mb-2">
-          Your order ID: <strong>{orderId}</strong>
-        </p>
-        <p className="text-[#3D2B1F] mb-6">Total Paid: LKR {totalPrice}</p>
-        <a
-          href="/products"
-          className="px-6 py-2 bg-[#5C4033] text-white rounded hover:bg-[#3D2B1F] transition"
-        >
-          Back to Shop
-        </a>
+        <h2 className="text-3xl font-bold text-green-800 mb-4">Order Confirmed!</h2>
+        <p className="text-[#5C4033] mb-2">Your order ID: <strong>{orderId}</strong></p>
+        <p className="text-[#3D2B1F] mb-6">Total Paid: LKR {calculateTotalPrice().toLocaleString()}</p>
+        <a href="/products" className="px-6 py-2 bg-[#5C4033] text-white rounded hover:bg-[#3D2B1F] transition">Back to Shop</a>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto py-16 px-4 md:px-0">
-      {/* Empty cart message */}
       {!cartItems.length && (
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#5C4033] mb-4">
-            Your cart is empty
-          </h2>
+          <h2 className="text-3xl font-bold text-[#5C4033] mb-4">Your cart is empty</h2>
           <p className="text-[#3D2B1F] mb-4">Add products to proceed!</p>
-          <a
-            href="/products"
-            className="text-[#A65B05] font-bold px-4 py-2 bg-transparent rounded-lg border-2 border-[#A65B05] hover:bg-[#A65B05] hover:text-white transition"
-          >
-            View Products
-          </a>
+          <a href="/products" className="text-[#A65B05] font-bold px-4 py-2 bg-transparent rounded-lg border-2 border-[#A65B05] hover:bg-[#A65B05] hover:text-white transition">View Products</a>
         </div>
       )}
 
-      {/* Checkout Section */}
       {cartItems.length > 0 && (
         <div className="flex flex-col lg:flex-row gap-8 mt-8">
           {/* Cart Items */}
           <div className="flex-1">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="relative flex flex-col sm:flex-row items-center sm:justify-between gap-4 p-4 border rounded-lg shadow-sm bg-yellow-50 mb-4 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-transform duration-300"
-              >
+            {cartItems.map(item => (
+              <div key={item.productId + item.weight} className="relative flex flex-col sm:flex-row items-center sm:justify-between gap-4 p-4 border rounded-lg shadow-sm bg-yellow-50 mb-4 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-transform duration-300">
                 <div className="relative">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-24 h-24 object-cover rounded hover:scale-105 transition-transform duration-300"
-                  />
+                  <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded hover:scale-105 transition-transform duration-300" />
                   {item.quantity > 0 && (
-                    <span
-                      className={`absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg transition-transform ${
-                        animateBadge[item.id]
-                          ? "scale-125 animate-bounce"
-                          : "scale-100"
-                      }`}
-                    >
+                    <span className={`absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg transition-transform ${animateBadge[item.id]? "scale-125 animate-bounce" : "scale-100"}`}>
                       {item.quantity}
                     </span>
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <h3 className="font-semibold text-[#5C4033]">{item.name}</h3>
-                  <p className="text-[#3D2B1F]">Price: LKR {item.price}</p>
+                  <p className="text-[#3D2B1F]">Weight: {parseWeight(item.weight)} kg</p>
+                  <p className="text-[#3D2B1F]">Price: LKR {(item.price * parseWeight(item.weight)).toLocaleString()}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <button
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                      onClick={() =>
-                        handleQuantityChange(
-                          item.id,
-                          Math.max(item.quantity - 1, 1)
-                        )
-                      }
-                    >
-                      -
-                    </button>
-                    <span className="px-2 py-1 border rounded">
-                      {item.quantity}
-                    </span>
-                    <button
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
-                      }
-                    >
-                      +
-                    </button>
+                    <button className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300" onClick={() => handleQuantityChange(item.id, Math.max(item.quantity - 1, 1))}>-</button>
+                    <span className="px-2 py-1 border rounded">{item.quantity}</span>
+                    <button className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300" onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <span className="font-bold text-[#5C4033]">
-                    LKR {item.price * item.quantity}
-                  </span>
-                  <button
-                    className="text-red-600 font-semibold hover:text-red-800"
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    Remove
-                  </button>
+                  <span className="font-bold text-[#5C4033]">LKR {(item.price * parseWeight(item.weight) * item.quantity).toLocaleString()}</span>
+                  <button className="text-red-600 font-semibold hover:text-red-800" onClick={() => removeFromCart(item.id)}>Remove</button>
                 </div>
               </div>
             ))}
@@ -228,152 +181,62 @@ export default function OrderConfirmation() {
 
           {/* Order Summary / Payment */}
           <div className="lg:w-1/3 p-6 border rounded-lg shadow bg-yellow-50 sticky top-20 h-fit flex flex-col gap-4">
-            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">
-              Order Summary
-            </h3>
-            <div className="flex justify-between font-semibold mb-2">
-              <span>Items:</span>
-              <span>{cartItems.length}</span>
-            </div>
-            <div className="flex justify-between font-bold text-[#5C4033] text-lg mb-4 border-t pt-2">
-              <span>Total:</span>
-              <span>LKR {totalPrice}</span>
-            </div>
+            <h3 className="text-xl font-semibold text-[#5C4033] mb-2">Order Summary</h3>
+            <div className="flex justify-between font-semibold mb-2"><span>Items:</span><span>{cartItems.length}</span></div>
+            <div className="flex justify-between font-bold text-[#5C4033] text-lg mb-4 border-t pt-2"><span>Total:</span><span>LKR {calculateTotalPrice().toLocaleString()}</span></div>
 
-            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">
-              Payment Method
-            </h3>
+            <h3 className="text-lg font-semibold text-[#5C4033] mb-3">Payment Method</h3>
             <div className="flex flex-col gap-3 mb-4">
-              {["cod", "creditCard", "paypal"].map((method) => (
-                <label
-                  key={method}
-                  className="flex items-center gap-2 bg-yellow-100 p-3 rounded-lg border hover:border-[#5C4033] cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value={method}
-                    checked={paymentMethod === method}
-                    onChange={() => setPaymentMethod(method)}
-                  />
-                  {method === "cod"
-                    ? "Cash on Delivery"
-                    : method === "creditCard"
-                    ? "Credit / Debit Card"
-                    : "PayPal"}
+              {["cod", "creditCard", "paypal"].map(method => (
+                <label key={method} className="flex items-center gap-2 bg-yellow-100 p-3 rounded-lg border hover:border-[#5C4033] cursor-pointer">
+                  <input type="radio" name="payment" value={method} checked={paymentMethod === method} onChange={() => setPaymentMethod(method)} />
+                  {method === "cod" ? "Cash on Delivery" : method === "creditCard" ? "Credit / Debit Card" : "PayPal"}
                 </label>
               ))}
             </div>
 
             {paymentMethod === "creditCard" && (
               <div className="flex flex-col gap-3 mb-4">
-                <input
-                  type="text"
-                  placeholder="Card Number"
-                  value={cardDetails.cardNumber}
-                  onChange={(e) =>
-                    handleCardChange("cardNumber", e.target.value)
-                  }
-                  maxLength={19}
-                  className="p-2 border rounded"
-                />
-                {errors.cardNumber && (
-                  <p className="text-red-600 text-sm">{errors.cardNumber}</p>
-                )}
-                <input
-                  type="text"
-                  placeholder="Cardholder Name"
-                  value={cardDetails.cardName}
-                  onChange={(e) => handleCardChange("cardName", e.target.value)}
-                  className="p-2 border rounded"
-                />
-                {errors.cardName && (
-                  <p className="text-red-600 text-sm">{errors.cardName}</p>
-                )}
+                <input type="text" placeholder="Card Number" value={cardDetails.cardNumber} onChange={e => handleCardChange("cardNumber", e.target.value)} maxLength={19} className="p-2 border rounded" />
+                {errors.cardNumber && <p className="text-red-600 text-sm">{errors.cardNumber}</p>}
+                <input type="text" placeholder="Cardholder Name" value={cardDetails.cardName} onChange={e => handleCardChange("cardName", e.target.value)} className="p-2 border rounded" />
+                {errors.cardName && <p className="text-red-600 text-sm">{errors.cardName}</p>}
                 <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    value={cardDetails.expiry}
-                    onChange={(e) => handleCardChange("expiry", e.target.value)}
-                    className="p-2 border rounded flex-1"
-                    maxLength={5}
-                  />
-                  <input
-                    type="text"
-                    placeholder="CVV"
-                    value={cardDetails.cvv}
-                    onChange={(e) => handleCardChange("cvv", e.target.value)}
-                    className="p-2 border rounded w-24"
-                    maxLength={4}
-                  />
+                  <input type="text" placeholder="MM/YY" value={cardDetails.expiry} onChange={e => handleCardChange("expiry", e.target.value)} className="p-2 border rounded flex-1" maxLength={5} />
+                  <input type="text" placeholder="CVV" value={cardDetails.cvv} onChange={e => handleCardChange("cvv", e.target.value)} className="p-2 border rounded w-24" maxLength={4} />
                 </div>
-                {(errors.expiry || errors.cvv) && (
-                  <div className="text-red-600 text-sm">
-                    {errors.expiry || errors.cvv}
-                  </div>
-                )}
+                {(errors.expiry || errors.cvv) && <div className="text-red-600 text-sm">{errors.expiry || errors.cvv}</div>}
               </div>
             )}
 
-            <div className="flex gap-4 justify-center mb-4 flex-wrap">
-              {Object.values(paymentLogos)}
-            </div>
+            <div className="flex gap-4 justify-center mb-4 flex-wrap">{Object.values(paymentLogos)}</div>
 
-            <button
-              onClick={handlePlaceOrder}
-              className="w-full px-6 py-3 bg-[#5C4033] text-white rounded-lg shadow hover:bg-[#3D2B1F] transition transform hover:scale-105"
-            >
-              Confirm Order
-            </button>
+            <button onClick={handlePlaceOrder} className="w-full px-6 py-3 bg-[#5C4033] text-white rounded-lg shadow hover:bg-[#3D2B1F] transition transform hover:scale-105">Confirm Order</button>
           </div>
         </div>
       )}
 
       {/* Previous Orders */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">
-          Your Previous Orders
-        </h2>
+        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">Your Previous Orders</h2>
         {orders.length === 0 ? (
           <p className="text-[#3D2B1F]">You have no previous orders.</p>
         ) : (
-          orders.map((order) => (
-            <div
-              key={order.id}
-              className="border rounded-lg p-4 mb-4 shadow-sm bg-white hover:shadow-lg transition"
-            >
+          orders.map(order => (
+            <div key={order.id} className="border rounded-lg p-4 mb-4 shadow-sm bg-white hover:shadow-lg transition">
               <div className="flex justify-between mb-2">
-                <span className="font-semibold text-[#5C4033]">
-                  Order ID: {order.id}
-                </span>
-                <span
-                  className={`text-sm font-semibold ${
-                    order.status === "Pending"
-                      ? "text-orange-600"
-                      : "text-green-700"
-                  }`}
-                >
-                  {order.status}
-                </span>
+                <span className="font-semibold text-[#5C4033]">Order ID: {order.id}</span>
+                <span className={`text-sm font-semibold ${order.status === "Pending" ? "text-orange-600" : "text-green-700"}`}>{order.status}</span>
               </div>
               <div className="mb-2">
-              {order.items.map((item) => (
-  <div
-    key={item.id}
-    className="flex justify-between text-sm py-1 border-b last:border-b-0"
-  >
-    <span>{item.name} {item.weight && `(${item.weight})`}</span>
-    <span>
-      {item.quantity} × {item.price}
-    </span>
-  </div>
-))}
-
+                {order.items.map(item => (
+                  <div key={item.productId + item.weightKg} className="flex justify-between text-sm py-1 border-b last:border-b-0">
+                    <span>{item.name} ({item.weightKg} kg)</span>
+                    <span>LKR {item.price.toLocaleString()} × {item.quantity} = {(item.price * item.quantity).toLocaleString()}</span>
+                  </div>
+                ))}
               </div>
-              <div className="text-right font-bold text-[#5C4033]">
-                Total: LKR {order.totalPrice}
-              </div>
+              <div className="text-right font-bold text-[#5C4033]">Total: LKR {order.totalPrice.toLocaleString()}</div>
             </div>
           ))
         )}
@@ -381,27 +244,22 @@ export default function OrderConfirmation() {
 
       {/* Recommended Products */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">
-          Recommended for you
-        </h2>
+        <h2 className="text-2xl font-bold text-[#5C4033] mb-6">Recommended for you</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {recommendedProducts.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-lg p-4 bg-white shadow hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-transform"
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-36 object-cover mb-2 rounded"
-              />
-              <p className="text-sm font-semibold text-[#5C4033] mb-1">
-                {product.title}
-              </p>
+          {recommendedProducts.map(product => (
+            <div key={product.id} className="border rounded-lg p-4 bg-white shadow hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-transform">
+              <img src={product.image} alt={product.title} className="w-full h-36 object-cover mb-2 rounded" />
+              <p className="text-sm font-semibold text-[#5C4033] mb-1">{product.title}</p>
               <p className="text-sm text-[#3D2B1F] mb-2">LKR {product.price}</p>
-              <button className="w-full py-1 bg-yellow-900 text-white rounded hover:bg-yellow-800 transition">
-                Add to Cart
-              </button>
+
+              <select className="mb-2 p-1 border rounded w-full" value={selectedWeights[product.id]} onChange={(e) => setSelectedWeights(prev => ({ ...prev, [product.id]: Number(e.target.value) }))}>
+                <option value={0.5}>500g</option>
+                <option value={1}>1kg</option>
+                <option value={2}>2kg</option>
+                <option value={3}>3kg</option>
+              </select>
+
+              <button className="w-full py-1 bg-yellow-900 text-white rounded hover:bg-yellow-800 transition" onClick={() => addToCart({ ...product, weight: selectedWeights[product.id], quantity: 1 })}>Add to Cart</button>
             </div>
           ))}
         </div>

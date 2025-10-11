@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import AdminSidebar from "../../components/admin/Sidebar";
-import { FaBoxOpen, FaPhone, FaEnvelope, FaUser, FaBuilding, FaSortAmountUp, FaWeight, FaCommentAlt, FaCalendar } from "react-icons/fa";
 
 export default function BulkOrdersPage() {
   const [bulkOrders, setBulkOrders] = useState([]);
@@ -159,105 +158,106 @@ export default function BulkOrdersPage() {
 
         {/* Modal */}
         {modalOpen && selectedOrder && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
-            onClick={closeModal}
-          >
-            <div
-              className="bg-yellow-50 rounded-2xl shadow-xl w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-brown-900">
-                  Bulk Order Details
-                </h3>
-                <button
-                  onClick={closeModal}
-                  className="text-brown-900 text-xl font-bold hover:text-red-500"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="space-y-3 text-brown-800">
-                <p>
-                  <FaUser className="inline mr-2 text-yellow-600" />
-                  <strong>Name:</strong> {selectedOrder.name}
-                </p>
-                <p>
-                  <FaEnvelope className="inline mr-2 text-yellow-600" />
-                  <strong>Email:</strong> {selectedOrder.email}
-                </p>
-                <p>
-                  <FaPhone className="inline mr-2 text-yellow-600" />
-                  <strong>Phone:</strong> {selectedOrder.phone || "-"}
-                </p>
-                <p>
-                  <FaBuilding className="inline mr-2 text-yellow-600" />
-                  <strong>Company:</strong> {selectedOrder.company || "-"}
-                </p>
-                {selectedOrder.productList && (
-                  <p>
-                    <FaBoxOpen className="inline mr-2 text-yellow-600" />
-                    <strong>Requested Products:</strong>{" "}
-                    {selectedOrder.productList}
-                  </p>
-                )}
-                {selectedOrder.quantity && (
-                  <p>
-                    <FaSortAmountUp className="inline mr-2 text-yellow-600" />
-                    <strong>Quantity:</strong> {selectedOrder.quantity}
-                  </p>
-                )}
-                {selectedOrder.weight && (
-                  <p>
-                    <FaWeight className="inline mr-2 text-yellow-600" />
-                    <strong>Weight per Product:</strong>{" "}
-                    {selectedOrder.weight}
-                  </p>
-                )}
-                <p>
-                <FaCommentAlt className="inline mr-2 text-yellow-600" />
-                  <strong>Message:</strong>
-                  <br />
-                  {selectedOrder.message || "-"}
-                </p>
-                <p className="text-sm text-brown-600">
-                <FaCalendar className="inline mr-2 text-yellow-600" />
-                  <strong>Submitted on:</strong>{" "}
-                  {new Date(selectedOrder.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <div className="mt-4 flex gap-4">
-  {selectedOrder.email && (
-    <a
-      href={`mailto:${selectedOrder.email}`}
-      className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 flex items-center gap-2"
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300"
+    onClick={closeModal}
+  >
+    <div
+      className="bg-white rounded-xl shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto p-8 relative animate-fadeIn border border-gray-200"
+      onClick={(e) => e.stopPropagation()}
     >
-      📧 Email
-    </a>
-  )}
-  {selectedOrder.phone && (
-    <a
-      href={`tel:${selectedOrder.phone}`}
-      className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 flex items-center gap-2"
-    >
-      📞 Call
-    </a>
-  )}
-</div>
+      {/* Close Button */}
+      <button
+        onClick={closeModal}
+        className="absolute top-4 right-4 text-gray-500 text-2xl hover:text-red-500 transition"
+      >
+        ✕
+      </button>
 
-              
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 bg-yellow-300 rounded-xl hover:bg-yellow-400 font-medium"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+      {/* Title */}
+      <h2 className="text-2xl font-semibold text-yellow-900 mb-6 text-center border-b pb-3">
+        Bulk Order Details
+      </h2>
+
+      {/* Order Info */}
+      <div className="space-y-4 text-gray-700 text-base leading-relaxed">
+        <div className="flex items-center gap-2">
+          <span><strong>Name:</strong> {selectedOrder.name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span><strong>Email:</strong> {selectedOrder.email}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span><strong>Phone:</strong> {selectedOrder.phone || "-"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span><strong>Company:</strong> {selectedOrder.company || "-"}</span>
+        </div>
+
+        {selectedOrder.productList && (
+          <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+            <strong>Requested Products:</strong>{" "}
+            <span>{selectedOrder.productList}</span>
           </div>
         )}
+
+        {selectedOrder.quantity && (
+          <div className="flex items-center gap-2">
+            <span><strong>Quantity:</strong> {selectedOrder.quantity}</span>
+          </div>
+        )}
+
+        {selectedOrder.weight && (
+          <div className="flex items-center gap-2">
+            <span><strong>Weight per Product:</strong> {selectedOrder.weight}</span>
+          </div>
+        )}
+
+        {selectedOrder.message && (
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <strong>Message:</strong>
+            <p className="mt-2 text-gray-700 whitespace-pre-line">{selectedOrder.message}</p>
+          </div>
+        )}
+
+        <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+          <span>
+            <strong>Submitted:</strong>{" "}
+            {new Date(selectedOrder.createdAt).toLocaleString()}
+          </span>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="mt-6 flex flex-wrap justify-end gap-3">
+        {selectedOrder.email && (
+          <a
+            href={`mailto:${selectedOrder.email}`}
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2 transition"
+          >
+            📧 Email
+          </a>
+        )}
+        {selectedOrder.phone && (
+          <a
+            href={`tel:${selectedOrder.phone}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2 transition"
+          >
+            📞 Call
+          </a>
+        )}
+        <button
+          onClick={closeModal}
+          className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-gray-300 transition"
+        >
+          ❌ Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
       </div>
     </div>
   );

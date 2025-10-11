@@ -16,6 +16,7 @@ import ordersApi from "./api/orders/orders.js";
 import filteredProductsAPi from "./api/filtered-products/filteredProducts.js";
 import cartsApi from "./api/carts/carts.js";
 import searchApi from "./api/search/search.js";
+import bulkOrdersApi from "./api/bulkOrders/bulkOrders.js";
 
 
 dotenv.config();
@@ -44,6 +45,7 @@ app.use("/api/stats", statsApi);
 app.use("/api/orders", ordersApi);
 app.use("/api/filtered-products", filteredProductsAPi);
 app.use("/api/carts", cartsApi);
+app.use("/api/bulk-orders", bulkOrdersApi);
 
 
 app.use("/api/search", searchApi);

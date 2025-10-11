@@ -19,9 +19,10 @@ router.post("/", async (req, res) => {
             name: i.name,
             price: i.price,
             quantity: i.quantity,
+            weightKg: i.weightKg, // 👈 include this
             image: i.image,
           })),
-        },
+        },        
       },
       include: {
         items: true,

@@ -12,10 +12,10 @@ export default function SearchResults() {
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 
-  useEffect(() => {
+useEffect(() => {
     if (!query.trim()) return;
     setLoading(true);
-
+  
     fetch(`${API_URL}/api/search?query=${encodeURIComponent(query)}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch search results");
@@ -27,7 +27,8 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
       })
       .catch((err) => console.error("Search fetch error:", err))
       .finally(() => setLoading(false));
-  }, [query]);
+  }, [query, API_URL]); // ✅ add API_URL here
+  
 
   return (
     <div className="max-w-6xl mx-auto p-6 text-[#4A2F1D]">

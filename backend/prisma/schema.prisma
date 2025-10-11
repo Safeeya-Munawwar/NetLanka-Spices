@@ -78,6 +78,7 @@ model OrderItem {
   name      String
   price     Float
   quantity  Int
+  weightKg  Float?     // 👈 ADD THIS
   image     String?
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id])
