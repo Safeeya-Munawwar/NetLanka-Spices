@@ -101,8 +101,4 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
       )}
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c79935df29b4f33658f07a730f63486072312712

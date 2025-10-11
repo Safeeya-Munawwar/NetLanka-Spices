@@ -122,8 +122,4 @@ export default function ProductsSection() {
       </div>
     </section>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c79935df29b4f33658f07a730f63486072312712
