@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visibleItems, setVisibleItems] = useState({});
-  const refs = useRef([]);
 
   // Fetch categories from backend
   const fetchCategories = async () => {
@@ -24,34 +22,6 @@ export default function CategoriesPage() {
   useEffect(() => {
     fetchCategories();
   }, []);
-
-  // Intersection Observer for animation
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleItems((prev) => ({
-              ...prev,
-              [entry.target.dataset.id]: true,
-            }));
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    const elements = refs.current;
-    elements.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => {
-      elements.forEach((ref) => {
-        if (ref) observer.unobserve(ref);
-      });
-    };
-  }, [categories]);
 
   return (
     <div>
@@ -77,21 +47,13 @@ export default function CategoriesPage() {
             <p className="text-center text-brown-700">No categories found.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-              {categories.map((cat, index) => (
+              {categories.map((cat) => (
                 <div
                   key={cat.id}
-                  ref={(el) => (refs.current[index] = el)}
-                  data-id={cat.id}
-                  className={`flex flex-col items-center justify-between p-8 rounded-2xl border-2 border-amber-900 shadow-md transition-transform duration-700 transform bg-white hover:-translate-y-1 hover:scale-105 hover:shadow-2xl
-                    ${
-                      visibleItems[cat.id]
-                        ? "opacity-100 translate-y-0 animate-slide-in-top"
-                        : "opacity-0 translate-y-10"
-                    }`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
+                  className="flex flex-col items-center justify-between p-8 rounded-2xl border-2 border-amber-900 shadow-md bg-white hover:-translate-y-1 hover:scale-105 hover:shadow-2xl transition-transform duration-500"
                 >
                   <div className="flex flex-col items-center">
-                    <div className="mb-4 text-brown-800 transition-transform duration-500">
+                    <div className="mb-4 text-brown-800">
                       <img
                         src={cat.image}
                         alt={cat.title}
@@ -107,7 +69,6 @@ export default function CategoriesPage() {
                   </div>
 
                   {/* View Products Button */}
-
                   <Link
                     to={`/categories/${cat.slug}`}
                     className="px-6 py-3 bg-yellow-900 text-white rounded-lg shadow-md hover:bg-yellow-800 hover:shadow-lg transition transform hover:scale-105"

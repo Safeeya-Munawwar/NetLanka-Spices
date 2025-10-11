@@ -358,17 +358,18 @@ export default function OrderConfirmation() {
                 </span>
               </div>
               <div className="mb-2">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between text-sm py-1 border-b last:border-b-0"
-                  >
-                    <span>{item.name}</span>
-                    <span>
-                      {item.quantity} × {item.price}
-                    </span>
-                  </div>
-                ))}
+              {order.items.map((item) => (
+  <div
+    key={item.id}
+    className="flex justify-between text-sm py-1 border-b last:border-b-0"
+  >
+    <span>{item.name} {item.weight && `(${item.weight})`}</span>
+    <span>
+      {item.quantity} × {item.price}
+    </span>
+  </div>
+))}
+
               </div>
               <div className="text-right font-bold text-[#5C4033]">
                 Total: LKR {order.totalPrice}

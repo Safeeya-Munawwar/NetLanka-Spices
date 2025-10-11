@@ -19,6 +19,7 @@ import UsersPage from "./pages/admin/UsersPage";
 import CategoryFormPage from "./components/admin/CategoryForm";
 import ProductPage from "./pages/admin/ProductPage";
 import ProductFormPage from "./components/admin/ProductFormPage";
+import SearchResults from "./pages/SearchResults";
 
 function App() {
   return (
@@ -68,6 +69,17 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+  path="/search"
+  element={
+    <PrivateRoute>
+      <Layout>
+        <SearchResults/>
+      </Layout>
+    </PrivateRoute>
+  }
+/>
+
         <Route
           path="/categories/:category"
           element={

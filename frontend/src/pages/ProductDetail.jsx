@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
+
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [weight, setWeight] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Fetch product by ID
         const res = await axios.get(`http://localhost:5000/api/products/${id}`);
         setProduct(res.data);
 
-        // Fetch all products to find related ones
         const allRes = await axios.get("http://localhost:5000/api/products");
         const related = allRes.data.filter(
           (p) =>
             p.category?.id === res.data.category?.id && p.id !== res.data.id
         );
-        setRelatedProducts(related.slice(0, 3)); // max 3 related products
+        setRelatedProducts(related.slice(0, 3));
       } catch (err) {
         console.error("Failed to fetch product:", err);
         setProduct(null);
@@ -35,6 +37,19 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
+
+  const handleAddToCart = () => {
+    const itemToAdd = {
+      ...product,
+      quantity: Number(quantity),
+      weight: weight || "1kg",
+    };
+    addToCart(itemToAdd);
+  };
+
+  const handleBulkOrder = () => {
+    navigate(`/bulk-order/${product.id}`, { state: { product } });
+  };
 
   if (loading) {
     return (
@@ -88,20 +103,57 @@ export default function ProductDetail() {
                 "A premium product carefully selected for quality and freshness."}
             </p>
 
+            {/* Quantity & Weight Selection */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div>
+                <label className="block text-yellow-900 font-semibold mb-1">
+                  Quantity:
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  className="border border-yellow-300 rounded-lg px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-yellow-700"
+                />
+              </div>
+
+              <div>
+                <label className="block text-yellow-900 font-semibold mb-1">
+                  Weight (kg):
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 1kg, 500g"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="border border-yellow-300 rounded-lg px-3 py-2 w-32 focus:outline-none focus:ring-2 focus:ring-yellow-700"
+                />
+              </div>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4">
               <button
-                onClick={() => addToCart(product)}
+                onClick={handleAddToCart}
                 className="px-5 py-2 md:px-6 md:py-3 bg-yellow-900 text-white rounded-lg md:rounded-xl shadow-md 
             hover:bg-yellow-800 hover:shadow-lg transition transform hover:scale-105"
               >
                 Add to Cart
               </button>
 
-              <Link
-                to={`/categories/${product.category?.slug}`}
+              <button
+                onClick={handleBulkOrder}
                 className="px-5 py-2 md:px-6 md:py-3 bg-yellow-700 text-white rounded-lg md:rounded-xl shadow-md 
             hover:bg-yellow-600 hover:shadow-lg transition transform hover:scale-105"
+              >
+                Bulk Order Inquiry
+              </button>
+
+              <Link
+                to={`/categories/${product.category?.slug}`}
+                className="px-5 py-2 md:px-6 md:py-3 bg-yellow-600 text-white rounded-lg md:rounded-xl shadow-md 
+            hover:bg-yellow-500 hover:shadow-lg transition transform hover:scale-105"
               >
                 Back to {product.category?.title}
               </Link>

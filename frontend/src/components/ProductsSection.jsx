@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 
 export default function ProductsSection() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -53,7 +55,9 @@ export default function ProductsSection() {
           >
             {products.map((p) => (
               <SwiperSlide key={p.id}>
-                <div className="border border-gray-300 rounded-sm shadow-sm hover:shadow-md transition-all duration-300 bg-white h-[360px] flex flex-col items-center justify-center p-6">
+                <div
+                  className="border border-gray-300 rounded-sm shadow-sm hover:shadow-md transition-all duration-300 bg-white h-[360px] flex flex-col items-center justify-center p-6 cursor-pointer"
+                >
                   {/* Circle image */}
                   <div className="w-32 h-32 rounded-full overflow-hidden mb-4">
                     <img
@@ -68,10 +72,14 @@ export default function ProductsSection() {
                     {p.category?.title || "Category"}
                   </p>
 
-                  {/* Title */}
-                  <h3 className="font-bold text-[#3A1F04] text-lg mb-1">
-                    {p.title}
-                  </h3>
+                  {/* Title - clickable to view details */}
+                 <h3
+  className="font-bold text-[#3A1F04] text-lg mb-1 hover:text-[#B59D56] hover:underline transition-all duration-200 cursor-pointer"
+  onClick={() => navigate(`/products/${p.id}`)}
+>
+  {p.title}
+</h3>
+
 
                   {/* Price */}
                   <p className="font-extrabold text-black text-[17px]">
@@ -82,7 +90,7 @@ export default function ProductsSection() {
             ))}
           </Swiper>
 
-          {/* Custom arrows centered below */}
+          {/* Custom arrows */}
           <div className="flex justify-center items-center gap-4 mt-8">
             <button className="custom-prev border border-[#B59D56] text-[#B59D56] w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#B59D56] hover:text-white transition-colors duration-200">
               <svg
@@ -115,4 +123,3 @@ export default function ProductsSection() {
     </section>
   );
 }
-

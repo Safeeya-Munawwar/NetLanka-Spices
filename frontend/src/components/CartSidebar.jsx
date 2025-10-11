@@ -76,10 +76,11 @@ export default function CartSidebar({
                   />
                 )}
                 <div>
-                  <h3 className="text-yellow-900 font-semibold">{item.name}</h3>
-                  <p className="text-yellow-800">
-                    LKR {item.price} x {item.quantity}
-                  </p>
+                <h3 className="text-yellow-900 font-semibold">{item.name}</h3>
+<p className="text-yellow-800">
+  {item.quantity} × LKR {item.price} {item.weight && `(${item.weight})`}
+</p>
+
                   <div className="flex gap-2 mt-1">
                     <button
                       className="px-2 py-1 bg-yellow-900 text-white rounded"

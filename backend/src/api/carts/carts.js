@@ -2,43 +2,45 @@ import express from "express";
 const router = express.Router();
 
 // Get user cart
+// Get user cart (Safe Upsert)
 router.get("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
 
   try {
-    let cart = await prisma.cart.findUnique({
+    const cart = await prisma.cart.upsert({
       where: { userId },
+      update: {},
+      create: { userId },
       include: { items: true },
     });
 
-    if (!cart) {
-      cart = await prisma.cart.create({
-        data: { userId },
-        include: { items: true },
-      });
-    }
     res.json(cart);
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching/creating cart:", err);
     res.status(500).json({ error: "Failed to fetch cart" });
   }
 });
 
+
+// Update user cart
 // Update user cart
 router.post("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
   const { items } = req.body;
+
   try {
-    let cart = await prisma.cart.findUnique({
+    // Ensure the cart exists (no duplicate create)
+    const cart = await prisma.cart.upsert({
       where: { userId },
-      include: { items: true },
+      update: {},
+      create: { userId },
     });
-    if (!cart) {
-      cart = await prisma.cart.create({ data: { userId } });
-    }
+
+    // Clear old items and insert new ones
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+
     const createdItems = await Promise.all(
       items.map((item) =>
         prisma.cartItem.create({
@@ -56,9 +58,10 @@ router.post("/:userId", async (req, res) => {
 
     res.json({ ...cart, items: createdItems });
   } catch (err) {
-    console.error(err);
+    console.error("Error updating cart:", err);
     res.status(500).json({ error: "Failed to update cart" });
   }
 });
+
 
 export default router;

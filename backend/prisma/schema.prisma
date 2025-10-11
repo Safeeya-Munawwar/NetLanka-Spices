@@ -83,3 +83,20 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
 }
 
+model BulkOrder {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  message     String?
+  productList String? // Product names / description
+  quantity    Int?    // Bulk quantity
+  weight      String? // Weight (e.g., "5kg")
+  status      String   @default("pending") // <-- Add this
+  createdAt   DateTime @default(now())
+}
+
+
+
+
