@@ -196,4 +196,8 @@ export default function SearchBox({ initialValue = "", onClose } = {}) {
       )}
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c79935df29b4f33658f07a730f63486072312712
