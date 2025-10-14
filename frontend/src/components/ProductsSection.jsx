@@ -31,7 +31,7 @@ export default function ProductsSection() {
         <h1 className="font-serif text-[#B59D56] text-xl italic mb-2 text-left">
           Net Spice's
         </h1>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#3A1F04] mb-10 text-left tracking-wide">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#3A1F04] mb-10 text-left tracking-wide">
           FEATURED PRODUCTS
         </h2>
 
@@ -83,7 +83,7 @@ export default function ProductsSection() {
 
                   {/* Price */}
                   <p className="font-extrabold text-black text-[17px]">
-                    Rs.{p.price}
+                    LKR.{p.price}
                   </p>
                 </div>
               </SwiperSlide>
