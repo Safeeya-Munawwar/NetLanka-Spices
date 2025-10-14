@@ -65,7 +65,7 @@ export default function BulkOrdersPage() {
   return (
     <div className="flex min-h-screen bg-yellow-50">
       <AdminSidebar />
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 ml-64 overflow-y-auto">
         <h2 className="text-2xl font-bold text-brown-900 mb-6">
           Bulk Order Requests
         </h2>

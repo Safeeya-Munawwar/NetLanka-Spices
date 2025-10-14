@@ -17,6 +17,8 @@ import filteredProductsAPi from "./api/filtered-products/filteredProducts.js";
 import cartsApi from "./api/carts/carts.js";
 import searchApi from "./api/search/search.js";
 import bulkOrdersApi from "./api/bulkOrders/bulkOrders.js";
+import contactApi from "./api/contact/contact.js";
+
 
 
 dotenv.config();
@@ -46,8 +48,8 @@ app.use("/api/orders", ordersApi);
 app.use("/api/filtered-products", filteredProductsAPi);
 app.use("/api/carts", cartsApi);
 app.use("/api/bulk-orders", bulkOrdersApi);
-
-
+app.use("/api/contact", contactApi);
 app.use("/api/search", searchApi);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
