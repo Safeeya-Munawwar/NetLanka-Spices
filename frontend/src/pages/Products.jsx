@@ -5,59 +5,50 @@ import axios from "axios";
 
 export default function Products() {
   const headingRef = useRef(null);
-  const gridRef = useRef(null);
   const [headingVisible, setHeadingVisible] = useState(false);
-  const [gridVisible, setGridVisible] = useState(false);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
 
-  // ✅ Fetch products (full list or search results)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         let res;
         if (query) {
-          // If there's a search query, use search endpoint
           res = await axios.get(`http://localhost:5000/api/search?query=${query}`);
           setProducts(res.data.products || []);
         } else {
-          // Otherwise, fetch all products
           res = await axios.get("http://localhost:5000/api/products");
-          setProducts(res.data);
+          setProducts(res.data || []);
         }
       } catch (err) {
         console.error("Error fetching products:", err);
         setProducts([]);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchProducts();
-  }, [query]); // Re-fetch whenever the search query changes
+  }, [query]);
 
-  // ✅ Intersection animations
   useEffect(() => {
     const observerOptions = { threshold: 0.3 };
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === headingRef.current) setHeadingVisible(entry.isIntersecting);
-        if (entry.target === gridRef.current) setGridVisible(entry.isIntersecting);
       });
     }, observerOptions);
 
-    const headingEl = headingRef.current;
-    const gridEl = gridRef.current;
-
-    if (headingEl) observer.observe(headingEl);
-    if (gridEl) observer.observe(gridEl);
-
-    return () => {
-      if (headingEl) observer.unobserve(headingEl);
-      if (gridEl) observer.unobserve(gridEl);
-    };
+    if (headingRef.current) observer.observe(headingRef.current);
+    return () => observer.disconnect();
   }, []);
+
+  const SkeletonCard = () => (
+    <div className="animate-pulse bg-gray-100 h-64 rounded-lg shadow-sm"></div>
+  );
 
   return (
     <div>
@@ -74,14 +65,14 @@ export default function Products() {
         </p>
       </section>
 
-      {/* Products Grid Section */}
+      {/* Products Section */}
       <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Heading */}
           <div
             ref={headingRef}
             className={`text-center transition-opacity duration-700 ease-in-out ${
-              headingVisible ? "animate-slide-in-top" : "opacity-0"
+              headingVisible ? "opacity-100" : "opacity-0"
             }`}
           >
             <h2 className="text-yellow-800 font-semibold text-lg mb-2">
@@ -92,22 +83,25 @@ export default function Products() {
             </h1>
           </div>
 
-          {/* Grid */}
-          <div
-            ref={gridRef}
-            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 transition-opacity duration-700 ease-in-out ${
-              gridVisible ? "animate-fade-in" : "opacity-0"
-            }`}
-          >
-            {products.length > 0 ? (
-              products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              <p className="text-center col-span-full text-gray-600">
-                No products found.
-              </p>
-            )}
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {loading
+  ? Array(8)
+      .fill()
+      .map((_, i) => <SkeletonCard key={i} />)
+  : products.length > 0
+  ? products.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product} // pass raw product object
+      />
+    ))
+  : (
+    <p className="text-center col-span-full text-gray-600">
+      No products found.
+    </p>
+  )}
+
           </div>
         </div>
       </section>

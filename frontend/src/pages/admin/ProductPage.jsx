@@ -159,125 +159,141 @@ export default function ProductPage() {
         </button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse bg-yellow-100 rounded-xl shadow-md">
-          <thead className="bg-yellow-200 text-brown-900 uppercase text-sm">
-            <tr>
-              {[
-                "Image",
-                "Title",
-                "Category",
-                "Price",
-                "Quantity",
-                "Active",
-              ].map((col, i) => (
-                <th
-                  key={i}
-                  className="px-6 py-3 cursor-pointer select-none"
-                  onClick={() => handleSort(col.toLowerCase())}
-                >
-                  {col}
-                  {sortConfig.key === col.toLowerCase() ? (
-                    sortConfig.direction === "asc" ? (
-                      <FaSortUp className="inline ml-1" />
-                    ) : (
-                      <FaSortDown className="inline ml-1" />
-                    )
-                  ) : (
-                    <FaSort className="inline ml-1" />
-                  )}
-                </th>
-              ))}
-              <th className="px-6 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-brown-900">
-            {loading ? (
-              <tr>
-                <td colSpan="7" className="text-center py-6 text-brown-400">
-                  Loading products...
-                </td>
-              </tr>
-            ) : currentProducts.length === 0 ? (
-              <tr>
-                <td colSpan="7" className="text-center py-6 text-brown-400">
-                  No products found.
-                </td>
-              </tr>
+{/* Table */}
+<div className="overflow-x-auto">
+  <table className="w-full text-left border-collapse bg-yellow-100 rounded-xl shadow-md">
+    <thead className="bg-yellow-200 text-brown-900 uppercase text-sm">
+      <tr>
+        {[
+          "Image",
+          "Title",
+          "Category",
+          "Price (LKR)",
+          "Price (USD)",
+          "Quantity",
+          "Active",
+        ].map((col, i) => (
+          <th
+            key={i}
+            className="px-6 py-3 cursor-pointer select-none"
+            onClick={() => handleSort(col.toLowerCase())}
+          >
+            {col}
+            {sortConfig.key === col.toLowerCase() ? (
+              sortConfig.direction === "asc" ? (
+                <FaSortUp className="inline ml-1" />
+              ) : (
+                <FaSortDown className="inline ml-1" />
+              )
             ) : (
-              currentProducts.map((prod) => (
-                <tr
-                  key={prod.id}
-                  className="border-b border-yellow-300 hover:bg-yellow-200 transition"
-                >
-                  <td className="px-6 py-4">
-                    {prod.image && (
-                      <img
-                        src={prod.image}
-                        alt={prod.title}
-                        className="w-12 h-12 rounded-lg object-cover border border-yellow-300"
-                      />
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-medium">{prod.title}</td>
-                  <td className="px-6 py-4">{prod.category?.title || "—"}</td>
-                  <td className="px-6 py-4">${prod.price}</td>
-                  <td className="px-6 py-4">{prod.quantity}</td>
-                  <td
-                    className={`px-6 py-4 font-semibold ${
-                      prod.active ? "text-green-700" : "text-red-700"
-                    }`}
-                  >
-                    {prod.active ? "Active" : "Inactive"}
-                  </td>
-                  <td className="px-6 py-4 flex items-end justify-center gap-3 h-full">
-                    <button
-                      onClick={() =>
-                        navigate(`/admin/products/form`, {
-                          state: { product: prod },
-                        })
-                      }
-                      className="text-yellow-700 hover:underline flex items-center justify-center h-6 w-6"
-                    >
-                      <FaEdit className="text-lg mt-1" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(prod.id)}
-                      className="text-red-700 hover:underline flex items-center justify-center h-6 w-6"
-                    >
-                      <FaTrash className="text-lg mt-1" />
-                    </button>
-                  </td>
-                </tr>
-              ))
+              <FaSort className="inline ml-1" />
             )}
-          </tbody>
-        </table>
+          </th>
+        ))}
+        <th className="px-6 py-3">Actions</th>
+      </tr>
+    </thead>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-4 flex justify-center items-center gap-2 text-brown-700 text-sm">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
+    <tbody className="text-brown-900">
+      {loading ? (
+        <tr>
+          <td colSpan="8" className="text-center py-6 text-brown-400">
+            Loading products...
+          </td>
+        </tr>
+      ) : currentProducts.length === 0 ? (
+        <tr>
+          <td colSpan="8" className="text-center py-6 text-brown-400">
+            No products found.
+          </td>
+        </tr>
+      ) : (
+        currentProducts.map((prod) => (
+          <tr
+            key={prod.id}
+            className="border-b border-yellow-300 hover:bg-yellow-200 transition"
+          >
+            <td className="px-6 py-4">
+              {prod.image && (
+                <img
+                  src={prod.image}
+                  alt={prod.title}
+                  className="w-12 h-12 rounded-lg object-cover border border-yellow-300"
+                />
+              )}
+            </td>
+            <td className="px-6 py-4 font-medium">{prod.title}</td>
+            <td className="px-6 py-4">{prod.category?.title || "—"}</td>
+            <td className="px-6 py-4 font-semibold text-yellow-700">
+              Rs. {prod.priceLKR?.toLocaleString() ?? "—"}
+            </td>
+            <td className="px-6 py-4 font-semibold text-yellow-700">
+              ${prod.priceUSD ?? "—"}
+            </td>
+            <td className="px-6 py-4">{prod.quantity}</td>
+            <td
+              className={`px-6 py-4 font-semibold ${
+                prod.active ? "text-green-700" : "text-red-700"
+              }`}
             >
-              Prev
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
-            >
-              Next
-            </button>
-          </div>
-        )}
-      </div>
+              {prod.active ? "Active" : "Inactive"}
+            </td>
+            <td className="px-6 py-4 flex items-center justify-center gap-3">
+              <button
+                onClick={() =>
+                  navigate(`/admin/products/form`, {
+                    state: { product: prod },
+                  })
+                }
+                className="text-yellow-700 hover:underline flex items-center justify-center h-6 w-6"
+              >
+                <FaEdit className="text-lg mt-1" />
+              </button>
+              <button
+                onClick={() => handleDelete(prod.id)}
+                className="text-red-700 hover:underline flex items-center justify-center h-6 w-6"
+              >
+                <FaTrash className="text-lg mt-1" />
+              </button>
+            </td>
+          </tr>
+        ))
+      )}
+    </tbody>
+  </table>
+</div>
+
+{/* Pagination Controls */}
+<div className="flex justify-center mt-6 gap-3">
+  <button
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage((p) => p - 1)}
+    className={`px-4 py-2 rounded-xl border ${
+      currentPage === 1
+        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+        : "bg-yellow-600 text-white hover:bg-yellow-700"
+    }`}
+  >
+    Prev
+  </button>
+
+  <span className="px-3 py-2 text-brown-900">
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage((p) => p + 1)}
+    className={`px-4 py-2 rounded-xl border ${
+      currentPage === totalPages
+        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+        : "bg-yellow-600 text-white hover:bg-yellow-700"
+    }`}
+  >
+    Next
+  </button>
+</div>
+
     </CategoryLayout>
   );
 }

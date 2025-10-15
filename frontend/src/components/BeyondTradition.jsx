@@ -1,10 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function BeyondTradition() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchEntries = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/beyondTradition");
+      setEntries(res.data);
+    } catch (err) {
+      console.error("Failed to fetch Beyond Tradition entries:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEntries();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-12 text-center text-gray-500">
+        Loading Beyond Tradition entries...
+      </section>
+    );
+  }
+
+  if (entries.length === 0) {
+    return (
+      <section className="py-12 text-center text-gray-500">
+        No Beyond Tradition entries available.
+      </section>
+    );
+  }
+
+  // Flatten all images into individual cards, ensuring first image is first
+  const allCards = entries.flatMap(entry =>
+    entry.images.map((img, index) => ({
+      title: entry.title || "",
+      subtitle: entry.subtitle || "",
+      description: entry.description || "",
+      image: img,
+      isFirst: index === 0,
+    }))
+  );
+
+  // Optional: sort so that first images appear first (just in case)
+  allCards.sort((a, b) => (a.isFirst === b.isFirst ? 0 : a.isFirst ? -1 : 1));
+
   return (
-    <section className="bg-white py-12 sm:py-16">
+    <section className="bg-[#F9F5EE] py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Section Titles */}
         <h1 className="font-serif text-[#B59D56] text-lg sm:text-xl italic mb-1">
           Net Spice's
         </h1>
@@ -12,79 +60,40 @@ export default function BeyondTradition() {
           BEYOND TRADITION
         </h2>
 
-        <div className="bg-slate-100 max-w-6xl mx-auto px-4 sm:px-5 py-5 rounded-md">
-          {/* First Two Main Halves */}
-          <div className="flex flex-col md:flex-row gap-3 mb-3">
-            {/* Left Half with Overlay */}
-            <div className="w-full md:w-1/2 relative">
-              <div className="rounded-md overflow-hidden h-[280px] sm:h-[350px] md:h-[420px]">
-                <img
-                  src="/9.webp"
-                  alt="Processing continuation"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Overlay Content Box */}
-              <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-0 md:m-8 p-4 sm:p-6 bg-white/80 backdrop-blur-[3px] w-[90%] sm:w-[85%] rounded-md">
-                <h3 className="text-base sm:text-lg font-bold text-[#1F4D3E] mb-2 sm:mb-3 uppercase">
-                  SEE HOW IT PROCESSED
-                </h3>
-                <p className="text-xs sm:text-sm md:text-base leading-relaxed text-gray-800">
-                  Handpicked at dawn, only the finest Cinnamon are carefully plucked
-                  by skilled hands in Sri Lanka’s lush highlands. These tender leaves
-                  are quickly transported to the factory, where they undergo expert
-                  withering, rolling, oxidation, and drying processes to preserve
-                  their rich flavor and aroma. Once perfected, the tea is meticulously
-                  sorted, graded, and packaged with care, to deliver the pure taste of
-                  Ceylon to the world.
-                </p>
-              </div>
-            </div>
-
-            {/* Right Half */}
-            <div className="w-full md:w-1/2 flex flex-col gap-3">
-              <div className="rounded-md overflow-hidden h-[180px] sm:h-[200px] md:h-[210px]">
-                <img
-                  src="/8.webp"
-                  alt="Processing continuation"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="rounded-md overflow-hidden h-[180px] sm:h-[200px] md:h-[210px]">
-                <img
-                  src="/5.webp"
-                  alt="Processing continuation"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Third Row of 3 Images */}
-          <div className="flex flex-col sm:flex-row flex-wrap md:flex-nowrap gap-3">
-            <div className="w-full sm:w-1/2 md:w-1/3 rounded-md overflow-hidden h-[200px] sm:h-[250px] md:h-[300px]">
+        {/* Single Grid for all image cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {allCards.map((card, idx) => (
+            <div
+              key={idx}
+              className="relative h-64 rounded-xl overflow-hidden shadow-lg border border-[#D9C8A2] hover:scale-105 transition-transform duration-300"
+            >
+              {/* Image */}
               <img
-                src="/7.webp"
-                alt="Processing continuation"
+                src={`http://localhost:5000${card.image}`}
+                alt={card.title || "Beyond Tradition"}
                 className="w-full h-full object-cover"
               />
+
+              {/* Elegant Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">
+                {card.title && (
+                  <h3 className="text-lg sm:text-xl font-serif font-bold text-white mb-1 uppercase">
+                    {card.title}
+                  </h3>
+                )}
+                {card.subtitle && (
+                  <p className="text-sm sm:text-base italic text-[#FFD580] mb-1">
+                    {card.subtitle}
+                  </p>
+                )}
+                {card.description && (
+                  <p className="text-xs sm:text-sm md:text-base text-white line-clamp-3">
+                    {card.description}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="w-full sm:w-1/2 md:w-1/3 rounded-md overflow-hidden h-[200px] sm:h-[250px] md:h-[300px]">
-              <img
-                src="/3.webp"
-                alt="Processing continuation"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="w-full sm:w-1/2 md:w-1/3 rounded-md overflow-hidden h-[200px] sm:h-[250px] md:h-[300px]">
-              <img
-                src="/4.webp"
-                alt="Processing continuation"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

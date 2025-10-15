@@ -6,6 +6,25 @@ import { useCart } from "../context/CartContext";
 function ProductCard({ product }) {
   const { addToCart } = useCart();
 
+  // Conversion rate: 1 LKR ≈ 0.0045 USD (adjust if needed)
+  const conversionRate = 0.0045;
+
+  // Format price safely
+  const formatPrice = (priceLKR, priceUSD) => {
+    const lkr = parseFloat(priceLKR);
+    const usd = parseFloat(priceUSD);
+
+    const lkrText = !isNaN(lkr) ? `Rs. ${lkr.toLocaleString()}` : "Rs. —";
+    const usdText =
+      !isNaN(usd)
+        ? `$${usd.toFixed(2)}`
+        : !isNaN(lkr)
+        ? `$${(lkr * conversionRate).toFixed(2)}`
+        : "$—";
+
+    return `${lkrText} / ${usdText}`;
+  };
+
   return (
     <div
       className="relative bg-white border-2 border-yellow-900 rounded-2xl shadow-md 
@@ -46,11 +65,12 @@ function ProductCard({ product }) {
           </button>
         </div>
       </div>
+
       {/* Product Info */}
       <div className="p-4 flex flex-col flex-grow text-center z-10">
         <h3 className="text-lg font-bold text-yellow-900">{product.title}</h3>
         <p className="text-yellow-800 mt-2 font-semibold">
-          LKR {product.price.toLocaleString()}/kg
+          {formatPrice(product.priceLKR, product.priceUSD)} per kg
         </p>
       </div>
     </div>

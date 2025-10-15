@@ -33,7 +33,8 @@ model Product {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
-  price       Float
+priceLKR Float @default(0)
+priceUSD Float @default(0)
   quantity    Int
   image       String?
   active      Boolean  @default(true)
@@ -44,21 +45,23 @@ model Product {
 }
 
 model Cart {
-  id      String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId  String      @unique
-  items   CartItem[]
-  updatedAt DateTime  @updatedAt
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String     @unique
+  items     CartItem[]
+  updatedAt DateTime   @updatedAt
 }
 
 model CartItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   productId String
   name      String
-  price     Float
+  priceLKR  Float
+  priceUSD  Float
   quantity  Int
+  weight    Float     // weight in KG
   image     String?
   cartId    String
-  cart      Cart    @relation(fields: [cartId], references: [id])
+  cart      Cart      @relation(fields: [cartId], references: [id])
 }
 
 model Order {
@@ -66,7 +69,8 @@ model Order {
   userId        String?     @db.ObjectId
   user          User?       @relation(fields: [userId], references: [id])
   items         OrderItem[]
-  totalPrice    Float
+totalPriceLKR Float?
+totalPriceUSD Float?
   paymentMethod String
   status        String      @default("Pending")
   createdAt     DateTime    @default(now())
@@ -76,9 +80,10 @@ model OrderItem {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   productId String
   name      String
-  price     Float
+priceLKR  Float?
+priceUSD  Float?
   quantity  Int
-  weightKg  Float?     // 👈 ADD THIS
+  weightKg  Float?
   image     String?
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id])
@@ -98,6 +103,34 @@ model BulkOrder {
   createdAt   DateTime @default(now())
 }
 
+model Service {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  image       String
+  buttonText  String?
+  link        String?
+  createdAt   DateTime @default(now())
+}
+
+model Blog {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  category    String
+  image       String
+  date        String
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model BeyondTradition {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String?   // now optional
+  subtitle    String?
+  description String?   // now optional
+  images      String[]
+  createdAt   DateTime @default(now())
+}
 
 
 

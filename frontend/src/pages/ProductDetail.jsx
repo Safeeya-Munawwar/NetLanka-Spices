@@ -15,6 +15,26 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [weight, setWeight] = useState("");
 
+  // ✅ Add conversion rate
+  const conversionRate = 0.0045; // 1 LKR ≈ 0.0045 USD
+
+  // ✅ Dual price formatter
+  const formatDualPrice = (priceLKR, priceUSD, weight = 1, qty = 1) => {
+    const lkrTotal = priceLKR ? priceLKR * weight * qty : null;
+    const usdTotal =
+      priceUSD
+        ? priceUSD * qty
+        : lkrTotal
+        ? lkrTotal * conversionRate
+        : null;
+
+    const lkrText = lkrTotal !== null ? `Rs. ${lkrTotal.toLocaleString()}` : "Rs. —";
+    const usdText = usdTotal !== null ? `$${usdTotal.toFixed(2)}` : "$—";
+
+    return `${lkrText} / ${usdText}`;
+  };
+  
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -96,8 +116,9 @@ export default function ProductDetail() {
               {product.title}
             </h1>
             <p className="text-2xl md:text-3xl font-semibold text-yellow-800 mb-4">
-              ${product.price}
-            </p>
+  {formatDualPrice(product.priceLKR, product.priceUSD)}
+</p>
+
             <p className="text-yellow-700 mb-6 leading-relaxed text-justify">
               {product.description ||
                 "A premium product carefully selected for quality and freshness."}

@@ -22,6 +22,12 @@ import ProductFormPage from "./components/admin/ProductFormPage";
 import SearchResults from "./pages/SearchResults";
 import BulkOrders from "./pages/admin/BulkOrdersPage";
 import BulkOrderForm from "./pages/BulkOrderForm";
+import ServicesPage from "./pages/admin/contents/Services";
+import BlogsPage from "./pages/admin/contents/Blogs";
+import ServicesForm from "./pages/admin/contents/ServiceForm";
+import BlogsForm from "./pages/admin/contents/BlogForm";
+import BeyondTraditionPage from "./pages/admin/contents/BeyondTradition";
+import BeyondForm from "./pages/admin/contents/BeyondForm";
 
 function App() {
   return (
@@ -134,6 +140,18 @@ function App() {
        
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin/contents/services" element={<ServicesPage />} />
+        <Route path="/admin/contents/services/form" element={<ServicesForm />} />
+        <Route path="/admin/contents/blogs" element={<BlogsPage />} />
+        <Route path="/admin/contents/blogform" element={<BlogsForm />} />
+        <Route path="/admin/contents/beyond" element={<BeyondTraditionPage />} />
+        <Route path="/admin/contents/beyondTradition/form" element={<BeyondForm />} />
+
+
+
+<Route path="/admin/contents/beyondTradition" element={<BeyondTraditionPage />} />
+<Route path="/admin/contents/beyondTradition/form" element={<BeyondForm />} />
+
         <Route path="/admin/products" element={<ProductPage />} />
         <Route path="/admin/products/form" element={<ProductFormPage />} />
         <Route path="/admin/products/edit/:id" element={<ProductFormPage />} />

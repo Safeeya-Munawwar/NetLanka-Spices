@@ -9,7 +9,10 @@ export default function ProductFormPage() {
   const editingProduct = state?.product || null;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [priceLKR, setPriceLKR] = useState("");
+  const [priceUSD, setPriceUSD] = useState("");
+  const [manualUSD, setManualUSD] = useState(false); // track manual edit
+  const conversionRate = 0.0051; // 1 LKR ≈ 0.0051 USD (update as needed)  
   const [quantity, setQuantity] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
@@ -34,13 +37,32 @@ export default function ProductFormPage() {
     if (editingProduct) {
       setTitle(editingProduct.title || "");
       setDescription(editingProduct.description || "");
-      setPrice(editingProduct.price || "");
+      setPriceLKR(editingProduct.priceLKR || editingProduct.price || "");
+      setPriceUSD(editingProduct.priceUSD || "");
       setQuantity(editingProduct.quantity || "");
       setCategoryId(editingProduct.categoryId || "");
       setImagePreview(editingProduct.image || "");
       setActive(editingProduct.active ?? true);
     }
   }, [editingProduct]);
+
+  // When LKR changes
+const handleLKRChange = (e) => {
+  const value = e.target.value;
+  setPriceLKR(value);
+
+  // Only update USD if admin hasn't manually edited it
+  if (!manualUSD) {
+    const usdValue = value ? (parseFloat(value) * conversionRate).toFixed(2) : "";
+    setPriceUSD(usdValue);
+  }
+};
+
+// When USD changes manually
+const handleUSDChange = (e) => {
+  setPriceUSD(e.target.value);
+  setManualUSD(true); // mark as manually edited
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +71,8 @@ export default function ProductFormPage() {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("price", price);
+    formData.append("priceLKR", priceLKR);
+    formData.append("priceUSD", priceUSD);
     formData.append("quantity", quantity);
     formData.append("categoryId", categoryId);
     formData.append("active", active);
@@ -105,26 +128,38 @@ export default function ProductFormPage() {
             </div>
             {/* Price & Quantity */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-brown-800 mb-1">Price</label>
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-brown-800 mb-1">Quantity</label>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
-                />
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+  <div>
+    <label className="block text-brown-800 mb-1">Price (LKR)</label>
+    <input
+      type="number"
+      value={priceLKR}
+      onChange={handleLKRChange}
+      required
+      className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+    />
+  </div>
+  <div>
+    <label className="block text-brown-800 mb-1">Price (USD)</label>
+    <input
+      type="number"
+      value={priceUSD}
+      onChange={handleUSDChange}
+      className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+    />
+  </div>
+</div>
+
+            </div>
+            <div>
+              <label className="block text-brown-800 mb-1">Quantity</label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                required
+                className="w-full px-4 py-2 rounded-lg bg-yellow-50 text-brown-900 border border-yellow-300 focus:ring-2 focus:ring-yellow-500 outline-none"
+              />
             </div>
             {/* Category */}
             <div>

@@ -46,13 +46,14 @@ router.post("/", upload.single("image"), async (req, res) => {
       data: {
         title: req.body.title,
         description: req.body.description,
-        price: parseFloat(req.body.price),
+        priceLKR: parseFloat(req.body.priceLKR),
+        priceUSD: parseFloat(req.body.priceUSD),
         quantity: parseInt(req.body.quantity),
         image: imageUrl,
         active: req.body.active === "true" || req.body.active === true,
         categoryId: req.body.categoryId,
       },
-    });
+    });    
     res.json(newProduct);
   } catch (err) {
     console.error(err);
@@ -76,13 +77,14 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       data: {
         title: req.body.title,
         description: req.body.description,
-        price: parseFloat(req.body.price),
+        priceLKR: parseFloat(req.body.priceLKR),
+        priceUSD: parseFloat(req.body.priceUSD),
         quantity: parseInt(req.body.quantity),
         image: imageUrl,
         active: req.body.active === "true" || req.body.active === true,
         categoryId: req.body.categoryId,
       },
-    });
+    });    
     res.json(updatedProduct);
   } catch (err) {
     console.error(err);

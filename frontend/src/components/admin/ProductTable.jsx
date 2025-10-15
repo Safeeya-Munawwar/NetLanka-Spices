@@ -28,8 +28,7 @@ export default function ProductTable() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
       await axios.delete(`http://localhost:5000/api/products/${id}`);
       setProducts(products.filter((p) => p.id !== id));
@@ -57,7 +56,7 @@ export default function ProductTable() {
                 <th className="px-6 py-3">Image</th>
                 <th className="px-6 py-3">Title</th>
                 <th className="px-6 py-3">Category</th>
-                <th className="px-6 py-3">Price</th>
+                <th className="px-6 py-3">Price (LKR / USD)</th>
                 <th className="px-6 py-3">Quantity</th>
                 <th className="px-6 py-3">Active</th>
                 <th className="px-6 py-3 text-right">Actions</th>
@@ -93,18 +92,21 @@ export default function ProductTable() {
                     </td>
                     <td className="px-6 py-4 font-medium">{prod.title}</td>
                     <td className="px-6 py-4">{prod.category?.title || "—"}</td>
-                    <td className="px-6 py-4">${prod.price}</td>
+                    <td className="px-6 py-4">
+                      Rs. {prod.priceLKR || prod.price || "—"} <br />
+                      <span className="text-sm text-brown-600">
+                        ${prod.priceUSD || "—"}
+                      </span>
+                    </td>
                     <td className="px-6 py-4">{prod.quantity}</td>
                     <td className="px-6 py-4">
                       {prod.active ? (
-                        <span className="text-green-700 font-semibold">
-                          Yes
-                        </span>
+                        <span className="text-green-700 font-semibold">Yes</span>
                       ) : (
                         <span className="text-red-700 font-semibold">No</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 flex items-center gap-3">
+                    <td className="px-6 py-4 flex items-center gap-3 relative">
                       <button
                         onClick={() => toggleMenu(prod.id)}
                         className="p-2 rounded-full hover:bg-yellow-300"

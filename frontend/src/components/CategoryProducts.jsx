@@ -22,23 +22,29 @@ function ProductCard({ product }) {
           <Link
             to={`/products/${product.id}`}
             title="View Details"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-[#5C4033] text-white shadow hover:bg-[#3D2B1F] transition transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center rounded-full 
+            bg-yellow-900 text-white shadow hover:bg-yellow-700 
+            transition transform hover:scale-110"
           >
             <FaInfoCircle />
           </Link>
           <button
             onClick={() => addToCart(product)}
             title="Add to Cart"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-[#3D2B1F] text-white shadow hover:bg-[#5C4033] transition transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center rounded-full 
+            bg-yellow-700 text-white shadow hover:bg-yellow-600 
+            transition transform hover:scale-110"
           >
             <FaCartPlus />
           </button>
         </div>
       </div>
 
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-[#5C4033]">{product.title}</h3>
-        <p className="text-[#3D2B1F] mt-2 font-semibold">${product.price}</p>
+      <div className="p-4 flex flex-col flex-grow text-center z-10">
+      <h3 className="text-lg font-bold text-yellow-900">{product.title}</h3>
+      <p className="text-yellow-800 mt-2 font-semibold">
+          LKR {product.price.toLocaleString()}/kg
+        </p>
       </div>
     </div>
   );

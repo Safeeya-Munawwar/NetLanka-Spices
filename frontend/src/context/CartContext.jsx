@@ -8,109 +8,75 @@ export const CartProvider = ({ children }) => {
   const { user } = useUser();
   const [cartItems, setCartItems] = useState([]);
 
-  // Fetch cart from backend on user login
-  useEffect(() => {
-    if (!user?.id) {
-      setCartItems([]);
-      return;
-    }
+  const parseWeightToKg = (weight) => {
+    if (!weight) return 1;
+    if (typeof weight === "number") return weight;
+    const w = weight.toString().toLowerCase().trim().replace(/\s/g, "");
+    if (w.endsWith("g")) return parseFloat(w) / 1000;
+    if (w.endsWith("kg")) return parseFloat(w);
+    return parseFloat(w) || 1;
+  };
 
+  // Fetch cart from backend
+  useEffect(() => {
+    if (!user?.id) return setCartItems([]);
     const fetchCart = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/carts/${user.id}`);
         const items = res.data.items?.map(i => ({
-          id: i.productId + "-" + (i.weight || "1"), // unique id per weight
+          id: i.productId + "-" + (i.weight || 1),
           productId: i.productId,
           name: i.name,
-          price: i.price,
-          quantity: i.quantity,
-          weight: i.weight || 1,
+          priceLKR: i.priceLKR || 0,
+          priceUSD: i.priceUSD || 0,
+          quantity: i.quantity || 1,
+          weight: parseWeightToKg(i.weight),
           image: i.image,
         })) || [];
         setCartItems(items);
       } catch (err) {
-        console.error("Failed to fetch cart:", err);
+        console.error("Failed to fetch cart:", err.response?.data || err.message);
       }
     };
-
     fetchCart();
   }, [user?.id]);
 
-  // Sync cart to backend whenever it changes
+  // Sync cart to backend
   useEffect(() => {
     if (!user?.id) return;
     const saveCart = async () => {
       try {
-        await axios.post(`http://localhost:5000/api/carts/${user.id}`, {
-          items: cartItems.map(({ productId, name, price, quantity, weight, image }) => ({
-            productId, name, price, quantity, weight, image,
-          })),
-        });
+        await axios.post(`http://localhost:5000/api/carts/${user.id}`, { items: cartItems });
       } catch (err) {
-        console.error("Failed to update cart:", err);
+        console.error("Failed to save cart:", err.response?.data || err.message);
       }
     };
     saveCart();
   }, [cartItems, user?.id]);
 
-  // Add product to cart
   const addToCart = (product) => {
-    setCartItems(prev => {
-      const weightKg = product.weightUnit === "g" ? product.weight / 1000 : product.weight;
-      const id = product.id + "-" + weightKg; // unique per weight
-  
-      const exist = prev.find(item => item.id === id);
-  
-      if (exist) {
-        return prev.map(item =>
-          item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [
-          ...prev,
-          {
-            id,
-            productId: product.id,
-            name: product.title,
-            price: product.price,
-            quantity: 1, // ✅ Always start with 1
-            weight: weightKg,
-            image: product.image,
-          }
-        ];
-      }
-    });
+    const weightKg = parseWeightToKg(product.weight);
+    const id = product.id + "-" + weightKg;
+    const existing = cartItems.find(i => i.id === id);
+    if (existing) {
+      setCartItems(cartItems.map(i => i.id === id ? { ...i, quantity: i.quantity + (product.quantity || 1) } : i));
+    } else {
+      setCartItems([...cartItems, { ...product, id, weight: weightKg, quantity: product.quantity || 1 }]);
+    }
   };
-  
 
-  // Remove item by unique id
-  const removeFromCart = (id) =>
-    setCartItems(prev => prev.filter(item => item.id !== id));
+  const updateQuantity = (id, quantity) => {
+    setCartItems(cartItems.map(i => i.id === id ? { ...i, quantity } : i));
+  };
 
-  // Update quantity for a product by unique id
-  const updateQuantity = (id, quantity) =>
-    setCartItems(prev =>
-      prev.map(item => item.id === id ? { ...item, quantity } : item)
-    );
-
-  // Clear cart
+  const removeFromCart = (id) => setCartItems(cartItems.filter(i => i.id !== id));
   const clearCart = () => setCartItems([]);
 
-  // Calculate total price
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + (item.price || 0) * item.quantity * (item.weight || 1),
-    0
-  );
+  const totalPriceLKR = cartItems.reduce((acc, i) => acc + (i.priceLKR || 0) * i.weight * i.quantity, 0);
+  const totalPriceUSD = cartItems.reduce((acc, i) => acc + (i.priceUSD || 0) * i.weight * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{
-      cartItems,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      clearCart,
-      totalPrice,
-    }}>
+    <CartContext.Provider value={{ cartItems, addToCart, updateQuantity, removeFromCart, clearCart, totalPriceLKR, totalPriceUSD }}>
       {children}
     </CartContext.Provider>
   );

@@ -82,9 +82,11 @@ export default function ProductsSection() {
 
 
                   {/* Price */}
-                  <p className="font-extrabold text-black text-[17px]">
-                    Rs.{p.price}
-                  </p>
+                  {/* Price */}
+<p className="font-extrabold text-black text-[17px]">
+  Rs.{p.priceLKR?.toLocaleString()} / ${p.priceUSD?.toFixed(2)}
+</p>
+
                 </div>
               </SwiperSlide>
             ))}
