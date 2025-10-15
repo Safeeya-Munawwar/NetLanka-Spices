@@ -1,20 +1,17 @@
 import express from "express";
 const router = express.Router();
 
-// Helper: parse user input to KG
 const parseWeightToKg = (weight) => {
-  if (!weight) return 1;           // default 1 kg
+  if (!weight) return 1;
   if (typeof weight === "number") return weight;
   const w = weight.toString().toLowerCase().trim();
   if (w.endsWith("g")) return parseFloat(w) / 1000;
   if (w.endsWith("kg")) return parseFloat(w);
-  // if just number, assume grams if <100, else kg
   const num = parseFloat(w);
-  return num > 100 ? num : num / 1000;
+  return isNaN(num) ? 1 : num;
 };
 
-
-// Get cart (safe upsert)
+// ✅ Get or create cart
 router.get("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
@@ -32,7 +29,7 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-// Update cart
+// ✅ Update entire cart
 router.post("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
@@ -45,28 +42,17 @@ router.post("/:userId", async (req, res) => {
       create: { userId },
     });
 
-    // Delete old items
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
 
-    // Only create items with valid numbers
-    const createdItems = await Promise.all(
-      (items || []).map((item) => {
-        const priceLKR = Number(item.priceLKR);
-        const priceUSD = Number(item.priceUSD);
-        const quantity = Number(item.quantity);
+    const validItems = await Promise.all(
+      (items || []).map(async (item) => {
+        const priceLKR = Number(item.priceLKR) || 0;
+        const priceUSD = Number(item.priceUSD) || 0;
+        const quantity = Number(item.quantity) || 1;
         const weight = parseWeightToKg(item.weight);
 
-        if (
-          !item.productId ||
-          !item.name ||
-          isNaN(priceLKR) ||
-          isNaN(priceUSD) ||
-          isNaN(quantity) ||
-          isNaN(weight)
-        ) {
-          console.warn("Skipping invalid cart item:", item);
+        if (!item.productId || !item.name || isNaN(priceLKR) || isNaN(priceUSD))
           return null;
-        }
 
         return prisma.cartItem.create({
           data: {
@@ -83,15 +69,11 @@ router.post("/:userId", async (req, res) => {
       })
     );
 
-    // Remove nulls
-    const validItems = createdItems.filter(Boolean);
-
-    res.json({ ...cart, items: validItems });
+    res.json({ ...cart, items: validItems.filter(Boolean) });
   } catch (err) {
     console.error("Cart update failed:", err);
     res.status(500).json({ error: "Failed to update cart" });
   }
 });
-
 
 export default router;

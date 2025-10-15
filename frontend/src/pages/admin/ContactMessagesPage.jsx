@@ -48,10 +48,24 @@ export default function ContactMessagesPage() {
     }
   };
 
-  const openModal = (contact) => {
+  const openModal = async (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
+  
+    if (!contact.read) {
+      try {
+        await axios.patch(
+          `${process.env.REACT_APP_API_URL}/contact/${contact.id}/read`,
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        fetchContacts(); // refresh table
+      } catch (err) {
+        console.error("Failed to mark as read:", err);
+      }
+    }
   };
+  
 
   const closeModal = () => {
     setSelectedContact(null);

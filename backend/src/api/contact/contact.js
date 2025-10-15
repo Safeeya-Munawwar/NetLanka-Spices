@@ -71,4 +71,19 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.patch("/:id/read", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updated = await prisma.contact.update({
+      where: { id },
+      data: { read: true },
+    });
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Failed to mark message as read" });
+  }
+});
+
+
 export default router;

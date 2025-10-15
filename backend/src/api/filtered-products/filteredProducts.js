@@ -8,15 +8,19 @@ router.get("/", async (req, res) => {
       where: category
         ? {
             category: {
-              slug: {
-                equals: category,
-                mode: "insensitive",
-              },
+              slug: { equals: category, mode: "insensitive" },
             },
           }
         : {},
-      include: { category: true },
-    });
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        priceLKR: true,
+        priceUSD: true,
+        category: true,
+      },
+    });    
     res.json(products);
   } catch (err) {
     console.error(err);

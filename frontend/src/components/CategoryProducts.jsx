@@ -6,21 +6,28 @@ import axios from "axios";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const conversionRate = 0.0045; // Example: 1 LKR = 0.0045 USD
+
+  // Safely get LKR price
+  const priceLKR = product?.priceLKR ?? null;
+const priceUSD = product?.priceUSD ?? (priceLKR ? (priceLKR * conversionRate).toFixed(2) : null);
 
   return (
     <div
       className="relative bg-yellow-100 rounded-xl shadow-md overflow-hidden
       transition-transform duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer flex flex-col h-full border-2 border-[#5C4033]"
     >
+      {/* Image */}
       <div className="relative overflow-hidden rounded-t-xl">
         <img
-          src={product.image}
-          alt={product.title}
+          src={product?.image || "/images/placeholder.jpg"}
+          alt={product?.title || "Product Image"}
           className="w-full h-48 object-cover transform hover:scale-110 transition duration-500"
         />
+        {/* Icons */}
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           <Link
-            to={`/products/${product.id}`}
+            to={`/products/${product?.id}`}
             title="View Details"
             className="w-10 h-10 flex items-center justify-center rounded-full 
             bg-yellow-900 text-white shadow hover:bg-yellow-700 
@@ -40,13 +47,28 @@ function ProductCard({ product }) {
         </div>
       </div>
 
+      {/* Info */}
       <div className="p-4 flex flex-col flex-grow text-center z-10">
-      <h3 className="text-lg font-bold text-yellow-900">{product.title}</h3>
-      <p className="text-yellow-800 mt-2 font-semibold">
-          LKR {product.price.toLocaleString()}/kg
+      <h3 className="text-lg font-bold text-yellow-900">
+          {product?.title || "Unnamed Product"}
+        </h3>
+        <p className="text-yellow-800 mt-2 font-semibold">
+          {priceLKR !== null ? (
+            <>
+              LKR {priceLKR.toLocaleString()} / ${priceUSD} per Kg
+              
+            </>
+          ) : (
+            <span className="text-gray-500 italic">Price not available</span>
+          )}
         </p>
       </div>
     </div>
+
+
+
+
+  
   );
 }
 
