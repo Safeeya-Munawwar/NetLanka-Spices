@@ -31,7 +31,7 @@ export default function ProductsSection() {
         <h1 className="font-serif text-[#B59D56] text-xl italic mb-2 text-left">
           Net Spice's
         </h1>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#3A1F04] mb-10 text-left tracking-wide">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#3A1F04] mb-10 text-left tracking-wide">
           FEATURED PRODUCTS
         </h2>
 
@@ -82,11 +82,17 @@ export default function ProductsSection() {
 
 
                   {/* Price */}
+<<<<<<< HEAD
                   {/* Price */}
 <p className="font-extrabold text-black text-[17px]">
   Rs.{p.priceLKR?.toLocaleString()} / ${p.priceUSD?.toFixed(2)}
 </p>
 
+=======
+                  <p className="font-extrabold text-black text-[17px]">
+                    LKR.{p.price}
+                  </p>
+>>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
                 </div>
               </SwiperSlide>
             ))}

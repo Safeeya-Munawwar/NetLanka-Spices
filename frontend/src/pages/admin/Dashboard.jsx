@@ -91,12 +91,19 @@ export default function Dashboard() {
       link: "/admin/users",
       count: stats.users,
     },
+     {
+      title: "Manage Messages",
+      description: "View and manage user accounts.",
+      icon: <FaUsers className="h-8 w-8 text-yellow-900" />,
+      link: "/admin/contact-messages",
+      count: stats.messages,
+    },
   ];
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex-1">
+         <div className="flex-1 ml-64 overflow-y-auto">
         {/* Hero Header */}
         <section
           className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-center bg-cover bg-no-repeat bg-fixed flex flex-col justify-center items-center"

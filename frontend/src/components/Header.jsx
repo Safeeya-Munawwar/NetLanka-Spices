@@ -47,68 +47,73 @@ export default function Header() {
 
       {/* Features Section */}
       <section className="w-full bg-white py-10">
-        <div className="flex justify-center">
-          <div className="bg-[#faf7f4] max-w-5xl w-full mx-4 sm:mx-6 md:mx-8 lg:mx-auto rounded-xl py-10 px-6 sm:px-8 md:px-12 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-              {/* Feature 1 */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px] mx-auto sm:mx-0">
-                  <FaCoffee className="text-[#2d2d2d] w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#2d2d2d] text-lg mb-1">Flavors</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-                    provident omnis esse illo consequatur eveniet distinctio nulla molestias.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px] mx-auto sm:mx-0">
-                  <FaGlobe className="text-[#2d2d2d] w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#2d2d2d] text-lg mb-1">Export</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, maxime, minima ipsum inventore enim cum sit.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px] mx-auto sm:mx-0">
-                  <FaSeedling className="text-[#2d2d2d] w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#2d2d2d] text-lg mb-1">Cultivation</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Et
-                    temporibus corporis esse rem non fugit tenetur modi saepe.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px] mx-auto sm:mx-0">
-                  <FaEye className="text-[#2d2d2d] w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#2d2d2d] text-lg mb-1">Testing</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Laudantium quia quod fugit facilis labore nesciunt iste
-                    necessitatibus, quas recusandae deleniti.
-                  </p>
-                </div>
-              </div>
-            </div>
+  <div className="flex justify-center">
+    <div className="bg-[#faf7f4] max-w-5xl w-full mx-4 sm:mx-6 md:mx-8 lg:mx-auto rounded-xl py-10 px-6 sm:px-8 md:px-12 shadow-sm">
+      {/* Grid: 2x2 on mobile, 2x2 on md (unchanged) */}
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 md:gap-10">
+        
+        {/* Feature 1 */}
+        <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-3 md:gap-4">
+          <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px]">
+            <FaCoffee className="text-[#2d2d2d] w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[#2d2d2d] text-base md:text-lg mb-1">Flavors</h3>
+            {/* Hide description on mobile */}
+            <p className="hidden md:block text-gray-600 text-sm leading-relaxed">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
+              provident omnis esse illo consequatur eveniet distinctio nulla molestias.
+            </p>
           </div>
         </div>
-      </section>
+
+        {/* Feature 2 */}
+        <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-3 md:gap-4">
+          <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px]">
+            <FaGlobe className="text-[#2d2d2d] w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[#2d2d2d] text-base md:text-lg mb-1">Export</h3>
+            <p className="hidden md:block text-gray-600 text-sm leading-relaxed">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, maxime, minima ipsum inventore enim cum sit.
+            </p>
+          </div>
+        </div>
+
+        {/* Feature 3 */}
+        <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-3 md:gap-4">
+          <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px]">
+            <FaSeedling className="text-[#2d2d2d] w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[#2d2d2d] text-base md:text-lg mb-1">Cultivation</h3>
+            <p className="hidden md:block text-gray-600 text-sm leading-relaxed">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Et
+              temporibus corporis esse rem non fugit tenetur modi saepe.
+            </p>
+          </div>
+        </div>
+
+        {/* Feature 4 */}
+        <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-3 md:gap-4">
+          <div className="bg-[#f3b41b] p-3 rounded-md flex items-center justify-center min-w-[45px] min-h-[45px]">
+            <FaEye className="text-[#2d2d2d] w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[#2d2d2d] text-base md:text-lg mb-1">Testing</h3>
+            <p className="hidden md:block text-gray-600 text-sm leading-relaxed">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Laudantium quia quod fugit facilis labore nesciunt iste
+              necessitatibus, quas recusandae deleniti.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
     </div>
   );
 }

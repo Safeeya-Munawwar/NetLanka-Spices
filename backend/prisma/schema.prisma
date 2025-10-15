@@ -103,6 +103,7 @@ model BulkOrder {
   createdAt   DateTime @default(now())
 }
 
+<<<<<<< HEAD
 model Service {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -130,6 +131,15 @@ model BeyondTradition {
   description String?   // now optional
   images      String[]
   createdAt   DateTime @default(now())
+=======
+model Contact {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+>>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
 }
 
 

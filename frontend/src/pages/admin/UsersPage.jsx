@@ -206,7 +206,7 @@ export default function UsersPage() {
     <div className="flex min-h-screen bg-yellow-50">
       <AdminSidebar />
 
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 ml-64 overflow-y-auto">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-yellow-100 rounded-2xl p-6 shadow-md border border-yellow-300 text-center cursor-pointer">

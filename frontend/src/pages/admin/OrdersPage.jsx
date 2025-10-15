@@ -115,7 +115,7 @@ export default function OrdersPage() {
   return (
     <div className="flex min-h-screen bg-yellow-50">
       <AdminSidebar />
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 ml-64 overflow-y-auto">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
           {[

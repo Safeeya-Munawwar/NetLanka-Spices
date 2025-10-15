@@ -22,12 +22,16 @@ import ProductFormPage from "./components/admin/ProductFormPage";
 import SearchResults from "./pages/SearchResults";
 import BulkOrders from "./pages/admin/BulkOrdersPage";
 import BulkOrderForm from "./pages/BulkOrderForm";
+<<<<<<< HEAD
 import ServicesPage from "./pages/admin/contents/Services";
 import BlogsPage from "./pages/admin/contents/Blogs";
 import ServicesForm from "./pages/admin/contents/ServiceForm";
 import BlogsForm from "./pages/admin/contents/BlogForm";
 import BeyondTraditionPage from "./pages/admin/contents/BeyondTradition";
 import BeyondForm from "./pages/admin/contents/BeyondForm";
+=======
+import ContactMessagesPage from "./pages/admin/ContactMessagesPage";
+>>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
 
 function App() {
   return (
@@ -164,6 +168,8 @@ function App() {
         <Route path="/admin/orders" element={<OrdersPage />} />
         <Route path="/admin/bulk-orders" element={<BulkOrders />} />
         <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin/contact-messages" element={<ContactMessagesPage />} />
+
       </Routes>
     </Router>
   );
