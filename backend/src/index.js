@@ -17,15 +17,10 @@ import filteredProductsAPi from "./api/filtered-products/filteredProducts.js";
 import cartsApi from "./api/carts/carts.js";
 import searchApi from "./api/search/search.js";
 import bulkOrdersApi from "./api/bulkOrders/bulkOrders.js";
-<<<<<<< HEAD
 import servicesRoute from "./api/services/services.js";
 import blogsRoute from "./api/blogs/blogs.js";
 import beyondTraditionRoute from "./api/beyond-tradition/beyondTradition.js";
-=======
 import contactApi from "./api/contact/contact.js";
-
-
->>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
 
 dotenv.config();
 
@@ -54,14 +49,10 @@ app.use("/api/orders", ordersApi);
 app.use("/api/filtered-products", filteredProductsAPi);
 app.use("/api/carts", cartsApi);
 app.use("/api/bulk-orders", bulkOrdersApi);
-<<<<<<< HEAD
 app.use("/api/services", servicesRoute);
 app.use("/api/blogs", blogsRoute);
 app.use("/api/beyondTradition", beyondTraditionRoute);
-
-=======
 app.use("/api/contact", contactApi);
->>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
 app.use("/api/search", searchApi);
 
 const PORT = process.env.PORT || 5000;
