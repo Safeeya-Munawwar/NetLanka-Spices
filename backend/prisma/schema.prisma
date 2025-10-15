@@ -69,8 +69,8 @@ model Order {
   userId        String?     @db.ObjectId
   user          User?       @relation(fields: [userId], references: [id])
   items         OrderItem[]
-totalPriceLKR Float?
-totalPriceUSD Float?
+  totalPriceLKR Float?
+  totalPriceUSD Float?
   paymentMethod String
   status        String      @default("Pending")
   createdAt     DateTime    @default(now())
@@ -80,8 +80,8 @@ model OrderItem {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   productId String
   name      String
-priceLKR  Float?
-priceUSD  Float?
+  priceLKR  Float?
+  priceUSD  Float?
   quantity  Int
   weightKg  Float?
   image     String?
@@ -103,7 +103,25 @@ model BulkOrder {
   createdAt   DateTime @default(now())
 }
 
-<<<<<<< HEAD
+model BeyondTradition {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  subtitle    String?
+  description String?
+  images      String[]
+  createdAt   DateTime @default(now())
+}
+
+
+model Contact {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+}
+
 model Service {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -118,29 +136,10 @@ model Blog {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   category    String
+  date        DateTime
+  description String
   image       String
-  date        String
-  description String?
   createdAt   DateTime @default(now())
 }
-
-model BeyondTradition {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String?   // now optional
-  subtitle    String?
-  description String?   // now optional
-  images      String[]
-  createdAt   DateTime @default(now())
-=======
-model Contact {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String
-  phone     String
-  message   String?
-  createdAt DateTime @default(now())
->>>>>>> 8b0c90a1a15859ebde0a84d0c95c9d51535a03b7
-}
-
 
 

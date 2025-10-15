@@ -137,7 +137,6 @@ function App() {
     </PrivateRoute>
   }
 />
-
        
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />

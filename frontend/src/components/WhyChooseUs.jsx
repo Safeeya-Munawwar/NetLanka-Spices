@@ -5,7 +5,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 export default function WhyChooseUs() {
   return (
     <div className="bg-white w-full">
-      <div className="max-w-7xl mx-auto px-6 py-16 md:px-20">
+      <div className="max-w-7xl mx-auto  py-16 ">
         {/* WHY CHOOSE US SECTION */}
      <section className="mb-16 px-4 sm:px-6">
   <h1 className="font-serif text-[#B59D56] text-lg sm:text-xl italic mb-2 text-left">
@@ -71,7 +71,7 @@ export default function WhyChooseUs() {
       {/* CUSTOMER TESTIMONIALS SECTION */}
    <section className="mt-2">
   {/* Headings */}
-  <div className="max-w-7xl mx-auto px-6 md:px-20 bg-white">
+  <div className="max-w-7xl mx-auto  px-6  bg-white">
     <h1 className="font-serif text-[#B59D56] text-xl italic mb-2 text-left">
       Net Spice's
     </h1>
@@ -81,7 +81,7 @@ export default function WhyChooseUs() {
   </div>
 
   {/* Background */}
-  <div className="bg-[#f7f7f7] py-10 mb-14">
+  <div className="bg-[#f6f9ff] py-10 mb-14">
     <div className="max-w-7xl mx-auto px-6 md:px-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
       
       {/* Testimonial 1 */}

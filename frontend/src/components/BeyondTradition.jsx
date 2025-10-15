@@ -36,8 +36,7 @@ export default function BeyondTradition() {
     );
   }
 
-  // Flatten all images into individual cards, ensuring first image is first
-  const allCards = entries.flatMap(entry =>
+  const allCards = entries.flatMap((entry) =>
     entry.images.map((img, index) => ({
       title: entry.title || "",
       subtitle: entry.subtitle || "",
@@ -47,54 +46,82 @@ export default function BeyondTradition() {
     }))
   );
 
-  // Optional: sort so that first images appear first (just in case)
   allCards.sort((a, b) => (a.isFirst === b.isFirst ? 0 : a.isFirst ? -1 : 1));
 
+  const leftMain = allCards[0];
+  const topRight = allCards[1];
+  const midRight = allCards[2];
+  const bottomRow = allCards.slice(3, 6);
+
   return (
-    <section className="bg-[#F9F5EE] py-12 sm:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <h1 className="font-serif text-[#B59D56] text-lg sm:text-xl italic mb-1">
+    <section className="py-12 md:py-16 max-w-7xl mx-auto bg-white px-4 sm:px-6 lg:px-8">
+      {/* Headings */}
+      <div className="text-left mb-8 md:mb-12">
+        <h1 className="font-serif text-[#B59D56] text-base sm:text-lg italic mb-1">
           Net Spice's
         </h1>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#3A1F04] mb-10 sm:mb-16 tracking-wide">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#3A1F04] tracking-wide">
           BEYOND TRADITION
         </h2>
+      </div>
 
-        {/* Single Grid for all image cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {allCards.map((card, idx) => (
-            <div
-              key={idx}
-              className="relative h-64 rounded-xl overflow-hidden shadow-lg border border-[#D9C8A2] hover:scale-105 transition-transform duration-300"
-            >
-              {/* Image */}
+      <div className="px-14 sm:px-16">
+        <div className="max-w-7xl bg-slate-200 mx-auto rounded-md py-4 sm:py-6 px-4 sm:px-6">
+        {/* Top Two Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Left Large Image with Text */}
+          {leftMain && (
+            <div className="relative rounded-md overflow-hidden">
               <img
-                src={`http://localhost:5000${card.image}`}
-                alt={card.title || "Beyond Tradition"}
-                className="w-full h-full object-cover"
+                src={`http://localhost:5000${leftMain.image}`}
+                alt={leftMain.title}
+                className="w-full h-64 sm:h-80 md:h-[410px] object-cover"
               />
-
-              {/* Elegant Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">
-                {card.title && (
-                  <h3 className="text-lg sm:text-xl font-serif font-bold text-white mb-1 uppercase">
-                    {card.title}
+              <div className="absolute inset-0 flex items-start justify-start">
+                <div className="relative p-4 sm:p-6 md:p-8 bg-white/70 backdrop-blur-[2px] w-[90%] sm:w-[85%] mt-4 sm:mt-6 md:mt-8 ml-4 sm:ml-6 md:ml-8 rounded-md">
+                  <h3 className="text-base sm:text-lg font-bold text-[#1F4D3E] mb-2 sm:mb-3 uppercase">
+                    {leftMain.title || "SEE HOW IT PROCESSED"}
                   </h3>
-                )}
-                {card.subtitle && (
-                  <p className="text-sm sm:text-base italic text-[#FFD580] mb-1">
-                    {card.subtitle}
+                  <p className="text-sm sm:text-base leading-relaxed text-[#222]">
+                    {leftMain.description ||
+                      "Handpicked at dawn, only the finest Cinnamon are carefully plucked by skilled hands in Sri Lanka's lush highlands..."}
                   </p>
-                )}
-                {card.description && (
-                  <p className="text-xs sm:text-sm md:text-base text-white line-clamp-3">
-                    {card.description}
-                  </p>
-                )}
+                </div>
               </div>
             </div>
+          )}
+
+          {/* Right Two Stacked Images */}
+          <div className="grid grid-rows-2 gap-2">
+            {topRight && (
+              <img
+                src={`http://localhost:5000${topRight.image}`}
+                alt={topRight.title}
+                className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-md"
+              />
+            )}
+            {midRight && (
+              <img
+                src={`http://localhost:5000${midRight.image}`}
+                alt={midRight.title}
+                className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-md"
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Row (3 Images) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 sm:mt-4">
+          {bottomRow.map((card, idx) => (
+            <img
+              key={idx}
+              src={`http://localhost:5000${card.image}`}
+              alt={card.title || "Beyond Tradition"}
+              className="w-full h-48 sm:h-56 md:h-64 object-cover rounded-md"
+            />
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

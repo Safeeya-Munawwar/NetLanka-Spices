@@ -10,7 +10,7 @@ import NewsletterSection from "../components/NewsletterSection";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-white">
       <Header />
       <All/>
       <ProductsSection />
