@@ -21,6 +21,7 @@ import servicesApi from "./api/services/services.js";
 import blogsApi from "./api/blogs/blogs.js";
 import beyondTraditionApi from "./api/beyond-tradition/beyondTradition.js";
 import contactApi from "./api/contact/contact.js";
+import wishlistRoutes from "./api/wishlist/wishlist.js";
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.use("/api/blogs", blogsApi);
 app.use("/api/beyondTradition", beyondTraditionApi);
 app.use("/api/contact", contactApi);
 app.use("/api/search", searchApi);
+app.use("/api/wishlist", wishlistRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

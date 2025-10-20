@@ -15,33 +15,34 @@ model User {
   role      String   @default("user")
   createdAt DateTime @default(now())
   active    Boolean  @default(true)
-  orders    Order[] 
+  orders    Order[]
 }
 
 model Category {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   image       String
-  slug        String   @unique
+  slug        String    @unique
   products    Product[]
-  active      Boolean  @default(true)
-  dateCreated DateTime @default(now())
+  active      Boolean   @default(true)
+  dateCreated DateTime  @default(now())
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
-priceLKR Float @default(0)
-priceUSD Float @default(0)
+  priceLKR    Float      @default(0)
+  priceUSD    Float      @default(0)
   quantity    Int
   image       String?
-  active      Boolean  @default(true)
-  categoryId  String   @db.ObjectId
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  active      Boolean    @default(true)
+  categoryId  String     @db.ObjectId
+  category    Category   @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  wishlist    Wishlist[]
 }
 
 model Cart {
@@ -52,16 +53,16 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
   productId String
   name      String
   priceLKR  Float
   priceUSD  Float
   quantity  Int
-  weight    Float     // weight in KG
+  weight    Float // weight in KG
   image     String?
   cartId    String
-  cart      Cart      @relation(fields: [cartId], references: [id])
+  cart      Cart    @relation(fields: [cartId], references: [id])
 }
 
 model Order {
@@ -97,34 +98,12 @@ model BulkOrder {
   company     String?
   message     String?
   productList String? // Product names / description
-  quantity    Int?    // Bulk quantity
+  quantity    Int? // Bulk quantity
   weight      String? // Weight (e.g., "5kg")
   status      String   @default("pending") // <-- Add this
   createdAt   DateTime @default(now())
 }
 
-<<<<<<< HEAD
-=======
-model BeyondTradition {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  subtitle    String?
-  description String?
-  images      String[]
-  createdAt   DateTime @default(now())
-}
-
-
-model Contact {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String
-  phone     String
-  message   String?
-  createdAt DateTime @default(now())
-}
-
->>>>>>> de11ca9cbada55cb572aa82d9fd339d013153d8d
 model Service {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -139,34 +118,35 @@ model Blog {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   category    String
-  date        DateTime
+  date        String
   description String
   image       String
   createdAt   DateTime @default(now())
 }
 
-<<<<<<< HEAD
 model BeyondTradition {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String?   // now optional
+  title       String? // now optional
   subtitle    String?
-  description String?   // now optional
+  description String? // now optional
   images      String[]
   createdAt   DateTime @default(now())
 }
 
 model Contact {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  email   String
-  phone   String
-  message String?
-  read    Boolean  @default(false)  // <- needed for unread messages
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  message   String?
+  read      Boolean  @default(false) // <- needed for unread messages
   createdAt DateTime @default(now())
 }
 
-
-=======
->>>>>>> de11ca9cbada55cb572aa82d9fd339d013153d8d
-
-
+model Wishlist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}

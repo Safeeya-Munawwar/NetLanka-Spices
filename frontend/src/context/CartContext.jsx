@@ -19,13 +19,25 @@ export const CartProvider = ({ children }) => {
     return isNaN(num) ? 1 : num;
   };
 
-  // ✅ Fetch cart items for logged-in user
+  // 1️⃣ Load cart from localStorage on init
   useEffect(() => {
-    if (!user?.id) return setCartItems([]);
+    const savedCart = localStorage.getItem("cartItems");
+    if (savedCart) setCartItems(JSON.parse(savedCart));
+  }, []);
+
+  // 2️⃣ Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // 3️⃣ Fetch cart from backend and merge with localStorage
+  useEffect(() => {
+    if (!user?.id) return; // skip if no user
+  
     const fetchCart = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/carts/${user.id}`);
-        const items =
+        const backendItems =
           res.data.items?.map((i) => ({
             id: `${i.productId}-${i.weight || 1}`,
             productId: i.productId,
@@ -36,17 +48,31 @@ export const CartProvider = ({ children }) => {
             weight: parseWeightToKg(i.weight),
             image: i.image || "",
           })) || [];
-        setCartItems(items);
+  
+        // Merge with localStorage items without overwriting duplicates
+        const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+        const merged = [...backendItems];
+  
+        savedCart.forEach((item) => {
+          if (!merged.find((i) => i.id === item.id)) {
+            merged.push(item);
+          }
+        });
+  
+        setCartItems(merged);
+        localStorage.setItem("cartItems", JSON.stringify(merged)); // update localStorage
       } catch (err) {
         console.error("Failed to fetch cart:", err.response?.data || err.message);
       }
     };
+  
     fetchCart();
-  }, [user?.id]);
+  }, [user?.id]);  
 
-  // ✅ Sync cart changes to backend
+  // 4️⃣ Sync cart changes to backend
   useEffect(() => {
     if (!user?.id) return;
+
     const saveCart = async () => {
       try {
         await axios.post(`http://localhost:5000/api/carts/${user.id}`, {
@@ -64,6 +90,7 @@ export const CartProvider = ({ children }) => {
         console.error("Failed to save cart:", err.response?.data || err.message);
       }
     };
+
     saveCart();
   }, [cartItems, user?.id]);
 
@@ -74,7 +101,6 @@ export const CartProvider = ({ children }) => {
     const existing = cartItems.find((i) => i.id === id);
 
     if (existing) {
-      // Increase quantity by 1 (not multiplied)
       setCartItems(
         cartItems.map((i) =>
           i.id === id ? { ...i, quantity: i.quantity + 1 } : i

@@ -29,6 +29,7 @@ import BlogsForm from "./pages/admin/contents/BlogForm";
 import BeyondTraditionPage from "./pages/admin/contents/BeyondTradition";
 import BeyondForm from "./pages/admin/contents/BeyondForm";
 import ContactMessagesPage from "./pages/admin/ContactMessagesPage";
+import Wishlist from "./components/Wishlist"; 
 
 function App() {
   return (
@@ -137,6 +138,7 @@ function App() {
     </PrivateRoute>
   }
 />
+<Route path="/wishlist" element={<Wishlist />} />
        
         {/* Admin Pages */}
         <Route path="/admin" element={<Dashboard />} />

@@ -15,13 +15,20 @@ const parseWeightToKg = (weight) => {
 router.get("/:userId", async (req, res) => {
   const { prisma } = req;
   const { userId } = req.params;
+
   try {
-    const cart = await prisma.cart.upsert({
+    let cart = await prisma.cart.findUnique({
       where: { userId },
-      update: {},
-      create: { userId },
       include: { items: true },
     });
+
+    if (!cart) {
+      cart = await prisma.cart.create({
+        data: { userId },
+        include: { items: true },
+      });
+    }
+
     res.json(cart);
   } catch (err) {
     console.error(err);
@@ -36,14 +43,18 @@ router.post("/:userId", async (req, res) => {
   const { items } = req.body;
 
   try {
-    const cart = await prisma.cart.upsert({
-      where: { userId },
-      update: {},
-      create: { userId },
-    });
+    // Find existing cart
+    let cart = await prisma.cart.findUnique({ where: { userId } });
 
+    // Create cart if it doesn't exist
+    if (!cart) {
+      cart = await prisma.cart.create({ data: { userId } });
+    }
+
+    // Delete all existing items
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
 
+    // Create new items
     const validItems = await Promise.all(
       (items || []).map(async (item) => {
         const priceLKR = Number(item.priceLKR) || 0;

@@ -56,13 +56,13 @@ router.post("/", upload.single("image"), async (req, res) => {
     }
 
     const image = req.file ? `/uploads/blogs/${req.file.filename}` : "";
-    const blogDate = date ? new Date(date) : new Date();
+    const blogDate = date || new Date().toISOString().split("T")[0]; // default today in YYYY-MM-DD
 
     const newBlog = await prisma.blog.create({
       data: {
         title,
         category,
-        date: blogDate,
+        date: blogDate, // now string
         description,
         image,
       },
@@ -75,6 +75,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
+
 // ----------------------- PUT update blog -----------------------
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
@@ -83,14 +84,14 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     if (!blog) return res.status(404).json({ error: "Blog not found" });
 
     const image = req.file ? `/uploads/blogs/${req.file.filename}` : blog.image;
-    const blogDate = date ? new Date(date) : blog.date;
+    const blogDate = date || blog.date; // now string
 
     const updatedBlog = await prisma.blog.update({
       where: { id: req.params.id },
       data: {
         title: title || blog.title,
         category: category || blog.category,
-        date: blogDate,
+        date: blogDate,  // string
         description: description || blog.description,
         image,
       },
@@ -102,6 +103,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // ----------------------- DELETE blog -----------------------
 router.delete("/:id", async (req, res) => {
