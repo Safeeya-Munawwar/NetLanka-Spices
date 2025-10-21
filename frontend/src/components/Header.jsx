@@ -28,7 +28,7 @@ export default function Header() {
           {/* Centered Button */}
           <div className="flex justify-center md:justify-start">
             <Link to="/products">
-              <button className="bg-[#d9b55a] hover:bg-[#c5a24f] text-white font-semibold text-[15px] border border-yellow-400 px-10 py-3 rounded-xl shadow-sm transition-all w-full sm:w-auto">
+              <button className="bg-[#836149] hover:bg-[#c5a24f] text-white font-semibold text-[15px]  px-10 py-3 rounded-xl shadow-sm transition-all w-full sm:w-auto">
                 View Products
               </button>
             </Link>
