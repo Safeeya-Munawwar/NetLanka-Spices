@@ -12,7 +12,15 @@ function WhatsAppButton() {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-24 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50 transition whatsapp-pulse"
+      className="
+      fixed bottom-36 right-6   /* move WhatsApp higher */
+      bg-green-500 hover:bg-green-600
+      text-white p-3
+      rounded-full shadow-lg
+      flex items-center justify-center
+      z-50 transition transform hover:scale-110
+      "
+      title="Chat with us on WhatsApp"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

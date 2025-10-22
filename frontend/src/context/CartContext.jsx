@@ -33,10 +33,12 @@ export const CartProvider = ({ children }) => {
   // 3️⃣ Fetch cart from backend and merge with localStorage
   useEffect(() => {
     if (!user?.id) return; // skip if no user
-  
+
     const fetchCart = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/carts/${user.id}`);
+        const res = await axios.get(
+          `http://localhost:5000/api/carts/${user.id}`
+        );
         const backendItems =
           res.data.items?.map((i) => ({
             id: `${i.productId}-${i.weight || 1}`,
@@ -48,26 +50,29 @@ export const CartProvider = ({ children }) => {
             weight: parseWeightToKg(i.weight),
             image: i.image || "",
           })) || [];
-  
+
         // Merge with localStorage items without overwriting duplicates
         const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
         const merged = [...backendItems];
-  
+
         savedCart.forEach((item) => {
           if (!merged.find((i) => i.id === item.id)) {
             merged.push(item);
           }
         });
-  
+
         setCartItems(merged);
         localStorage.setItem("cartItems", JSON.stringify(merged)); // update localStorage
       } catch (err) {
-        console.error("Failed to fetch cart:", err.response?.data || err.message);
+        console.error(
+          "Failed to fetch cart:",
+          err.response?.data || err.message
+        );
       }
     };
-  
+
     fetchCart();
-  }, [user?.id]);  
+  }, [user?.id]);
 
   // 4️⃣ Sync cart changes to backend
   useEffect(() => {
@@ -87,7 +92,10 @@ export const CartProvider = ({ children }) => {
           })),
         });
       } catch (err) {
-        console.error("Failed to save cart:", err.response?.data || err.message);
+        console.error(
+          "Failed to save cart:",
+          err.response?.data || err.message
+        );
       }
     };
 
