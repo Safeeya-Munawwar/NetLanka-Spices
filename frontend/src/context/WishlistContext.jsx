@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import { useUser } from "./UserContext";
 
 const WishlistContext = createContext();
@@ -12,7 +12,7 @@ export const WishlistProvider = ({ children }) => {
   const fetchWishlist = async () => {
     try {
       if (!user) return;
-      const res = await axios.get(`http://localhost:5000/api/wishlist/${user.id}`);
+      const res = await axiosInstance.get(`/wishlist/${user.id}`);
       setWishlistItems(res.data);
     } catch (err) {
       console.error("Error fetching wishlist:", err);
@@ -30,13 +30,13 @@ export const WishlistProvider = ({ children }) => {
     try {
       if (existingItem) {
         // Remove from wishlist using the correct Wishlist.id
-        await axios.delete(`http://localhost:5000/api/wishlist/${existingItem.id}`);
+        await axiosInstance.delete(`/wishlist/${existingItem.id}`);
         setWishlistItems((prev) =>
           prev.filter((item) => item.product.id !== product.id)
         );
       } else {
         // Add to wishlist
-        const res = await axios.post(`http://localhost:5000/api/wishlist/`, {
+        const res = await axiosInstance.post(`/wishlist/`, {
           userId: user.id,
           productId: product.id,
         });

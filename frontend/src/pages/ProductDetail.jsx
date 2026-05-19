@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -21,27 +21,26 @@ export default function ProductDetail() {
   // ✅ Dual price formatter
   const formatDualPrice = (priceLKR, priceUSD, weight = 1, qty = 1) => {
     const lkrTotal = priceLKR ? priceLKR * weight * qty : null;
-    const usdTotal =
-      priceUSD
-        ? priceUSD * qty
-        : lkrTotal
-        ? lkrTotal * conversionRate
-        : null;
+    const usdTotal = priceUSD
+      ? priceUSD * qty
+      : lkrTotal
+      ? lkrTotal * conversionRate
+      : null;
 
-    const lkrText = lkrTotal !== null ? `Rs. ${lkrTotal.toLocaleString()}` : "Rs. —";
+    const lkrText =
+      lkrTotal !== null ? `Rs. ${lkrTotal.toLocaleString()}` : "Rs. —";
     const usdText = usdTotal !== null ? `$${usdTotal.toFixed(2)}` : "$—";
 
     return `${lkrText} / ${usdText}`;
   };
-  
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axiosInstance.get(`/products/${id}`);
         setProduct(res.data);
 
-        const allRes = await axios.get("http://localhost:5000/api/products");
+        const allRes = await axiosInstance.get("/products");
         const related = allRes.data.filter(
           (p) =>
             p.category?.id === res.data.category?.id && p.id !== res.data.id
@@ -116,8 +115,8 @@ export default function ProductDetail() {
               {product.title}
             </h1>
             <p className="text-2xl md:text-3xl font-semibold text-yellow-800 mb-4">
-  {formatDualPrice(product.priceLKR, product.priceUSD)}
-</p>
+              {formatDualPrice(product.priceLKR, product.priceUSD)}
+            </p>
 
             <p className="text-yellow-700 mb-6 leading-relaxed text-justify">
               {product.description ||

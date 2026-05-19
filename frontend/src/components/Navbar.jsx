@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosConfig";
 import {
   FaUserCircle,
   FaLeaf,
@@ -16,7 +17,7 @@ import { useWishlist } from "../context/WishlistContext";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode } from "swiper/modules";
+import { FreeMode, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -75,8 +76,8 @@ export default function Nav() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/categories");
-        const data = await res.json();
+        const res = await axiosInstance.get("/categories");
+        const data = res.data;
         if (Array.isArray(data) && data.length > 0) {
           const mapped = data.map((cat, idx) => ({
             name: cat.title,
@@ -136,10 +137,11 @@ export default function Nav() {
     const term = searchTerm.trim();
     if (!term) return;
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/search?query=${encodeURIComponent(term)}`
+      const res = await axiosInstance.get(
+        `/search?query=${encodeURIComponent(term)}`
       );
-      const { products = [], categories: catRes = [] } = await res.json();
+      
+      const { products = [], categories: catRes = [] } = res.data;
       if (catRes.length > 0) navigate(`/categories/${catRes[0].slug}`);
       else if (products.length > 0) navigate(`/products/${products[0].id}`);
       else navigate(`/search?query=${encodeURIComponent(term)}`);
@@ -335,8 +337,8 @@ export default function Nav() {
           spaceBetween={20}
           freeMode={true}
           grabCursor={true}
-          modules={[FreeMode]}
-          loop={true} // Enable loop
+          modules={[FreeMode, Autoplay]}
+          loop={desktopCategories.length > 1}
           autoplay={{
             delay: 0, // Set delay to 0 for continuous scrolling
             disableOnInteraction: false, // Keeps autoplay even when interacting with the swiper

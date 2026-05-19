@@ -57,5 +57,5 @@ app.use("/api/contact", contactApi);
 app.use("/api/search", searchApi);
 app.use("/api/wishlist", wishlistRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

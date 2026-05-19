@@ -6,9 +6,9 @@ import {
   FaThList,
   FaClipboardList,
   FaUsers,
-  FaBoxes, // ✅ Added for Bulk Orders
+  FaBoxes,
 } from "react-icons/fa";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -16,9 +16,8 @@ export default function Dashboard() {
     categories: 0,
     orders: 0,
     users: 0,
-    bulkOrders: 0, // 👈 added
+    bulkOrders: 0,
   });
-  
 
   const [visible, setVisible] = useState(false);
   const dashboardRef = useRef(null);
@@ -27,7 +26,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/stats`, {
+        const res = await axiosInstance.get(`/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats(res.data);
@@ -91,7 +90,7 @@ export default function Dashboard() {
       link: "/admin/users",
       count: stats.users,
     },
-     {
+    {
       title: "Manage Messages",
       description: "View and manage user accounts.",
       icon: <FaUsers className="h-8 w-8 text-yellow-900" />,
@@ -103,7 +102,7 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-         <div className="flex-1 ml-64 overflow-y-auto">
+      <div className="flex-1 ml-64 overflow-y-auto">
         {/* Hero Header */}
         <section
           className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-center bg-cover bg-no-repeat bg-fixed flex flex-col justify-center items-center"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import AdminSidebar from "../../components/admin/Sidebar";
 
 export default function ContactMessagesPage() {
@@ -12,7 +12,7 @@ export default function ContactMessagesPage() {
 
   const fetchContacts = useCallback(async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/contact`, {
+      const res = await axiosInstance.get(`/contact`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setContacts(res.data);
@@ -36,9 +36,10 @@ export default function ContactMessagesPage() {
   );
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this message?")) return;
+    if (!window.confirm("Are you sure you want to delete this message?"))
+      return;
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/contact/${id}`, {
+      await axiosInstance.delete(`/contact/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setContacts((prev) => prev.filter((c) => c.id !== id));
@@ -51,11 +52,11 @@ export default function ContactMessagesPage() {
   const openModal = async (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
-  
+
     if (!contact.read) {
       try {
-        await axios.patch(
-          `${process.env.REACT_APP_API_URL}/contact/${contact.id}/read`,
+        await axiosInstance.patch(
+          `/contact/${contact.id}/read`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -65,7 +66,6 @@ export default function ContactMessagesPage() {
       }
     }
   };
-  
 
   const closeModal = () => {
     setSelectedContact(null);
@@ -172,9 +172,15 @@ export default function ContactMessagesPage() {
                 Message Details
               </h2>
               <div className="space-y-3 text-gray-700">
-                <p><strong>Name:</strong> {selectedContact.name}</p>
-                <p><strong>Email:</strong> {selectedContact.email}</p>
-                <p><strong>Phone:</strong> {selectedContact.phone}</p>
+                <p>
+                  <strong>Name:</strong> {selectedContact.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedContact.email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {selectedContact.phone}
+                </p>
                 {selectedContact.message && (
                   <p className="border border-gray-200 bg-gray-50 p-3 rounded-lg">
                     <strong>Message:</strong> <br />
@@ -182,7 +188,8 @@ export default function ContactMessagesPage() {
                   </p>
                 )}
                 <p className="text-sm text-gray-500 mt-2">
-                  Submitted: {new Date(selectedContact.createdAt).toLocaleString()}
+                  Submitted:{" "}
+                  {new Date(selectedContact.createdAt).toLocaleString()}
                 </p>
               </div>
               <div className="mt-6 flex justify-end gap-3">

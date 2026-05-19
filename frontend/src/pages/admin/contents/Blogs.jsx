@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 import {
   FaTrash,
   FaEdit,
@@ -16,13 +16,16 @@ export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [sortConfig, setSortConfig] = useState({ key: "createdAt", direction: "desc" });
+  const [sortConfig, setSortConfig] = useState({
+    key: "createdAt",
+    direction: "desc",
+  });
   const navigate = useNavigate();
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axiosInstance.get("/blogs");
       setBlogs(res.data);
     } catch (err) {
       console.error("Failed to fetch blogs:", err);
@@ -38,7 +41,7 @@ export default function BlogPage() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+      await axiosInstance.delete(`/blogs/${id}`);
       fetchBlogs();
     } catch (err) {
       console.error("Failed to delete blog:", err);
@@ -141,7 +144,10 @@ export default function BlogPage() {
                   <td className="px-6 py-4">
                     {blog.image ? (
                       <img
-                        src={`http://localhost:5000${blog.image}`}
+                        src={`${process.env.REACT_APP_API_URL.replace(
+                          "/api",
+                          ""
+                        )}${blog.image}`}
                         alt={blog.title}
                         className="w-14 h-14 rounded-lg object-cover border border-yellow-300"
                       />
@@ -155,7 +161,9 @@ export default function BlogPage() {
                   <td className="px-6 py-4 flex justify-center gap-3">
                     <button
                       onClick={() =>
-                        navigate("/admin/contents/blogform", { state: { blog } })
+                        navigate("/admin/contents/blogform", {
+                          state: { blog },
+                        })
                       }
                       className="text-yellow-700 hover:underline"
                     >

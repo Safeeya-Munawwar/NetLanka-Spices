@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import {
   FaTrash,
   FaEdit,
@@ -30,7 +30,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axiosInstance.get("/categories");
       setCategories(res.data);
     } catch (err) {
       console.error(err);
@@ -47,7 +47,7 @@ export default function CategoriesPage() {
     if (!window.confirm("Are you sure you want to delete this category?"))
       return;
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      await axiosInstance.delete(`/categories/${id}`);
       setCategories((prev) => prev.filter((cat) => cat.id !== id));
     } catch (err) {
       console.error(err);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 
 export default function BeyondTradition() {
   const [entries, setEntries] = useState([]);
@@ -7,7 +7,7 @@ export default function BeyondTradition() {
 
   const fetchEntries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/beyondTradition");
+      const res = await axiosInstance.get("/beyondTradition");
       setEntries(res.data);
     } catch (err) {
       console.error("Failed to fetch Beyond Tradition entries:", err);
@@ -75,7 +75,7 @@ export default function BeyondTradition() {
             {leftMain && (
               <div className="relative rounded-md overflow-hidden">
                 <img
-                  src={`http://localhost:5000${leftMain.image}`}
+                src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${leftMain.image}`}
                   alt={leftMain.title}
                   className="w-full h-64 sm:h-80 md:h-[410px] object-cover"
                 />
@@ -103,7 +103,7 @@ export default function BeyondTradition() {
                 card ? (
                   <div key={idx} className="relative rounded-md overflow-hidden">
                     <img
-                      src={`http://localhost:5000${card.image}`}
+                     src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${card.image}`}
                       alt={card.title}
                       className="w-full h-32 sm:h-40 md:h-48 object-cover"
                     />
@@ -133,7 +133,7 @@ export default function BeyondTradition() {
             {bottomRow.map((card, idx) => (
               <div key={idx} className="relative rounded-md overflow-hidden">
                 <img
-                  src={`http://localhost:5000${card.image}`}
+               src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${card.image}`}
                   alt={card.title || "Beyond Tradition"}
                   className="w-full h-48 sm:h-56 md:h-64 object-cover"
                 />

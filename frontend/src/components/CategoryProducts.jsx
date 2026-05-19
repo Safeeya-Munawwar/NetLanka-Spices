@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaInfoCircle, FaCartPlus, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -118,8 +118,8 @@ export default function CategoryProducts() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          "http://localhost:5000/api/filtered-products",
+        const res = await axiosInstance.get(
+          "/filtered-products",
           { params: { category } }
         );
         setProducts(res.data);

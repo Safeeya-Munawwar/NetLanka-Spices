@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
@@ -10,7 +10,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axiosInstance.get("/categories");
       setCategories(res.data);
     } catch (err) {
       console.error("Error fetching categories:", err);

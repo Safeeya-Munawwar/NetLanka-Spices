@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 
 export default function BeyondForm() {
   const { state } = useLocation();
@@ -20,14 +20,18 @@ export default function BeyondForm() {
       setTitle(editingItem.title || "");
       setSubtitle(editingItem.subtitle || "");
       setDescription(editingItem.description || "");
-      setImagePreviews(editingItem.images.map(img => `http://localhost:5000${img}`));
+      setImagePreviews(
+        editingItem.images.map(
+          (img) => `${process.env.REACT_APP_API_URL.replace("/api", "")}${img}`
+        )
+      );
     }
   }, [editingItem]);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles(files);
-    setImagePreviews(files.map(f => URL.createObjectURL(f)));
+    setImagePreviews(files.map((f) => URL.createObjectURL(f)));
   };
 
   const handleSubmit = async (e) => {
@@ -43,13 +47,13 @@ export default function BeyondForm() {
     if (title) formData.append("title", title);
     if (subtitle) formData.append("subtitle", subtitle);
     if (description) formData.append("description", description);
-    imageFiles.forEach(file => formData.append("images", file));
+    imageFiles.forEach((file) => formData.append("images", file));
 
     try {
       if (editingItem) {
-        await axios.put(`http://localhost:5000/api/beyondTradition/${editingItem.id}`, formData);
+        await axiosInstance.put(`/beyondTradition/${editingItem.id}`, formData);
       } else {
-        await axios.post("http://localhost:5000/api/beyondTradition", formData);
+        await axiosInstance.post("/beyondTradition", formData);
       }
       navigate("/admin/contents/beyondTradition");
     } catch (err) {
@@ -69,7 +73,9 @@ export default function BeyondForm() {
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-brown-800 mb-1">Title (Optional)</label>
+              <label className="block text-brown-800 mb-1">
+                Title (Optional)
+              </label>
               <input
                 type="text"
                 value={title}
@@ -79,7 +85,9 @@ export default function BeyondForm() {
             </div>
 
             <div>
-              <label className="block text-brown-800 mb-1">Subtitle (Optional)</label>
+              <label className="block text-brown-800 mb-1">
+                Subtitle (Optional)
+              </label>
               <input
                 type="text"
                 value={subtitle}
@@ -89,7 +97,9 @@ export default function BeyondForm() {
             </div>
 
             <div>
-              <label className="block text-brown-800 mb-1">Description (Optional)</label>
+              <label className="block text-brown-800 mb-1">
+                Description (Optional)
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -99,7 +109,9 @@ export default function BeyondForm() {
             </div>
 
             <div>
-              <label className="block text-brown-800 mb-1">Images (Required)</label>
+              <label className="block text-brown-800 mb-1">
+                Images (Required)
+              </label>
               <input
                 type="file"
                 multiple
@@ -124,7 +136,13 @@ export default function BeyondForm() {
               disabled={loading}
               className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-xl transition disabled:opacity-50"
             >
-              {loading ? (editingItem ? "Updating..." : "Creating...") : (editingItem ? "Update Entry" : "Create Entry")}
+              {loading
+                ? editingItem
+                  ? "Updating..."
+                  : "Creating..."
+                : editingItem
+                ? "Update Entry"
+                : "Create Entry"}
             </button>
           </form>
         </div>

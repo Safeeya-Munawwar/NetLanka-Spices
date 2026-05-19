@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 
 export default function BlogForm() {
   const { state } = useLocation();
@@ -22,7 +22,9 @@ export default function BlogForm() {
       setCategory(editingBlog.category);
       setDate(editingBlog.date);
       setDescription(editingBlog.description);
-      setImagePreview(`http://localhost:5000${editingBlog.image}`);
+      setImagePreview(
+        `${process.env.REACT_APP_API_URL.replace("/api", "")}${editingBlog.image}`
+      );
     }
   }, [editingBlog]);
 
@@ -39,12 +41,12 @@ export default function BlogForm() {
 
     try {
       if (editingBlog) {
-        await axios.put(
-          `http://localhost:5000/api/blogs/${editingBlog.id}`,
+        await axiosInstance.put(
+          `/blogs/${editingBlog.id}`,
           formData
         );
       } else {
-        await axios.post("http://localhost:5000/api/blogs", formData);
+        await axiosInstance.post("/blogs", formData);
       }
       navigate("/admin/contents/blogs");
     } catch (err) {

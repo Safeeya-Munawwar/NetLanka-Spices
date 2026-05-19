@@ -15,7 +15,7 @@ import {
   FaLandmark
 } from "react-icons/fa";
 import { FiHome, FiMessageCircle } from "react-icons/fi";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function Sidebar() {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token"); // your admin token
-        const res = await axios.get("http://localhost:5000/api/stats", { // 👈 backend URL
+        const res = await axiosInstance.get("/stats", { // 👈 backend URL
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats({

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 
 export default function ProductFormPage() {
   const { state } = useLocation();
@@ -24,7 +24,7 @@ export default function ProductFormPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/categories");
+        const res = await axiosInstance.get("/categories");
         setCategories(res.data.map((c) => ({ id: c.id, title: c.title })));
       } catch (err) {
         console.error("Failed to fetch categories:", err);
@@ -81,12 +81,12 @@ const handleUSDChange = (e) => {
       formData.append("existingImage", editingProduct.image);
     try {
       if (editingProduct) {
-        await axios.put(
-          `http://localhost:5000/api/products/${editingProduct.id}`,
+        await axiosInstance.put(
+          `/products/${editingProduct.id}`,
           formData
         );
       } else {
-        await axios.post("http://localhost:5000/api/products", formData);
+        await axiosInstance.post("/products", formData);
       }
       navigate("/admin/products");
     } catch (err) {

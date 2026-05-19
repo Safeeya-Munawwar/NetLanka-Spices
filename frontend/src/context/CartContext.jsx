@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useUser } from "./UserContext";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 
 const CartContext = createContext();
 
@@ -36,8 +36,8 @@ export const CartProvider = ({ children }) => {
 
     const fetchCart = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/carts/${user.id}`
+        const res = await axiosInstance.get(
+          `/carts/${user.id}`
         );
         const backendItems =
           res.data.items?.map((i) => ({
@@ -80,7 +80,7 @@ export const CartProvider = ({ children }) => {
 
     const saveCart = async () => {
       try {
-        await axios.post(`http://localhost:5000/api/carts/${user.id}`, {
+        await axiosInstance.post(`/carts/${user.id}`, {
           items: cartItems.map((i) => ({
             productId: i.productId,
             name: i.name,

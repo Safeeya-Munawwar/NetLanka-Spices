@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function ProductsSection() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axiosInstance.get("/products");
         const allProducts = res.data;
         const featured = allProducts.sort(() => 0.5 - Math.random()).slice(0, 6);
         setProducts(featured);

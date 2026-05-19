@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import AdminSidebar from "../../components/admin/Sidebar";
 import {
   FaSort, FaSortUp, FaSortDown, FaBoxOpen, FaHourglassHalf, FaCheckCircle,
@@ -28,7 +28,7 @@ export default function OrdersPage() {
   // Fetch orders
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/orders`, {
+      const res = await axiosInstance.get(`/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -73,8 +73,8 @@ export default function OrdersPage() {
   // Update order status
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      const res = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/orders/${orderId}/status`,
+      const res = await axiosInstance.patch(
+        `/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

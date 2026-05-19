@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // 👁️ from react-icons
 
 export default function LoginPage() {
@@ -10,7 +10,7 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
+      const res = await axiosInstance.post(`${process.env.REACT_APP_API_URL}/login`, {
         email,
         password,
       });

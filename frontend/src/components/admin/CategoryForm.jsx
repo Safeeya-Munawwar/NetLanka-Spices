@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 
 export default function CategoryFormPage() {
   const { state } = useLocation();
@@ -33,13 +33,13 @@ export default function CategoryFormPage() {
     if (imageFile) formData.append("image", imageFile);
     try {
       if (editingCategory) {
-        await axios.put(
-          `http://localhost:5000/api/categories/${editingCategory.id}`,
+        await axiosInstance.put(
+          `/categories/${editingCategory.id}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
-        await axios.post("http://localhost:5000/api/categories", formData, {
+        await axiosInstance.post("/categories", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }

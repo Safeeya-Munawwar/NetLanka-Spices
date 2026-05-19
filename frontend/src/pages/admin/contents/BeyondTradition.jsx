@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 import { FaTrash, FaEdit, FaSort, FaSortUp, FaSortDown, FaPlus, FaImage } from "react-icons/fa";
 
 export default function BeyondTraditionPage() {
@@ -14,7 +14,7 @@ export default function BeyondTraditionPage() {
   const fetchItems = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/beyondTradition");
+      const res = await axiosInstance.get("/beyondTradition");
       setItems(res.data);
     } catch (err) {
       console.error(err);
@@ -30,7 +30,7 @@ export default function BeyondTraditionPage() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this entry?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/beyondTradition/${id}`);
+      await axiosInstance.delete(`/beyondTradition/${id}`);
       fetchItems();
     } catch (err) {
       console.error(err);
@@ -121,7 +121,12 @@ export default function BeyondTraditionPage() {
                   <td className="px-6 py-4 flex gap-2">
                     {item.images && item.images.length > 0 ? (
                       item.images.map((img, idx) => (
-                        <img key={idx} src={`http://localhost:5000${img}`} className="w-14 h-14 rounded-lg object-cover border border-yellow-300" alt="img" />
+                        <img
+                        key={idx}
+                        src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${img}`}
+                        className="w-14 h-14 rounded-lg object-cover border border-yellow-300"
+                        alt="img"
+                      />
                       ))
                     ) : <FaImage className="text-yellow-700 text-2xl" />}
                   </td>

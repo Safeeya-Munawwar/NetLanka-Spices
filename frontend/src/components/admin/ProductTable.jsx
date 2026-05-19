@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEllipsisV, FaTrash, FaEdit } from "react-icons/fa";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductTable() {
@@ -14,7 +14,7 @@ export default function ProductTable() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axiosInstance.get("/products");
       setProducts(res.data);
     } catch (err) {
       console.error("Failed to fetch products:", err);
@@ -30,7 +30,7 @@ export default function ProductTable() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axiosInstance.delete(`/products/${id}`);
       setProducts(products.filter((p) => p.id !== id));
     } catch (err) {
       console.error("Failed to delete product:", err);

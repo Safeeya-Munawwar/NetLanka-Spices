@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import AdminSidebar from "../../components/admin/Sidebar";
 import {
   FaTrash,
@@ -28,7 +28,7 @@ export default function UsersPage() {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`, {
+      const res = await axiosInstance.get(`/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
@@ -77,8 +77,8 @@ export default function UsersPage() {
       return;
     }
     try {
-      const res = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/users/${id}/deactivate`,
+      const res = await axiosInstance.patch(
+        `/users/${id}/deactivate`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -90,8 +90,8 @@ export default function UsersPage() {
 
   const handleActivate = async (id) => {
     try {
-      const res = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/users/${id}/activate`,
+      const res = await axiosInstance.patch(
+        `/users/${id}/activate`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -107,11 +107,9 @@ export default function UsersPage() {
       return;
     }
     try {
-      await axios.patch(
-        `${process.env.REACT_APP_API_URL}/users/${updatedUser.id}`,
-        updatedUser,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axiosInstance.patch(`/users/${updatedUser.id}`, updatedUser, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setEditingUser(null);
       fetchUsers();
     } catch (err) {

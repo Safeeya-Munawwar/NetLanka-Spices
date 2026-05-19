@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 import {
   FaTrash,
   FaEdit,
@@ -16,13 +16,16 @@ export default function ServicesPage() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [sortConfig, setSortConfig] = useState({ key: "createdAt", direction: "desc" });
+  const [sortConfig, setSortConfig] = useState({
+    key: "createdAt",
+    direction: "desc",
+  });
   const navigate = useNavigate();
 
   const fetchServices = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/services");
+      const res = await axiosInstance.get("/services");
       setServices(res.data);
     } catch (err) {
       console.error("Failed to fetch services:", err);
@@ -36,9 +39,10 @@ export default function ServicesPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this service?")) return;
+    if (!window.confirm("Are you sure you want to delete this service?"))
+      return;
     try {
-      await axios.delete(`http://localhost:5000/api/services/${id}`);
+      await axiosInstance.delete(`/services/${id}`);
       fetchServices();
     } catch (err) {
       console.error("Failed to delete service:", err);
@@ -75,7 +79,9 @@ export default function ServicesPage() {
   return (
     <CategoryLayout>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-brown-900">Services Management</h2>
+        <h2 className="text-2xl font-bold text-brown-900">
+          Services Management
+        </h2>
         <button
           onClick={() => navigate("/admin/contents/services/form")}
           className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-xl transition flex items-center gap-2"
@@ -139,10 +145,10 @@ export default function ServicesPage() {
                   <td className="px-6 py-4">
                     {service.image ? (
                       <img
-                        src={`http://localhost:5000${service.image}`}
-                        alt={service.title}
-                        className="w-14 h-14 rounded-lg object-cover border border-yellow-300"
-                      />
+                      src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${service.image}`}
+                      alt={service.title}
+                      className="w-14 h-14 rounded-lg object-cover border border-yellow-300"
+                    />
                     ) : (
                       <FaImage className="text-yellow-700 text-2xl" />
                     )}

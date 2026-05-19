@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 
 export default function Products() {
   const headingRef = useRef(null);
@@ -18,10 +18,10 @@ export default function Products() {
         setLoading(true);
         let res;
         if (query) {
-          res = await axios.get(`http://localhost:5000/api/search?query=${query}`);
+          res = await axiosInstance.get(`/search?query=${query}`);
           setProducts(res.data.products || []);
         } else {
-          res = await axios.get("http://localhost:5000/api/products");
+          res = await axiosInstance.get("/products");
           setProducts(res.data || []);
         }
       } catch (err) {
@@ -38,7 +38,8 @@ export default function Products() {
     const observerOptions = { threshold: 0.3 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.target === headingRef.current) setHeadingVisible(entry.isIntersecting);
+        if (entry.target === headingRef.current)
+          setHeadingVisible(entry.isIntersecting);
       });
     }, observerOptions);
 
@@ -85,23 +86,22 @@ export default function Products() {
 
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {loading
-  ? Array(8)
-      .fill()
-      .map((_, i) => <SkeletonCard key={i} />)
-  : products.length > 0
-  ? products.map((product) => (
-      <ProductCard
-        key={product.id}
-        product={product} // pass raw product object
-      />
-    ))
-  : (
-    <p className="text-center col-span-full text-gray-600">
-      No products found.
-    </p>
-  )}
-
+            {loading ? (
+              Array(8)
+                .fill()
+                .map((_, i) => <SkeletonCard key={i} />)
+            ) : products.length > 0 ? (
+              products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product} // pass raw product object
+                />
+              ))
+            ) : (
+              <p className="text-center col-span-full text-gray-600">
+                No products found.
+              </p>
+            )}
           </div>
         </div>
       </section>

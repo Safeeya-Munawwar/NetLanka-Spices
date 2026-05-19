@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import CategoryLayout from "../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import { useNavigate } from "react-router-dom";
 
 export default function CategoryTable() {
@@ -11,7 +11,7 @@ export default function CategoryTable() {
   const toggleMenu = (id) => setOpenMenu(openMenu === id ? null : id);
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axiosInstance.get("/categories");
       setCategories(res.data);
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@ export default function CategoryTable() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      await axiosInstance.delete(`/categories/${id}`);
       setCategories(categories.filter((cat) => cat.id !== id));
     } catch (err) {
       console.error(err);

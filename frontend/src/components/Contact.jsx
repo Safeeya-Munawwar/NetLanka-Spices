@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import emailjs from "@emailjs/browser";
 import NewsletterSection from "./NewsletterSection";
 
@@ -26,7 +26,7 @@ export default function Contact() {
 
     try {
       // ✅ 1. Save to database
-      await axios.post(`${process.env.REACT_APP_API_URL}/contact`, formData);
+      await axiosInstance.post(`${process.env.REACT_APP_API_URL}/contact`, formData);
 
       // ✅ 2. Send email (only name & email)
       const emailParams = {

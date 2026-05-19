@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CategoryLayout from "../../../components/admin/CategoryLayout";
-import axios from "axios";
+import axiosInstance from "../../../axiosConfig";
 
 export default function ServiceForm() {
   const { state } = useLocation();
@@ -18,7 +18,11 @@ export default function ServiceForm() {
     if (editingService) {
       setTitle(editingService.title);
       setDescription(editingService.description);
-      setImagePreview(`http://localhost:5000${editingService.image}`);
+      setImagePreview(
+        `${process.env.REACT_APP_API_URL.replace("/api", "")}${
+          editingService.image
+        }`
+      );
     }
   }, [editingService]);
 
@@ -33,12 +37,9 @@ export default function ServiceForm() {
 
     try {
       if (editingService) {
-        await axios.put(
-          `http://localhost:5000/api/services/${editingService.id}`,
-          formData
-        );
+        await axiosInstance.put(`/services/${editingService.id}`, formData);
       } else {
-        await axios.post("http://localhost:5000/api/services", formData);
+        await axiosInstance.post("/services", formData);
       }
       navigate("/admin/contents/services");
     } catch (err) {

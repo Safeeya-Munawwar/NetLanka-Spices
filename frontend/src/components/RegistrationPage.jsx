@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function RegistrationPage() {
@@ -17,7 +17,7 @@ export default function RegistrationPage() {
       return;
     }
     try {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${process.env.REACT_APP_API_URL}/register`,
         {
           name,

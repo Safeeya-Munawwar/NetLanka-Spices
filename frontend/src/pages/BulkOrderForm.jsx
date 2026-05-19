@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 import {
   FaEnvelope,
   FaUser,
@@ -72,8 +72,8 @@ export default function BulkOrderForm() {
         quantity: formData.quantity ? Number(formData.quantity) : undefined,
       };
 
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/bulk-orders`,
+      const res = await axiosInstance.post(
+        `/bulk-orders`,
         payload
       );
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosConfig";
 import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
@@ -12,7 +12,7 @@ export default function Hero() {
   const fetchServices = async () => {
     try {
       setLoadingServices(true);
-      const res = await axios.get("http://localhost:5000/api/services");
+      const res = await axiosInstance.get("/services");
       setServices(res.data);
     } catch (err) {
       console.error("Failed to fetch services:", err);
@@ -24,7 +24,7 @@ export default function Hero() {
   const fetchBlogs = async () => {
     try {
       setLoadingBlogs(true);
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axiosInstance.get("/blogs");
       const sorted = res.data.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
@@ -43,7 +43,6 @@ export default function Hero() {
 
   return (
     <div className="bg-white text-gray-800">
-
       {/* SERVICES SECTION */}
       <section className="py-12 px-4 sm:px-6 md:px-12 max-w-[90rem] mx-auto text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#4b2e05] mb-8 tracking-wide">
@@ -62,7 +61,9 @@ export default function Hero() {
                 className="flex flex-col items-center text-center bg-white rounded-lg shadow-sm p-3 sm:p-4 w-full max-w-[350px]"
               >
                 <img
-                  src={`http://localhost:5000${service.image}`}
+                  src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${
+                    service.image
+                  }`}
                   alt={service.title}
                   className="w-full h-32 sm:h-36 md:h-40 object-cover rounded-md"
                 />
@@ -105,16 +106,16 @@ export default function Hero() {
               Our Promise
             </h2>
             <p className="text-[#3d2d11] mb-3 sm:mb-4 leading-relaxed text-[14px] sm:text-[16px] text-justify">
-              At Net Spice’s, our promise is to deliver nature's purest treasures,
-              cultivated with care, crafted with integrity, and shared with pride.
-              We honor centuries of Sri Lankan heritage, working hand-in-hand with
-              local farmers to bring you products of unmatched purity,
-              authenticity, and excellence.
+              At Net Spice’s, our promise is to deliver nature's purest
+              treasures, cultivated with care, crafted with integrity, and
+              shared with pride. We honor centuries of Sri Lankan heritage,
+              working hand-in-hand with local farmers to bring you products of
+              unmatched purity, authenticity, and excellence.
             </p>
             <p className="text-[#3d2d11] leading-relaxed text-[14px] sm:text-[16px] text-justify">
               From sustainable sourcing to artisanal craftsmanship, every detail
-              reflects our deep respect for nature and our commitment to offering
-              you only the finest.
+              reflects our deep respect for nature and our commitment to
+              offering you only the finest.
             </p>
           </div>
         </div>
@@ -138,7 +139,9 @@ export default function Hero() {
                 className="relative rounded-lg overflow-hidden shadow-lg w-full max-w-[350px]"
               >
                 <img
-                  src={`http://localhost:5000${blog.image}`}
+                  src={`${process.env.REACT_APP_API_URL.replace("/api", "")}${
+                    blog.image
+                  }`}
                   alt={blog.title}
                   className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover"
                 />
